@@ -1,0 +1,67 @@
+
+Output of sum_of_digit.c :
+
+
+user@zulkernine:~/c programme$ gcc sum_of_digit.c
+user@zulkernine:~/c programme$ ./a.out
+Enter a number=4785
+
+sum=24
+user@zulkernine:~/c programme$ ./a.out
+Enter a number=05
+
+sum=5
+user@zulkernine:~/c programme$ ./a.out
+Enter a number=5
+
+sum=5
+user@zulkernine:~/c programme$ ./a.out
+Enter a number=354876
+
+sum=33
+
+
+Output of max_min.c :
+user@zulkernine:~/c programme$ gcc max_min.c
+user@zulkernine:~/c programme$ ./a.out
+ Enter 3 number=45
+2
+1
+max = 45 
+min=1
+user@zulkernine:~/c programme$ ./a.out
+ Enter 3 number=0
+12
+3
+max = 12 
+min=0
+user@zulkernine:~/c programme$ ./a.out
+ Enter 3 number=21
+31
+61
+max = 61 
+min=21
+user@zulkernine:~/c programme$ 
+
+Output of check_prime.c :
+
+user@zulkernine:~/c programme$ gcc check_prime.c
+user@zulkernine:~/c programme$ ./a.out
+Enter a number=47
+47 is a prime number.
+user@zulkernine:~/c programme$ ./a.out
+Enter a number=19
+19 is a prime number.
+user@zulkernine:~/c programme$ ./a.out
+Enter a number=75
+75 is not a prime number.
+user@zulkernine:~/c programme$ ./a.out
+Enter a number=1
+1 is a prime number.
+user@zulkernine:~/c programme$ ./a.out
+Enter a number=2
+2 is a prime number.
+user@zulkernine:~/c programme$ ./a.out
+Enter a number=6747
+6747 is not a prime number.
+user@zulkernine:~/c programme$ 
