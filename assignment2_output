@@ -1,0 +1,46 @@
+
+
+user@zulkernine:~/c programme/assignments/assignment2$ gcc grace_mark.c -o grace_mark
+user@zulkernine:~/c programme/assignments/assignment2$ ./grace_mark
+Enter the obtained class(1/2/3)=1
+Enter the number of subject failed=2
+Grace marks is = 10
+user@zulkernine:~/c programme/assignments/assignment2$ ./grace_mark
+Enter the obtained class(1/2/3)=2
+Enter the number of subject failed=3
+No grace mark
+user@zulkernine:~/c programme/assignments/assignment2$ ./grace_mark
+Enter the obtained class(1/2/3)=3
+Enter the number of subject failed=1
+Grace marks is =5
+user@zulkernine:~/c programme/assignments/assignment2$ ./grace_mark
+Enter the obtained class(1/2/3)=1
+Enter the number of subject failed=4
+No grace mark
+
+
+
+user@zulkernine:~/c programme/assignments/assignment2$ gcc year.c -o year
+user@zulkernine:~/c programme/assignments/assignment2$ ./year
+Enter a year to check leap year=2000
+2000 is a leap year.
+user@zulkernine:~/c programme/assignments/assignment2$ ./year
+Enter a year to check leap year=2100
+2100 is not a leap year.
+user@zulkernine:~/c programme/assignments/assignment2$ ./year
+Enter a year to check leap year=2012
+2012 is a leap year.
+user@zulkernine:~/c programme/assignments/assignment2$ ./year
+Enter a year to check leap year=2009
+2009 is not a leap year.
+
+user@zulkernine:~/c programme/assignments/assignment2$ gcc rev_num.c -o rev_num
+user@zulkernine:~/c programme/assignments/assignment2$ ./rev_num
+Enter a number=4676873
+Reverse =3786764
+user@zulkernine:~/c programme/assignments/assignment2$ ./rev_num
+Enter a number=10
+Reverse =1
+user@zulkernine:~/c programme/assignments/assignment2$ ./rev_num
+Enter a number=06709
+Reverse =9076
