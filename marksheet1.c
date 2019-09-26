@@ -2,11 +2,14 @@
 #include <string.h>
 
 int main(){
-    char student_name[5][20],pf[5][5];
-    int marks[5][5],total[5]={0},percentage[5],fail[5];
-    char grade[5][5],class[5];
-    char sub[][10]={"Physics","Chemistry","Math","Geography","History"};
-    for(int i=0;i<5;i++){
+    int n;
+    printf("Enter number of student=");
+    scanf("%d",&n);
+    char student_name[2][20],pf[2][5];
+    int marks[2][5],total[2]={0},percentage[2],fail[2];
+    char grade[2][5],class[2];
+    char sub[][10]={"Phys.","Chemist.","Math","Geo.","Hist."};
+    for(int i=0;i<2;i++){
         printf("Enter student name:");
         scanf("%s",student_name[i]);
         for(int j=0;j<5;j++){
@@ -15,7 +18,7 @@ int main(){
         }
     }
    
-    for(int i=0;i<5;i++){
+    for(int i=0;i<2;i++){
         int sf=0;
         for(int j=0;j<5;j++){
             total[i] += marks[i][j];
@@ -67,13 +70,14 @@ int main(){
         else
             strcpy(pf[i],"Fail");
             // pf[i]= "Fail";       
-        
+        printf("status= %s",pf[i]);
         if(percentage[i]>=65)
             class[i]= 'A';
         else if(percentage[i]<60 && percentage[i] >= 50)
             class[i]= 'B' ;
         else
             class[i]= 'F' ;
+        printf("over all grade %c \n",class[i]);
         for(int j=0;j<5;j++){
             if(marks[i][j]<40)
                 grade[i][j]='F';
@@ -84,21 +88,23 @@ int main(){
             else if(marks[i][j]<90&&marks[i][j]>=80)
                  grade[i][j]='A';
             else if(marks[i][j]>=90)
-                 grade[i][j]='s';   
+                 grade[i][j]='s'; 
+             printf("%c    \n",grade[i][j]);   
         }
-        
+      
         
     }
-    for(int i=0; i<5;i++){
+    /*for(int i=0; i<2;i++){
         printf("Name: %s\n",student_name[i]);
-        printf("Subject\t\tMarks\t\tGrade\n");
+        printf("Subject\t\t\tMarks\t\t\tGrade\n");
         for(int j=0;j<5;j++){
-            printf("%s\t\t%d\t\t%c\n",sub[j],marks[i][j],grade[i][j]);
+            printf("%s\t\t\t%d\t\t\t%c\n\n",sub[j],marks[i][j],grade[i][j]);
         }
-        printf("Status:%s",pf[i]);
+        printf("Status:%s\n",pf[i]);
         printf("Over all Grade :%c",class[i]);
+        printf("\n\n");
     }
-    
+    */
     
     return 0;
 }
