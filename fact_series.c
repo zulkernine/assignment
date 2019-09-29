@@ -13,3 +13,7 @@ void main(){
         sum += fact(i) ;
     printf(" Sum =%d\n",sum);
 }
+
+
+
+
