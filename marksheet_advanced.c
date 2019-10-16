@@ -25,6 +25,7 @@ void data_entry(struct student_data *stu){
 }
 void processing_data(struct student_data *stu){
     int sf=0;
+    stu->total_mark=0;
     char class;
         for(int j=0;j<5;j++){
             stu->total_mark += stu->marks[j];
