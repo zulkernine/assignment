@@ -1,31 +1,31 @@
-user@zulkernine:~/c programme/assignments$ gcc marksheet_advanced.c -o marksheet
-user@zulkernine:~/c programme/assignments$ ./marksheet
+
+user@zulkernine:~/c programme/assignments$ gcc marksheet_advanced.c -o marksheetuser@zulkernine:~/c programme/assignments$ ./marksheet
 
 --------------------------------------------------
 Enter the student's name:Sk Shahnawaz
-Enter the number of Physics =99
+Enter the number of Physics =97
 Enter the number of Chemistry =98
 Enter the number of Math =99
-Enter the number of History =91
-Enter the number of Geography =89
+Enter the number of History =89
+Enter the number of Geography =91
 
 
 --------------------------------------------------
 Enter the student's name:Sanmit Mandal
-Enter the number of Physics =75
-Enter the number of Chemistry =94
-Enter the number of Math =59
+Enter the number of Physics =53
+Enter the number of Chemistry =59
+Enter the number of Math =48
 Enter the number of History =23
-Enter the number of Geography =45
+Enter the number of Geography =31
 
 
 --------------------------------------------------
 Enter the student's name:Srirupa Roy
-Enter the number of Physics =89
-Enter the number of Chemistry =79
-Enter the number of Math =98
-Enter the number of History =26
-Enter the number of Geography =51
+Enter the number of Physics =71
+Enter the number of Chemistry =62
+Enter the number of Math =30
+Enter the number of History =59
+Enter the number of Geography =43
 
 Processing the entered data.
 
@@ -37,38 +37,38 @@ Processing done.
 --------------------------------------------------
 Name: Sk Shahnawaz
 SUBJECT		MARRKS(100)	GRADE
-Physics  		99	S
+Physics  		97	S
 Chemistry		98	S
 Math     		99	S
-History  		91	S
-Geography		89	A
+History  		89	A
+Geography		91	S
 
 Passed with 1st Division.
-Total marks = 476 	 Percentage mark = 95.00
+Total marks = 474 	 Percentage mark = 94.00
 
 
 --------------------------------------------------
 Name: Sanmit Mandal
 SUBJECT		MARRKS(100)	GRADE
-Physics  		75	B
-Chemistry		94	S
-Math     		59	C
-History  		27	F
-Geography		45	C
+Physics  		53	C
+Chemistry		59	C
+Math     		48	C
+History  		23	F
+Geography		31	F
 
-Passed with 1st Division.
-Total marks = 300 	 Percentage mark = 60.00
+Status : FAILED.
+Total marks = 214 	 Percentage mark = 42.00
 
 
 --------------------------------------------------
 Name: Srirupa Roy
 SUBJECT		MARRKS(100)	GRADE
-Physics  		89	A
-Chemistry		79	B
-Math     		98	S
-History  		31	F
-Geography		51	C
+Physics  		71	B
+Chemistry		62	B
+Math     		34	F
+History  		59	C
+Geography		43	C
 
-Passed with 1st Division.
-Total marks = 348 	 Percentage mark = 69.00
+Passed with 2nd Division.
+Total marks = 269 	 Percentage mark = 53.00
 user@zulkernine:~/c programme/assignments$ 
