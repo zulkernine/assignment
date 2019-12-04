@@ -1,7 +1,7 @@
 #include<stdio.h>
 #include<stdlib.h>
 char *str_append(char*s1,char*s2,int i){
-    char* s3=malloc(60*sizeof(char));
+    static char* s3=malloc(60*sizeof(char));
     int j=0;
     if(!s3){
         printf("Exit");
