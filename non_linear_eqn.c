@@ -2,10 +2,10 @@
 #include<math.h>
 #include<stdlib.h>
 float f(float x){
-    return pow(x,3) + sin(x);
+    return pow(x,3) -x -2;
 }
 float df(float x){
-    return 3*pow(x,2) + cos(x);
+    return 3*pow(x,2) -1;
 }
 float absolute(float x){
     return x>0 ? x : -x ;
