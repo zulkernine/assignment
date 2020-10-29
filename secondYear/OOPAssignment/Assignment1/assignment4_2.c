@@ -15,6 +15,45 @@
     exit(1);\
 }
 
+int getSize(){
+    int size;
+    printf("Size of the array: ");
+    scanf("%d", &size);
+    return size;
+}
+
+void allocate(int**arr,int size){
+    *arr = (int*)malloc(size * sizeof(int));
+    if (!(*arr)){
+        printf("Failed to allocate memory for the array :(\n");
+        exit(1);
+    }
+}
+
+void getElements(int *arr,int size){
+    printf("Enter all elements space/new-line separated: ");
+    FOR(i,size) scanf("%d", arr + i);
+}
+
+void print(int *arr,int size){
+    printf("All the array elements are: ");
+    FOR(i,size) printf("%d ", arr[i]);
+    printf("\n");
+}
+
 int main(){
-    
+    int* arr, size;
+
+    //get size input
+    size = getSize();
+
+    //Allocate memory
+    allocate(&arr,size);
+
+    //Input elements of the array
+    getElements(arr,size);
+
+    //Output the elemnts
+    print(arr,size);
+    return 0;
 }
