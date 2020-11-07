@@ -9,9 +9,9 @@
 
 ll fibonacciIteratively(ll num){
     if(num<=2 && num>0){
-        return 2;
+        return 1;
     }else if(num>2){
-        int prev1=1,prev2=1;
+        ll prev1=1,prev2=1;
         ll finacciNum=0;
         for(int i=3;i<=num;i++){
             finacciNum = prev1+prev2;
