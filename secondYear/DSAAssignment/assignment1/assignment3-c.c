@@ -27,12 +27,12 @@ int binarySearchInt(char** arr, int start, int end, char* str){
         return -1;
     }
 
-    int bool = strcmp(curNum,str);
-    if (bool == 0) return middle;
+    int cmpValue; cmpValue = strcmp(curNum, str);
+    if (cmpValue == 0) return middle;
     else{
         if (start == end) return -1;
         else {
-            if (bool<0) {
+            if (cmpValue < 0) {
                 return binarySearchInt(arr, middle + 1, end, str);
             }
             else {
