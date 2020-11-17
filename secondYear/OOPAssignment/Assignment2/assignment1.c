@@ -11,7 +11,8 @@
 #include<stdlib.h>
 #define FOR(i,n) for(int i=0;i<n;i++)
 #define FLUSH_CIN while(getchar()!='\n')
-#define DATA_FILE_NAME "DATA_BINARY"
+
+char DATA_FILE_NAME[30];
 
 typedef struct{
     int roll;
@@ -36,9 +37,9 @@ int getOption(){
     return n;
 }
 
-void InitFromLocalFile(StudentData** ptr){
+void InitFromLocalFile(StudentData** ptr,char* fileName){
     FILE *input;
-    if((input = fopen(DATA_FILE_NAME,"rb")) == NULL){
+    if ((input = fopen(fileName, "rb")) == NULL){
         printf("Can't find previously saved data :)\n");
 
         //Init default values
@@ -55,9 +56,9 @@ void InitFromLocalFile(StudentData** ptr){
     }
 }
 
-void saveDataTOLOcalFile(StudentData*ptr){
+void saveDataTOLOcalFile(StudentData* ptr, char* fileName){
     FILE* output;
-    if ((output = fopen(DATA_FILE_NAME, "wb")) == NULL){
+    if ((output = fopen(fileName, "wb")) == NULL){
         printf("Can't save data to memory :(\n\n");
     }else{
         fwrite(&SIZE,sizeof(int),1,output);
@@ -65,10 +66,6 @@ void saveDataTOLOcalFile(StudentData*ptr){
         printf("Data saved on local file succesfully :-o\n\n");
     }
 
-}
-
-void initialiseArr(StudentData**arr){
-    InitFromLocalFile(arr);
 }
 
 void expandArr(StudentData** arr,int newSize){
@@ -185,13 +182,17 @@ void viewList(StudentData*arr){
 
 int main(){
     StudentData* arr;
-    initialiseArr(&arr);
+
+    printf("Enter File name(IF not exist, it will be created during saving): ");
+    scanf("%s",DATA_FILE_NAME);
+
+    InitFromLocalFile(&arr,DATA_FILE_NAME);
 
     while(1){
         int option = getOption();
         switch(option){
             case 0:
-                saveDataTOLOcalFile(arr);
+                saveDataTOLOcalFile(arr, DATA_FILE_NAME);
                 printf("Exiting the program\n");
                 exit(0);
             case 1:
