@@ -1,89 +1,58 @@
 /*
-    Design a STUDENT class to store roll, name, course, admission date and marks in 5 subjects. 
-    Provide methods corresponding to admission (marks are not available then), 
-    receiving marks and preparing mark sheet. 
-    Support must be there to show the number of students who have taken admission.
+    Create an APPLICANT class with application id (auto generated as last id +1), name and score.
+    Support must be there to receive applicant data, show applicant details and to find out number of applicants
 */
 
-#include <iostream>
-#include <ctime>
+#include<iostream>
 using namespace std;
 
-class STUDENT
-{
-    int roll;
+class APPLICANT{
+    static int idCount;
+    int id;
     char name[30];
-    int course; //id of course
-    time_t admissionDate;
-    int marks[5];
-    static int numberOfStudent;
+    int score;
 
 public:
-    STUDENT() : roll(-1), course(0)
-    {
-        for (int i = 0; i < 5; i++)
-            marks[i] = 0;
-        name[0] = '\0';
-        numberOfStudent++;
-    }
-    ~STUDENT(){
-        numberOfStudent--;
-    }
+    APPLICANT(int score,char* name):score(score){
+        ++idCount;
+        this->id = idCount;
 
-    void admit(int roll, char *name)
-    {
-        this->roll = roll;
-        int i = 0;
-        for ( i = 0; name[i] != '\0'; i++)
+        int i=0;
+        do{
             this->name[i] = name[i];
-        this->name[i] = '\0';
+            i++;
+        }while(name[i]!='\0');
+    }
+    ~APPLICANT(){
+        --idCount;
+    }
 
-        admissionDate = time(0);
+    static inline int numberOfApplicants(){
+        return idCount;
     }
-    void setMarks(){
-        int d;
-        for(int i=0;i<5;i++){
-            cout<<"Marks of subject code-"<<i<<" : ";
-            cin>>d;
-            if(d<0 || d>100) i--;
-            else marks[i]=d;
-        }
-    }
-    void marksheet(){
-        cout<<"\n\n";
-        cout<<"Roll:"<<roll<<" Name:"<<name<<endl;
-        for(int i=0;i<5;i++){
-            cout<<"Marks for subject code-"<<i<<" : "<<marks[i]<<endl;
-        }
-        cout<<endl;
-    }
-    char* getAdmissionDate(){
-        struct tm *date;
-        date = localtime(&admissionDate);
-        char* dateString = asctime(date);
-        // free(date);
-        return dateString;
-    }
-    static inline int getNumberOfStudent(){ return numberOfStudent; }
+
+    friend ostream& operator<<(ostream& stream,const APPLICANT &application);
 };
 
-int STUDENT::numberOfStudent = 0;
+int APPLICANT::idCount = 0;
+
+ostream& operator<<(ostream& stream,const APPLICANT &application){
+    stream<<"ID: "<<application.id<<"  Score: "<<application.score<<endl;
+    stream<<"Name: "<<application.name<<endl;
+    return stream;
+}
 
 int main(){
-    STUDENT st;
-    int roll;char *buff;
-    buff = new char[50];
-
-    cout<<"Roll: ";cin>>roll;
+    int score;char buff[50];
+    cout<<"applicant score:";cin>>score;
     cin.ignore();cin.clear();
-    cout<<"Name: ";cin.getline(buff,50);
-    st.admit(roll,buff);
-    st.setMarks();
+    cout<<"Name:";cin.getline(buff,50);
 
-    cout<<"\nNumber of students: "<<STUDENT::getNumberOfStudent()<<endl;
-    st.marksheet();
-    buff = st.getAdmissionDate();
-    cout<<"Admission date: "<<buff;
-    // delete[] buff;
+    APPLICANT apl(score,buff);
+
+    cout<<"Total no of applicant:"<<APPLICANT::numberOfApplicants()<<endl;
+    cout<<"Application details:\n";
+    cout<<apl;
+
     return 0;
 }
