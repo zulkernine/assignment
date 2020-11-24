@@ -19,19 +19,16 @@ class STUDENT
     static int numberOfStudent;
 
 public:
-    STUDENT() : roll(-1), course(0)
-    {
+    STUDENT() : roll(-1), course(0){
         for (int i = 0; i < 5; i++)
             marks[i] = 0;
         name[0] = '\0';
-        numberOfStudent++;
     }
     ~STUDENT(){
-        numberOfStudent--;
+        if(roll !=- 1) numberOfStudent--;
     }
 
-    void admit(int roll, char *name)
-    {
+    void admit(int roll, char *name){
         this->roll = roll;
         int i = 0;
         for ( i = 0; name[i] != '\0'; i++)
@@ -39,7 +36,9 @@ public:
         this->name[i] = '\0';
 
         admissionDate = time(0);
+        STUDENT::numberOfStudent++;
     }
+    
     void setMarks(){
         int d;
         for(int i=0;i<5;i++){
