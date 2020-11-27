@@ -8,6 +8,16 @@
 #include<stdio.h>
 #include<stdlib.h>
 
+int stringCmp(char* s1,char* s2){
+    int index=0;
+    
+    while (s1[index] && s2[index] && ( (s1[index]|32) == (s2[index]|32) ) ) index++;
+
+    if(s1[index] == s2[index]) return 0;
+    else if ((s1[index] | 32) < (s2[index] | 32)) return -1;
+    else return 1;
+}
+
 int stringLentgh(char* str){
     int length=0;
     while(str[length] != '\0') length++;
@@ -36,6 +46,20 @@ void stringCopy(char *dest,char *source){
     do{
         dest[i] = source[i];
     } while (source[i++] != '\0');
+}
+
+void sortList(char** list,int size){
+    //Insertion sort
+    for(int i=1;i<size;i++){
+        char* temp = list[i];
+        int j=i-1;
+        while (j >= 0 && stringCmp(list[j], temp) == 1){
+            list[j+1] = list[j];
+            j--;
+        }
+        list[j+1] = temp;
+    }
+
 }
 
 int main(){
@@ -76,6 +100,19 @@ int main(){
 
     printf("Longest name in given file: %sLength:%d\n", longestName, longestNameLength);
     printf("Smallest name in given file: %sLength:%d\n", smallestName, smallestNameLength);
+
+    //sol2:sort the list using function :)
+    sortList(names,numberOfnames);
+    FILE *output;
+    if ((output = fopen("namesorted.txt", "w")) == NULL){
+        printf("Can't create file :(\n");
+        exit(1);
+    }
+
+    for(int i=0;i<numberOfnames;i++){
+        fprintf(output,"%s",names[i]);
+    }
+    fclose(output);
 
     return 0;
 }
