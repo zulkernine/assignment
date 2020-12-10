@@ -13,7 +13,7 @@ void initRandGen(){
     s *= ts.tv_nsec;
 }
 
-inline static uint32_t msws() {
+inline static uint64_t msws() {
     x *= x;
     x += (w += s);
     return x = (x >> 32) | (x << 32);
@@ -29,7 +29,7 @@ long long getRandomNumber(long long range){
 
 int main(){
     FILE *output;
-    if((output=fopen("random_number.txt","w"))==NULL){
+    if((output=fopen("random_number2.txt","w"))==NULL){
         printf("Can't open file :(\n");
         exit(1);
     }
