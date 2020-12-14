@@ -45,6 +45,21 @@ answer longDevision(char* num,int divisor){
 
 }
 
+void sumArr(int* result, int* operand1, int* operand2){
+    int buf = 0;
+    for (int i = MAX_SIZE - 1;i >= 0;i--){
+        int temp = operand1[i] + operand2[i] + buf;
+
+        result[i] = temp % 10;
+        buf = temp / 10;
+    }
+
+    if (buf > 0){
+        printf("Sum is too big. Array overflowed :)\n\n");
+        exit(1);
+    }
+}
+
 char* nameToNumberString(char* name){
     char* str = (char*) malloc(MAX_SIZE * sizeof(char));
     int index=MAX_SIZE-1;

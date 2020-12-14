@@ -60,7 +60,7 @@ int main(){
 
     printf("Actual array(i:el):- ");
     for(int i=0;i<size;i++) printf("%d:%d ",i,arr[i]);
-
+    printf("\n");
     free(arr);
     return 0;
 }
