@@ -139,10 +139,8 @@ polynomial mult(polynomial p1, polynomial p2)
         }
     }
     p.endIndex = available - 1;
-    print_polynomial(p);
+    
     //Now merge all the terms with same exponent value
-    mergesort(TERMS, p.startIndex, p.endIndex);
-    print_polynomial(p);
     int i = p.startIndex, j = p.startIndex + 1;
     while (j <= p.endIndex)
     {
@@ -167,11 +165,12 @@ polynomial mult(polynomial p1, polynomial p2)
 // – degree – returns the degree of the polynomial
 
 //print polynomial
-void print_polynomial(polynomial p)
-{
-    for (int i = p.startIndex; i <= p.endIndex; i++)
-    {
-        printf(" %+dx^%d", TERMS[i].coefficient, TERMS[i].exponent);
+void print_polynomial(polynomial p){
+    for (int i = p.startIndex;i <= p.endIndex;i++){
+        if (TERMS[i].exponent)
+            printf(" %+dx^%d", TERMS[i].coefficient, TERMS[i].exponent);
+        else
+            printf("%+d", TERMS[i].coefficient);
     }
     printf("\n");
 }
@@ -194,29 +193,6 @@ polynomial create_polynomial()
     }
     p.endIndex = available - 1;
     return p;
-}
-
-/* Internal Function */
-term min_term(term *arr, int start, int end, int *index_of_first_occurence)
-{
-    term t = TERMS[start];
-    for (int i = start + 1; i <= end; i++)
-    {
-        if (TERMS[i].exponent < t.exponent)
-        {
-            t.exponent = TERMS[i].exponent;
-            t.coefficient = TERMS[i].coefficient;
-            *index_of_first_occurence = i;
-            TERMS[i].exponent = MAX_EXPO;
-        }
-        else if (TERMS[i].exponent == t.exponent)
-        {
-            t.coefficient += TERMS[i].coefficient;
-            TERMS[i].exponent = MAX_EXPO;
-        }
-    }
-
-    return t;
 }
 
 //Merge Sort The Terms array for a specific polynomial
