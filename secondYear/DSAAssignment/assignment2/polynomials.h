@@ -106,37 +106,34 @@ polynomial mult(polynomial p1, polynomial p2){
     p.startIndex = available;
 
     //First compute all the elements
-    for (int i = p1.startIndex;i <= p1.endIndex;i++){
-        for (int j = p2.startIndex;j <= p2.endIndex;j++){
+    for (int i = p1.startIndex; i <= p1.endIndex; i++)
+    {
+        for (int j = p2.startIndex; j <= p2.endIndex; j++)
+        {
             TERMS[available].coefficient = TERMS[i].coefficient * TERMS[j].coefficient;
             TERMS[available++].exponent = TERMS[i].exponent + TERMS[j].exponent;
         }
     }
     p.endIndex = available - 1;
-
     //Now merge all the terms with same exponent value
-    int k = p.startIndex;
-    int temp_index; term temp_t;  //to swap
-    temp_t = min_term(TERMS, k, p.endIndex, &temp_index);
-    TERMS[temp_index] = TERMS[k];
-    TERMS[k] = temp_t;
-
-    for (k = k + 1;k <= p.endIndex;k++){
-        
-        printf("init k:%d available:%d\n",k,available);
-        temp_t = min_term(TERMS, k, p.endIndex, &temp_index);
-        TERMS[temp_index] = TERMS[k];
-        if (temp_t.exponent == MAX_EXPO){
-            p.endIndex = k-1;
-            available = k;
-            break;
+    print_polynomial(p);
+    int i = p.startIndex, j = p.startIndex + 1;
+    while (j <= p.endIndex)
+    {
+        if (TERMS[i].exponent == TERMS[j].exponent)
+        {
+            TERMS[i].coefficient += TERMS[j].coefficient;
+            j++;
         }
-        else{
-            TERMS[k] = temp_t;
+        else
+        {
+            ++i;
+            TERMS[i] = TERMS[j];
+            j++;
         }
-        printf("k:%d available:%d\n", k, available);
-
     }
+    p.endIndex = i;
+    available = i + 1;
 
     return p;
 }
@@ -146,7 +143,10 @@ polynomial mult(polynomial p1, polynomial p2){
 //print polynomial
 void print_polynomial(polynomial p){
     for (int i = p.startIndex;i <= p.endIndex;i++){
-        printf(" %+dx^%d", TERMS[i].coefficient, TERMS[i].exponent);
+        if (TERMS[i].exponent)
+            printf(" %+dx^%d", TERMS[i].coefficient, TERMS[i].exponent);
+        else
+            printf("%+d", TERMS[i].coefficient);
     }
     printf("\n");
 }
@@ -173,8 +173,7 @@ term min_term(term* arr, int start, int end, int* index_of_first_occurence){
     term t = TERMS[start];
     for (int i = start + 1;i <= end;i++){
         if (TERMS[i].exponent < t.exponent){
-            t.exponent = TERMS[i].exponent;
-            t.coefficient = TERMS[i].coefficient;
+            t = TERMS[i];
             *index_of_first_occurence = i;
             TERMS[i].exponent = MAX_EXPO;
         }
@@ -186,3 +185,53 @@ term min_term(term* arr, int start, int end, int* index_of_first_occurence){
 
     return t;
 }
+
+
+//Merge Sort The Terms array for a specific polynomial
+void mergesort(term* arr, int start, int end)
+{
+    if (start == end)
+    {
+        return;
+    }
+    int mid;
+    mid = (start + end) / 2;
+
+    mergesort(arr, start, mid);
+    mergesort(arr, mid + 1, end);
+
+    merge(arr, start, mid, end);
+}
+
+void merge(term* arr, int start, int mid, int end)
+{
+    int n1 = (mid - start + 1), n2 = (end - mid);
+    term temp_arr1[n1], temp_arr2[n2];
+
+    for (int i = 0; i < n1; i++)
+        temp_arr1[i] = arr[start + i];
+    for (int j = 0; j < n2; j++)
+        temp_arr2[j] = arr[mid + 1 + j];
+
+    int k = start, i = 0, j = 0;
+    while (i < n1 && j < n2)
+    {
+        if (temp_arr1[i].exponent < temp_arr2[j].exponent)
+        {
+            arr[k] = temp_arr1[i];
+            i++;
+        }
+        else
+        {
+            arr[k] = temp_arr2[j];
+            j++;
+        }
+        k++;
+    }
+
+    while (i < n1)
+        arr[k++] = temp_arr1[i++];
+    while (j < n2)
+        arr[k++] = temp_arr2[j++];
+}
+
