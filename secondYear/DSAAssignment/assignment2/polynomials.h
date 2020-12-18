@@ -141,6 +141,7 @@ polynomial mult(polynomial p1, polynomial p2)
     p.endIndex = available - 1;
     
     //Now merge all the terms with same exponent value
+    mergesort(TERMS,p.startIndex,p.endIndex);
     int i = p.startIndex, j = p.startIndex + 1;
     while (j <= p.endIndex)
     {
