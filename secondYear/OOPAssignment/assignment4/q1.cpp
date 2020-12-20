@@ -36,6 +36,7 @@ class ACCOUNT_LIST{
     //Create a new account and ACCOUNT itself confirms the uniqueness of account number
     int addAccount(int initialBalance=0);
 
+    friend class WITHDRAW;
 
 };
 
