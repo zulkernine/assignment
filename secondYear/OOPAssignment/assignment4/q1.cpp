@@ -7,6 +7,7 @@
     Implement your design. Use friend function wherever required and again, modify your implementation
     to avoid friend function.
 */
+#include<iostream>
 
 class ACCOUNT{
     static int lastAccNO;
@@ -16,14 +17,18 @@ class ACCOUNT{
     // Iniitalise account No with next no of last number, and puts the value of balance(default to 0) 
     ACCOUNT(int balance=0):accountNo(++lastAccNO){}
 
+    //Displays the account details
+    friend std::ostream& operator<<(std::ostream& stream, const ACCOUNT acc);
+
     //Give access of private member to account list and withdraw object
     friend class ACCOUNT_LIST;
     friend class WITHDRAW;
 };
 
 class ACCOUNT_LIST{
-    ACCOUNT* accountList;
+    ACCOUNT* accountList;//Ponter to the array of Accounts
     const int size;
+    int totalAccounts;
 
     //Returns a ponter to the account for acccount number equals to accountNumber
     // if ite exists in the array,else null
@@ -31,10 +36,17 @@ class ACCOUNT_LIST{
 
     public:
     //Initialise the accountList pointer to an array of ACCOUNT of length _size
-    ACCOUNT_LIST(int _size):size(_size){}
+    ACCOUNT_LIST(int _size):size(_size),totalAccounts(0){}
 
     //Create a new account and ACCOUNT itself confirms the uniqueness of account number
+    //Increaments the totalAccounts variable;
     int addAccount(int initialBalance=0);
+
+    //Displays accounts details of all acoounts, uses overloaded operator to do it
+    void print();
+
+    //Displays account details of Account corresponding to accNo
+    void printAcc(int accNo);
 
     friend class WITHDRAW;
 
