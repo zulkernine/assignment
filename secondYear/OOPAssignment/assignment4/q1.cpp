@@ -13,9 +13,9 @@ class ACCOUNT{
     static int lastAccNO;
     const int accountNo;
     int balance;
-    public:
+public:
     // Iniitalise account No with next no of last number, and puts the value of balance(default to 0) 
-    ACCOUNT(int balance=0):accountNo(++lastAccNO){}
+    ACCOUNT(int balance = 0) :accountNo(++lastAccNO){}
 
     //Displays the account details
     friend std::ostream& operator<<(std::ostream& stream, const ACCOUNT acc);
@@ -24,6 +24,8 @@ class ACCOUNT{
     friend class ACCOUNT_LIST;
     friend class WITHDRAW;
 };
+
+int ACCOUNT::lastAccNO=100000;
 
 class ACCOUNT_LIST{
     ACCOUNT* accountList;//Ponter to the array of Accounts
@@ -34,13 +36,13 @@ class ACCOUNT_LIST{
     // if ite exists in the array,else null
     ACCOUNT* findAccount(int acountNumber);
 
-    public:
+public:
     //Initialise the accountList pointer to an array of ACCOUNT of length _size
-    ACCOUNT_LIST(int _size):size(_size),totalAccounts(0){}
+    ACCOUNT_LIST(int _size) :size(_size), totalAccounts(0){}
 
     //Create a new account and ACCOUNT itself confirms the uniqueness of account number
     //Increaments the totalAccounts variable;
-    int addAccount(int initialBalance=0);
+    int addAccount(int initialBalance = 0);
 
     //Displays accounts details of all acoounts, uses overloaded operator to do it
     void print();
@@ -53,14 +55,14 @@ class ACCOUNT_LIST{
 };
 
 class WITHDRAW{
-    const ACCOUNT_LIST *parentList;//Points to the account_list object
+    const ACCOUNT_LIST* parentList;//Points to the account_list object
     int accountNumber;//account number
     int amount;//amount to be withdrawled
 public:
     //Initialise pointer to the list , account number and balance
     //It also checks if required amount exist in the corresponding account else throw exception
     //It searches the account using private function ACCOUNT_LIST::findAccount
-    WITHDRAW(ACCOUNT_LIST* parent,int accNo,int amnt):parentList(parent){}
+    WITHDRAW(ACCOUNT_LIST* parent, int accNo, int amnt) :parentList(parent){}
 
     // Executes the transaction and update the corresponding account in the available list pointed 
     //by parentList;
