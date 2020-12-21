@@ -1,9 +1,9 @@
 /*
-    For each student roll, name and phone number are to be maintained. For each subject store
-    subject code, name. A student may choose number of subjects from a list of subjects.
-    A subject may be chosen by number of students. Given a roll number system must able to display
-    the subjects chosen by the student and also be able to display the students corresponding to a
-    subject code. Design the classes and implement the system.
+    There are number of students. For every student roll (unique), name is to be stored.
+    For each subject, subject code and name is to be stored. A student can opt for number of
+    subjects. System should be able to maintain student list, subject list and will be able
+    to answer: i) which student has selected which subjects and ii) for a subjects who are the students.
+    Design the classes and implement. For list consider memory data structure.
 */
 
 class SUBJECT{
@@ -21,10 +21,10 @@ class SubjectList{
     SUBJECT* list;
     int size;
 public:
-    SubjectList(int _size=10);//Allocate memory for the "list" array
+    SubjectList(int _size = 10);//Allocate memory for the "list" array
 
     //if the code is unique and doesn't exist in the list, ads to the list
-    void addSubject(int code,char* name);
+    void addSubject(int code, char* name);
 };
 
 
@@ -37,7 +37,7 @@ class STUDENT{
     //Returns true if subject corresponding to subcode exist in subjects array
     bool hasSubject(int subCode);
 public:
-    STUDENT(char* _name, int num, int _roll=-1);//Initialise with data, roll=-1 implies invalid student object
+    STUDENT(char* _name, int num, int _roll = -1);//Initialise with data, roll=-1 implies invalid student object
 
     //Displays all the subject of the student
     void displaySubject();
@@ -54,7 +54,7 @@ public:
     //for given roll, returns null
     STUDENT* findStudent(int roll);
     //Initialise the list and allocate memory for it
-    StudentList(int _size=100);
+    StudentList(int _size = 100);
 
     //Display all student who have the subject corresponding to subCode,
     //It uses STUDENT::hadSubject() to look into the array
