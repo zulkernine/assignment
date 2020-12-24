@@ -94,7 +94,7 @@ int main(){
 
     BALANCE balance(AccountNumberOffset++);
     while (true){
-        cout << "1.Depoit 2.Withdrawl 3.See Balance\nOption: ";
+        cout << "1.Depoit 2.Withdrawl 3.See Balance 4.Exit\nOption: ";
         int opt;
         cin >> opt;
         switch (opt){
@@ -120,6 +120,7 @@ int main(){
               break;
         case 3: cout << balance << endl;
             break;
+        case 4: exit(0);
         default:{
             cout << "Please enter a valid option.\n";
         }
