@@ -22,7 +22,7 @@ class SubjectList{
     int size;
 public:
     SubjectList(int _size=10);//Allocate memory for the "list" array
-
+    
     //if the code is unique and doesn't exist in the list, ads to the list
     void addSubject(int code,char* name);
 };

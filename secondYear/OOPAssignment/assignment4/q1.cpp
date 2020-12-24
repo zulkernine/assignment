@@ -27,10 +27,19 @@ public:
 
 int ACCOUNT::lastAccNO=100000;
 
+class AccountNode{
+    AccountNode* prev;
+    AccountNode* next;
+    ACCOUNT data;
+public:
+    AccountNode():prev(nullptr),next(nullptr){}
+
+    friend class ACCOUNT_LIST;
+    friend class WITHDRAW;
+};
+
 class ACCOUNT_LIST{
-    ACCOUNT* accountList;//Ponter to the array of Accounts
-    const int size;
-    int totalAccounts;
+    AccountNode* head;//Ponter to the array of Accounts
 
     //Returns a ponter to the account for acccount number equals to accountNumber
     // if ite exists in the array,else null
@@ -38,7 +47,7 @@ class ACCOUNT_LIST{
 
 public:
     //Initialise the accountList pointer to an array of ACCOUNT of length _size
-    ACCOUNT_LIST(int _size) :size(_size), totalAccounts(0){}
+    ACCOUNT_LIST();
 
     //Create a new account and ACCOUNT itself confirms the uniqueness of account number
     //Increaments the totalAccounts variable;
@@ -55,16 +64,13 @@ public:
 };
 
 class WITHDRAW{
-    const ACCOUNT_LIST* parentList;//Points to the account_list object
     int accountNumber;//account number
     int amount;//amount to be withdrawled
 public:
     //Initialise pointer to the list , account number and balance
     //It also checks if required amount exist in the corresponding account else throw exception
-    //It searches the account using private function ACCOUNT_LIST::findAccount
-    WITHDRAW(ACCOUNT_LIST* parent, int accNo, int amnt) :parentList(parent){}
-
+    //It searches the account using private function ACCOUNT_LIST::findAccount, if it exists then
     // Executes the transaction and update the corresponding account in the available list pointed 
     //by parentList;
-    void execute();
+    WITHDRAW(ACCOUNT_LIST* parentList,int accNo, int amnt);
 };
