@@ -243,7 +243,7 @@ int main(){
         case 6:exit(0);
 
         default:
-            cout<<"Enter a valid option\n";
+            cout << "Enter a valid option\n";
         }
     }
 }
