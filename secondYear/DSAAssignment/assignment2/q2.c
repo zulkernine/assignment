@@ -11,7 +11,7 @@ void inputMatrix(matrix_term* matrix){
 }
 
 int main(){
-    matrix_term *mtx1,*mtx2,*addm,*transm;
+    matrix_term *mtx1,*mtx2,*addm,*transm,*mult;
 
     mtx1=create_matrix(); mtx2=create_matrix();
     inputMatrix(mtx1);inputMatrix(mtx2);
@@ -20,12 +20,37 @@ int main(){
     printf("Matrix2:\n");print_matrix(mtx2);
 
     addm = add_matrix(mtx1,mtx2);
-    printf("\n\nAdded matrix:\n\n");
-    print_matrix(addm);
+    if(addm){
+        printf("\n\nAdded matrix:\n\n");
+        print_matrix(addm);
+    }else{
+        printf("Given matrix can not be added\n");
+    }
 
     transm = transpose(addm);
     printf("\n\nTranspose of added matrix:\n\n");
     print_matrix(transm);
+
+    printf("Matrix1:\n");print_matrix(mtx1);
+    printf("Matrix2:\n");print_matrix(mtx2);
+    
+    mult = multiply_matrix(mtx1,mtx2);
+    if(mult){
+        printf("\n\nMultiplication of matrix1 and marix2:\n\n");
+        print_matrix(mult);
+    }else{
+        printf("Given matrix can't be multiplied\n");
+    }
+    
+
+    printf("\n");
+
+    //free memory
+    delete_matrix(mtx1);
+    delete_matrix(mtx2);
+    delete_matrix(addm);
+    delete_matrix(transm);
+    delete_matrix(mult);
 
     return 0;
 }
