@@ -22,6 +22,8 @@
 
 using namespace std;
 
+/* All the static variables are assigned random values , they don't count anything*/
+
 void strncpy(char* dest, char* source){
     int i = 0;
     do{
@@ -41,6 +43,7 @@ void getLine(char* str, int size){
     } while (strlen(str) == 0);
 }
 
+template<class T>class List;
 class LibrarySystem;
 
 template<class T>
@@ -52,15 +55,27 @@ public:
     inline T getData() const{ return data; }
 
     friend class LibrarySystem;
-    friend class List;
+    friend class List<T>;
+    friend class BookList;
+    friend class MemberList;
+    friend class TransactionList;
 };
 
 template<class T>
 class List{
+protected:
     Node<T>* head;
-    friend class LibrarySystem;
 public:
     List(){ head = nullptr; }
+    ~List(){
+        Node<T>* cur=head;
+        while(cur){
+            Node<T>* temp = cur;
+            cur = cur->next;
+
+            delete temp;
+        }
+    }
 
     void addNode(T d){
         Node<T>* n = new Node<T>(d);
@@ -72,7 +87,15 @@ public:
         head = n;
     }
 
+    virtual Node<T>* search(int) = 0;
 
+    void print(){
+        Node<T>* cur = head;
+        while (cur){
+            cout << cur->getData() << "\n";
+            cur = cur->next;
+        }
+    }
 };
 
 class Book{
@@ -107,19 +130,47 @@ public:
     }
 
     friend class LibrarySystem;
+    friend class BookList;
     friend ostream& operator<<(ostream& stream, const Book& book);
 };
-
-int Book::idCount = 0;
-int Book::serialCount = 0;
-
+int Book::idCount = 24615;
+int Book::serialCount = 156382;
 ostream& operator<<(ostream& stream, const Book& book){
     stream << "Book Id: " << book.bookId << "\tSerial Number: " << book.serialNumber << "\n";
     stream << "Book Name: " << book.name << "\tAuthor: " << book.author << "\n";
     stream << "Publisher: " << book.publisher << "\tPrice: " << book.price << "\n";
+    stream<<"Status: "<<(book.isIssued ? "Already Issued" : "Available/Not Issued")<<"\n";
 
     return stream;
 }
+
+class BookList : public List<Book>{
+public:
+    //Search for not issued book
+    Node<Book>* search(int bookId){
+        Node<Book>* cur = head;
+        while (cur){
+            if ((cur->getData().bookId == bookId && !cur->getData().isIssued)) break;
+            else cur = cur->next;
+        }
+        return cur;
+    }
+
+    Node<Book>* search(int bookId, int serNum){
+        Node<Book>* cur = head;
+        while (cur){
+            if ((cur->getData().bookId == bookId && cur->getData().serialNumber == serNum)) break;
+            else cur = cur->next;
+        }
+        return cur;
+    }
+
+    void print(){
+        if(head) List<Book>::print();
+        else cout<<"\n\nCurrently No Books Available\n\n";
+    }
+
+};
 
 class Member{
     static int CountMemberId; //Used to generate unique member id
@@ -146,38 +197,77 @@ public:
         numberOfBookIssued = 0;
     }
     friend class LibrarySystem;
+    friend class MemberList;
     friend ostream& operator<<(ostream& stream, const Member& m);
 };
-
-int Member::CountMemberId = 0;
-
+int Member::CountMemberId = 168851;
 ostream& operator<<(ostream& stream, const Member& m){
     stream << "ID: " << m.memberId << "\tQualification: " << (m.isStudent ? "Student" : "Faculty") << "\n";
     stream << "Name: " << m.name << "\n";
     stream << "Email: " << m.email << "\n";
     stream << "Address: " << m.address << "\n";
     stream << "Currently Issued Books: " << m.numberOfBookIssued << "\n";
+    return stream;
 }
 
+class MemberList : public List<Member>{
+public:
+    Node<Member>* search(int mid){
+        Node<Member>* cur = head;
+        while (cur){
+            if (cur->getData().memberId == mid) break;
+            else cur = cur->next;
+        }
+        return cur;
+    }
+};
+
 class Transaction{
+    static int TransIdCount;
+    const int transactionId;
     int memberId;
     int bookId;
-    int serialNum;
+    int serialNumber;
     bool isReturned;
 public:
     //values are -1 implies an invalid object
-    Transaction(int _mId = -1, int _bId = -1, int serNum = -1) :memberId(_mId), bookId(_bId), serialNum(serialNum){
+    Transaction(int _mId = -1, int _bId = -1, int serNum = -1) :
+        memberId(_mId),
+        bookId(_bId),
+        serialNumber(serNum),
+        transactionId(TransIdCount++){
         isReturned = false;
     };
 
     friend class LibrarySystem;
+    friend class TransactionList;
+    friend ostream& operator<<(ostream& stream, const Transaction& trans);
+};
+int Transaction::TransIdCount = 4135455;
+ostream& operator<<(ostream& stream, const Transaction& trans){
+    stream << "Transaction ID: " << trans.transactionId << "\tMember ID: " << trans.memberId << "\n";
+    stream << "Book ID: " << trans.bookId << "\tSerial Number: " << trans.serialNumber << "\n";
+    stream << "Status: " << (trans.isReturned ? "Returned" : "Not Returned") << "\n";
+    return stream;
+}
+
+class TransactionList : public List<Transaction>{
+public:
+    Node<Transaction>* search(int transId){
+        Node<Transaction>* cur = head;
+        while (cur){
+            if (cur->getData().transactionId == transId) break;
+            else cur = cur->next;
+        }
+        return cur;
+    }
 };
 
 class LibrarySystem{
-    List<Book> availableBooks;
-    List<Member> members;
+    BookList availableBooks;
+    MemberList members;
 
-    List<Transaction> transactionList;
+    TransactionList transactionList;
 public:
     //Allocates Memory for the 4 list members,issuedBooks,availableBooks,transactionList (array);
     LibrarySystem(){}
@@ -198,24 +288,30 @@ public:
     //array
     void returnBook();
 
-    //Returns th eindex if any books of given bookId exist in availableBooks array
-    int indexOfBook(int bookId);
+    void displayMembers(){ cout<<"All Members:\n";members.print();}
+    void displayBooks(){ cout << "All Books:\n";availableBooks.print(); }
+    void displayTransactions(){ cout << "All Transaction:\n";transactionList.print(); }
 };
 
 void LibrarySystem::addBook(){
     int id, serialNum;
     Book b;
-    cout << "Add New Books(Use -1 as ID for new book, unique id will be automatically\n";
-    cout << "generated.)Choose among following option\n";
+    cout << "Use -1 to enter new Book. Or to enter new copy of existing\n";
+    cout << "Book, use corresponding book id\n";
     cout << "Book Id:  ";cin >> id;
 
-    b.bookId = (id == -1) ? Book::idCount++ : id;
-
-    b.serialNumber = Book::serialCount++;
-    cout << "Book Name: "; getLine(b.name, MAX_BUFFER_SIZE);
-    cout << "Publisher: "; getLine(b.publisher, MAX_BUFFER_SIZE);
-    cout << "Author: "; getLine(b.author, MAX_BUFFER_SIZE);
-    cout << "Price: "; cin >> b.price;
+    if(id==-1){
+        b.bookId = Book::idCount++;
+        b.serialNumber = Book::serialCount++;
+        cout << "Book Name: "; getLine(b.name, MAX_BUFFER_SIZE);
+        cout << "Publisher: "; getLine(b.publisher, MAX_BUFFER_SIZE);
+        cout << "Author: "; getLine(b.author, MAX_BUFFER_SIZE);
+        cout << "Price: "; cin >> b.price;
+    }else{
+        Node<Book>* book = availableBooks.search(id);
+        b = Book(book->data);
+        b.serialNumber = Book::serialCount++;
+    }
 
     availableBooks.addNode(b);
 }
@@ -243,31 +339,27 @@ void LibrarySystem::issueBook(){
     cout << "Member ID: ";cin >> memId;
 
     //Look for the member
-    Node<Member>* curMem;
-    curMem = members.head;
-    while (curMem && curMem->getData().memberId != memId) curMem = curMem->next;
+    Node<Member>* member = members.search(memId);
 
-    if (curMem){
+    if (member){
         //Check How many book is already issued and reachs max limit
-        if ((curMem->data.isStudent && curMem->data.numberOfBookIssued == 2) || (!curMem->data.isStudent && curMem->data.numberOfBookIssued == 10)){
+        if ((member->data.isStudent && member->data.numberOfBookIssued == 2) || (!member->data.isStudent && member->data.numberOfBookIssued == 10)){
             cout << "No more books can be issued to this member\n.";
             return;
         }
 
         //Search the book in the list
         cout << "Book ID: ";cin >> bookId;
-        Node<Book>* curBook;
-        curBook = availableBooks.head;
-        while (curBook){
-            if (curBook->data.bookId == bookId && (!curBook->data.isIssued)) break;
-            else curBook = curBook->next;
-        }
+        Node<Book>* book = availableBooks.search(bookId);
 
-        if (curBook){
-            Transaction t(memId, bookId, curBook->data.serialNumber);
+        if (book){
+            Transaction t(memId, bookId, book->data.serialNumber);
             transactionList.addNode(t);
-            curMem->data.numberOfBookIssued++;
-            curBook->data.isIssued = true;
+            member->data.numberOfBookIssued++;
+            book->data.isIssued = true;
+
+            cout<<"Transaction Details:\n";
+            cout<<t<<"\n";
         }
         else{
             cout << "No book available :(\n";
@@ -279,42 +371,96 @@ void LibrarySystem::issueBook(){
 }
 
 void LibrarySystem::returnBook(){
-    int memId, bookId;
+    int memId, transId;
 
     cout << "Member ID: ";cin >> memId;
 
     //Look for the member
-    Node<Member>* curMem;
-    curMem = members.head;
-    while (curMem && curMem->getData().memberId != memId) curMem = curMem->next;
+    Node<Member>* member = members.search(memId);
 
-    if (curMem){
-        //Search the book in the list
-        cout << "Book ID: ";cin >> bookId;
-        cout << "Serial Number: ";int serId;cin >> serId;
+    if (member){
+        cout<<"Transaction ID: ";cin>>transId;
 
-        Node<Book>* curBook;
-        curBook = availableBooks.head;
-        while (curBook){
-            if (curBook->data.bookId == bookId && curBook->data.serialNumber == serId) break;
-            else curBook = curBook->next;
-        }
+        Node<Transaction>* transaction = transactionList.search(transId);
+        if(transaction){
+            if(transaction->data.memberId != memId){
+                cout<<"Member ID doesn't match to  recorded transaction details\n";
+                return;
+            }
 
-        if (curBook){
-            Transaction t(memId, bookId, curBook->data.serialNumber);
-            transactionList.addNode(t);
-            curMem->data.numberOfBookIssued++;
-            curBook->data.isIssued = true;
+            Node<Book>* book = availableBooks.search(transaction->data.bookId,transaction->data.serialNumber);
+
+            if (book){
+                member->data.numberOfBookIssued--;
+                book->data.isIssued = false;
+                transaction->data.isReturned = true;
+                cout << "Transaction Details:\n";
+                cout << transaction->data << "\n";
+            }else{
+                cout << "No Such book was issued :(\n";
+            }
         }
-        else{
-            cout << "No book available :(\n";
-        }
+        
     }
     else{
         cout << "Invalid Member\n";
     }
 }
 
-/*
-    TODO: implement returnBook completely
-*/
+int getOption(){
+    cout<<"Choose Option:\n";
+    cout<<"1.Add Member\n";
+    cout<<"2.Add Book\n";
+    cout<<"3.Issue Book\n";
+    cout<<"4.Return book\n";
+    cout<<"5.Display All Members\n";
+    cout<<"6.Display All Books\n";
+    cout<<"7.Display All Transaction details\n";
+    cout<<"-- 0 to exit --\n\n Option: ";
+    int opt;
+    cin>>opt;
+    return opt;
+}
+
+int main(){
+    LibrarySystem library;
+    while(true){
+        switch(getOption()){
+            case 0:{
+                return 0;
+            }
+            break;
+            case 1:{
+                library.addMember();
+            }
+            break;
+            case 2:{
+                library.addBook();
+            }
+            break;
+            case 3:{
+                library.issueBook();
+            }
+            break;
+            case 4:{
+                library.returnBook();
+            }
+            break;
+            case 5:{
+                library.displayMembers();
+            }
+            break;
+            case 6:{
+                library.displayBooks();
+            }
+            break;
+            case 7:{
+                library.displayTransactions();
+            }
+            break;
+            default:{
+                cout<<"Input a valid option between 0 and 7 (Both inclusive)\n";
+            }
+        }
+    }
+}
