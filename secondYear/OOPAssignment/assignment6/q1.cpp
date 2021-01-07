@@ -15,6 +15,7 @@
 //Implement File storage this time
 
 #include<iostream>
+#include<fstream>
 #define MAX_BUFFER_SIZE 100
 
 using namespace std;
@@ -40,57 +41,81 @@ void getLine(char* str, int size){
     } while (strlen(str) == 0);
 }
 
-template<class T>class List;
+template<class T>class List;//Linear List within file
 class LibrarySystem;
-
-template<class T>
-class Node{
-    T data;
-    Node<T>* next;
-public:
-    Node(T d) :data(d){ next = nullptr; }
-    inline T getData() const{ return data; }
-
-    friend class LibrarySystem;
-    friend class List<T>;
-    friend class BookList;
-    friend class MemberList;
-    friend class TransactionList;
-};
 
 template<class T>
 class List{
 protected:
-    Node<T>* head;
+    char fileName[50];
 public:
-    List(){ head = nullptr; }
-    ~List(){
-        Node<T>* cur = head;
-        while (cur){
-            Node<T>* temp = cur;
-            cur = cur->next;
-
-            delete temp;
-        }
-    }
+    List(){ fileName[0] = '\0'; }
 
     void addNode(T d){
-        Node<T>* n = new Node<T>(d);
+        if (fileName[0] != '\0'){
+            fstream out(fileName, ios::app | ios::binary);
 
-        if (head){
-            n->next = head;
+            if (!out){
+                cout << "Can't Open files, restart the program or check user permissions\n";
+                return;
+            }
+
+            out.write((char*)&d, sizeof(T));
+
+            out.close();
+        }        
+else{
+            cout << "Please Input the File Name first\n\n";
         }
 
-        head = n;
     }
 
-    virtual Node<T>* search(int) = 0;
+    virtual long long search(int) = 0;//Returns position in Binary File
+    virtual void setFile(char*) = 0;//Set fileName and initialise static data of class T
 
     void print(){
-        Node<T>* cur = head;
-        while (cur){
-            cout << cur->getData() << "\n";
-            cur = cur->next;
+        T temp;
+        ifstream input(fileName, ios::in | ios::binary);
+        if (!input){
+            cout << "Can't open file!\n";
+            return;
+        }
+
+        while (!input.eof()){
+            input.read((char*)&temp, sizeof(T));
+
+            cout << temp << "\n";
+        }
+
+        input.close();
+    }
+
+    T getDataAtPos(long long pos){
+        T data;
+        if (fileName[0] == '\0'){
+            cout << "Set file name first\n";
+            return data;
+        }
+
+        ifstream in(fileName, ios::in | ios::binary);
+        if (in){
+            in.seekg(pos, ios::beg);
+            in.read((char*)&data, sizeof(T));
+            in.close();
+        }
+
+        return data;
+    }
+
+    void updateDataAtPos(long long pos, T data){
+        fstream out(fileName, ios::in | ios::out | ios::binary);
+        if (out){
+            out.seekp(pos);
+            out.write((char*)&data, sizeof(T));
+            out.close();
+        }        
+else {
+            cout << "Can't open file to update\n";
         }
     }
 };
@@ -143,30 +168,75 @@ ostream& operator<<(ostream& stream, const Book& book){
 
 class BookList : public List<Book>{
 public:
+    void setFile(char* fn){
+        strncpy(fileName, fn);
+
+        //Now also initialse the static data in BOOK class using last record of file
+        ifstream in(fileName, ios::in | ios::binary);
+
+        if (in){
+            in.seekg(0, ios::end);
+
+            if (in.tellg() != 0){
+                in.seekg(sizeof(Book), ios::end);
+                Book b;
+                in.read((char*)&b, sizeof(Book));
+                Book::idCount = ++b.bookId;
+                Book::serialCount = ++b.serialNumber;
+            }
+
+            in.close();
+        }
+    }
+
     //Search for not issued book
-    Node<Book>* search(int bookId){
-        Node<Book>* cur = head;
-        while (cur){
-            if ((cur->getData().bookId == bookId && !cur->getData().isIssued)) break;
-            else cur = cur->next;
+    long long search(int bookId){
+        Book b;
+
+        ifstream input(fileName, ios::in | ios::binary);
+        if (!input) {
+            cout << "Can't Open File\n";
+            return -2;
         }
-        return cur;
-    }
 
-    Node<Book>* search(int bookId, int serNum){
-        Node<Book>* cur = head;
-        while (cur){
-            if ((cur->getData().bookId == bookId && cur->getData().serialNumber == serNum)) break;
-            else cur = cur->next;
+        while (!input.eof()){
+            input.read((char*)&b, sizeof(Book));
+
+            if ((b.bookId == bookId && !b.isIssued)){
+                long long pos = input.tellg();
+                input.close();
+
+                return pos;
+            }
         }
-        return cur;
+        input.close();
+
+        return -1;
     }
 
-    void print(){
-        if (head) List<Book>::print();
-        else cout << "\n\nCurrently No Books Available\n\n";
-    }
+    long long search(int bookId, int serNum){
+        Book b;
 
+        ifstream input(fileName, ios::in | ios::binary);
+        if (!input) {
+            cout << "Can't Open File\n";
+            return -2;
+        }
+
+        while (!input.eof()){
+            input.read((char*)&b, sizeof(Book));
+
+            if ((b.bookId == bookId && b.serialNumber == serNum)){
+                long long pos = input.tellg();
+                input.close();
+
+                return pos;
+            }
+        }
+        input.close();
+
+        return -1;
+    }
 };
 
 class Member{
@@ -209,13 +279,48 @@ ostream& operator<<(ostream& stream, const Member& m){
 
 class MemberList : public List<Member>{
 public:
-    Node<Member>* search(int mid){
-        Node<Member>* cur = head;
-        while (cur){
-            if (cur->getData().memberId == mid) break;
-            else cur = cur->next;
+    void setFile(char* fn){
+        strncpy(fileName, fn);
+
+        //Now also initialse the static data in BOOK class using last record of file
+        ifstream in(fileName, ios::in | ios::binary);
+
+        if (in){
+            in.seekg(0, ios::end);
+
+            if (in.tellg() != 0){
+                in.seekg(sizeof(Member), ios::end);
+                Member m;
+                in.read((char*)&m, sizeof(Member));
+                Member::CountMemberId = ++m.memberId;
+            }
+
+            in.close();
         }
-        return cur;
+    }
+
+    long long search(int mid){
+        Member m;
+
+        ifstream input(fileName, ios::in | ios::binary);
+        if (!input) {
+            cout << "Can't Open File\n";
+            return -2;
+        }
+
+        while (!input.eof()){
+            input.read((char*)&m, sizeof(Member));
+
+            if (m.memberId == mid){
+                long long pos = input.tellg();
+                input.close();
+
+                return pos;
+            }
+        }
+        input.close();
+
+        return -1;
     }
 };
 
@@ -250,13 +355,48 @@ ostream& operator<<(ostream& stream, const Transaction& trans){
 
 class TransactionList : public List<Transaction>{
 public:
-    Node<Transaction>* search(int transId){
-        Node<Transaction>* cur = head;
-        while (cur){
-            if (cur->getData().transactionId == transId) break;
-            else cur = cur->next;
+    void setFile(char* fn){
+        strncpy(fileName, fn);
+
+        //Now also initialse the static data in BOOK class using last record of file
+        ifstream in(fileName, ios::in | ios::binary);
+
+        if (in){
+            in.seekg(0, ios::end);
+
+            if (in.tellg() != 0){
+                in.seekg(sizeof(Transaction), ios::end);
+                Transaction t;
+                in.read((char*)&t, sizeof(Transaction));
+                Transaction::TransIdCount = t.transactionId + 1;
+            }
+
+            in.close();
         }
-        return cur;
+    }
+
+    long long search(int tid){
+        Transaction t;
+
+        ifstream input(fileName, ios::in | ios::binary);
+        if (!input) {
+            cout << "Can't Open File\n";
+            return -2;
+        }
+
+        while (!input.eof()){
+            input.read((char*)&t, sizeof(Transaction));
+
+            if (t.transactionId == tid){
+                long long pos = input.tellg();
+                input.close();
+
+                return pos;
+            }
+        }
+        input.close();
+
+        return -1;
     }
 };
 
@@ -268,6 +408,8 @@ class LibrarySystem{
 public:
     //Allocates Memory for the 4 list members,issuedBooks,availableBooks,transactionList (array);
     LibrarySystem(){}
+
+    void setFiles(char* mem, char* book, char* transaction);
 
     //Adds new member to the members array with unique id,
     void addMember();
@@ -290,6 +432,12 @@ public:
     void displayTransactions(){ cout << "All Transaction:\n";transactionList.print(); }
 };
 
+void LibrarySystem::setFiles(char* mem, char* book, char* transaction){
+    members.setFile(mem);
+    availableBooks.setFile(book);
+    transactionList.setFile(transaction);
+}
+
 void LibrarySystem::addBook(){
     int id, serialNum;
     Book b;
@@ -306,8 +454,9 @@ void LibrarySystem::addBook(){
         cout << "Price: "; cin >> b.price;
     }
     else{
-        Node<Book>* book = availableBooks.search(id);
-        b = Book(book->data);
+        long long pos = availableBooks.search(id);
+
+        b = Book(availableBooks.getDataAtPos(pos));
         b.serialNumber = Book::serialCount++;
     }
 
@@ -337,24 +486,29 @@ void LibrarySystem::issueBook(){
     cout << "Member ID: ";cin >> memId;
 
     //Look for the member
-    Node<Member>* member = members.search(memId);
+    long long memberPos = members.search(memId);
 
-    if (member){
+    if (memberPos >= 0){
+        Member m = members.getDataAtPos(memberPos);
         //Check How many book is already issued and reachs max limit
-        if ((member->data.isStudent && member->data.numberOfBookIssued == 2) || (!member->data.isStudent && member->data.numberOfBookIssued == 10)){
+        if ((m.isStudent && m.numberOfBookIssued == 2) || (!m.isStudent && m.numberOfBookIssued == 10)){
             cout << "No more books can be issued to this member\n.";
             return;
         }
 
         //Search the book in the list
         cout << "Book ID: ";cin >> bookId;
-        Node<Book>* book = availableBooks.search(bookId);
+        long long bookPos = availableBooks.search(bookId);
 
-        if (book){
-            Transaction t(memId, bookId, book->data.serialNumber);
+        if (bookPos >= 0){
+            Book b = availableBooks.getDataAtPos(bookPos);
+            Transaction t(memId, bookId, b.serialNumber);
             transactionList.addNode(t);
-            member->data.numberOfBookIssued++;
-            book->data.isIssued = true;
+
+            m.numberOfBookIssued++;
+            members.updateDataAtPos(memberPos, m);
+            b.isIssued = true;
+            availableBooks.updateDataAtPos(bookPos, b);
 
             cout << "Transaction Details:\n";
             cout << t << "\n";
@@ -374,26 +528,34 @@ void LibrarySystem::returnBook(){
     cout << "Member ID: ";cin >> memId;
 
     //Look for the member
-    Node<Member>* member = members.search(memId);
+    long long memberPos = members.search(memId);
 
-    if (member){
+    if (memberPos >= 0){
         cout << "Transaction ID: ";cin >> transId;
 
-        Node<Transaction>* transaction = transactionList.search(transId);
-        if (transaction){
-            if (transaction->data.memberId != memId){
+        long long transactionPos = transactionList.search(transId);
+        if (transactionPos >= 0){
+            Transaction t = transactionList.getDataAtPos(transactionPos);
+            if (t.memberId != memId){
                 cout << "Member ID doesn't match to  recorded transaction details\n";
                 return;
             }
 
-            Node<Book>* book = availableBooks.search(transaction->data.bookId, transaction->data.serialNumber);
+            long long bookPos = availableBooks.search(t.bookId, t.serialNumber);
+            if (bookPos >= 0){
+                Member m = members.getDataAtPos(memberPos);
+                m.numberOfBookIssued--;
+                members.updateDataAtPos(memberPos, m);
 
-            if (book){
-                member->data.numberOfBookIssued--;
-                book->data.isIssued = false;
-                transaction->data.isReturned = true;
+                Book b = availableBooks.getDataAtPos(bookPos);
+                b.isIssued = false;
+                availableBooks.updateDataAtPos(bookPos, b);
+
+                t.isReturned = true;
+                transactionList.updateDataAtPos(transactionPos, t);
+
                 cout << "Transaction Details:\n";
-                cout << transaction->data << "\n";
+                cout << t << "\n";
             }
             else{
                 cout << "No Such book was issued :(\n";
@@ -423,6 +585,12 @@ int getOption(){
 
 int main(){
     LibrarySystem library;
+    char membuf[50], bookbuf[50], transbuf[50];
+    cout << "Members' File Name: ";getLine(membuf, 50);
+    cout << "Books' File Name: ";getLine(bookbuf, 50);
+    cout << "Transactions' File Name: ";getLine(transbuf, 50);
+    library.setFiles(membuf, bookbuf, transbuf);
+
     while (true){
         switch (getOption()){
         case 0:{
@@ -463,3 +631,5 @@ int main(){
         }
     }
 }
+
+//TODO: Debug runtime errors
