@@ -18,6 +18,7 @@
     Design the classes and implement. For list consider memory data structure.
 */
 #include<iostream>
+#include<ctime>
 #define MAX_BUFFER_SIZE 100
 
 using namespace std;
@@ -229,6 +230,8 @@ class Transaction{
     int bookId;
     int serialNumber;
     bool isReturned;
+    long long issueTime;
+    long long returnTime;
 public:
     //values are -1 implies an invalid object
     Transaction(int _mId = -1, int _bId = -1, int serNum = -1) :
@@ -237,6 +240,8 @@ public:
         serialNumber(serNum),
         transactionId(TransIdCount++){
         isReturned = false;
+        issueTime = 0;
+        returnTime = 0;
     };
 
     friend class LibrarySystem;
@@ -248,6 +253,14 @@ ostream& operator<<(ostream& stream, const Transaction& trans){
     stream << "Transaction ID: " << trans.transactionId << "\tMember ID: " << trans.memberId << "\n";
     stream << "Book ID: " << trans.bookId << "\tSerial Number: " << trans.serialNumber << "\n";
     stream << "Status: " << (trans.isReturned ? "Returned" : "Not Returned") << "\n";
+    if (trans.issueTime){
+        char* idt = ctime((time_t*)&trans.issueTime);
+        cout << "Issue Time: " << idt;
+    }
+    if (trans.returnTime){
+        char* rdt = ctime((time_t*)&trans.returnTime);
+        cout << "Return Time: " << rdt;
+    }
     return stream;
 }
 
@@ -354,6 +367,7 @@ void LibrarySystem::issueBook(){
 
         if (book){
             Transaction t(memId, bookId, book->data.serialNumber);
+            t.issueTime = time(0);
             transactionList.addNode(t);
             member->data.numberOfBookIssued++;
             book->data.isIssued = true;
@@ -394,6 +408,7 @@ void LibrarySystem::returnBook(){
                 member->data.numberOfBookIssued--;
                 book->data.isIssued = false;
                 transaction->data.isReturned = true;
+                transaction->data.returnTime = time(0);
                 cout << "Transaction Details:\n";
                 cout << transaction->data << "\n";
             }else{

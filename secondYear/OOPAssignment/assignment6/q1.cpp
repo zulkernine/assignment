@@ -16,6 +16,7 @@
 
 #include<iostream>
 #include<fstream>
+#include<ctime>
 #define MAX_BUFFER_SIZE 100
 
 using namespace std;
@@ -83,7 +84,7 @@ public:
 
         while (!input.eof()){
             input.read((char*)&temp, sizeof(T));
-
+            if(input.eof()) break;
             cout << temp << "\n";
         }
 
@@ -158,9 +159,9 @@ public:
 int Book::idCount = 24615;
 int Book::serialCount = 156382;
 ostream& operator<<(ostream& stream, const Book& book){
-    stream << "Book Id: " << book.bookId << "\tSerial Number: " << book.serialNumber << "\n";
-    stream << "Book Name: " << book.name << "\tAuthor: " << book.author << "\n";
-    stream << "Publisher: " << book.publisher << "\tPrice: " << book.price << "\n";
+    stream << "Book Id: " << book.bookId << "\t\tSerial Number: " << book.serialNumber << "\n";
+    stream << "Book Name: " << book.name << "\t\tAuthor: " << book.author << "\n";
+    stream << "Publisher: " << book.publisher << "\t\tPrice: " << book.price << "\n";
     stream << "Status: " << (book.isIssued ? "Already Issued" : "Available/Not Issued") << "\n";
 
     return stream;
@@ -267,7 +268,7 @@ public:
 };
 int Member::CountMemberId = 168851;
 ostream& operator<<(ostream& stream, const Member& m){
-    stream << "ID: " << m.memberId << "\tQualification: " << (m.isStudent ? "Student" : "Faculty") << "\n";
+    stream << "ID: " << m.memberId << "\t\tQualification: " << (m.isStudent ? "Student" : "Faculty") << "\n";
     stream << "Name: " << m.name << "\n";
     stream << "Email: " << m.email << "\n";
     stream << "Address: " << m.address << "\n";
@@ -329,6 +330,8 @@ class Transaction{
     int bookId;
     int serialNumber;
     bool isReturned;
+    long long issueTime;
+    long long returnTime;
 public:
     //values are -1 implies an invalid object
     Transaction(int _mId = -1, int _bId = -1, int serNum = -1) :
@@ -337,6 +340,8 @@ public:
         serialNumber(serNum),
         transactionId(TransIdCount++){
         isReturned = false;
+        issueTime = 0;
+        returnTime = 0;
     };
 
     friend class LibrarySystem;
@@ -345,9 +350,17 @@ public:
 };
 int Transaction::TransIdCount = 4135455;
 ostream& operator<<(ostream& stream, const Transaction& trans){
-    stream << "Transaction ID: " << trans.transactionId << "\tMember ID: " << trans.memberId << "\n";
-    stream << "Book ID: " << trans.bookId << "\tSerial Number: " << trans.serialNumber << "\n";
+    stream << "Transaction ID: " << trans.transactionId << "\t\tMember ID: " << trans.memberId << "\n";
+    stream << "Book ID: " << trans.bookId << "\t\tSerial Number: " << trans.serialNumber << "\n";
     stream << "Status: " << (trans.isReturned ? "Returned" : "Not Returned") << "\n";
+    if(trans.issueTime){
+        char* idt = ctime((time_t*)&trans.issueTime);
+        cout << "Issue Time: " << idt;
+    }
+    if(trans.returnTime){
+        char* rdt = ctime((time_t*)&trans.returnTime);
+        cout << "Return Time: " << rdt;
+    }
     return stream;
 }
 
@@ -504,6 +517,7 @@ void LibrarySystem::issueBook(){
         if (bookPos >= 0){
             Book b = availableBooks.getDataAtPos(bookPos);
             Transaction t(memId, bookId, b.serialNumber);
+            t.issueTime = time(0);
             transactionList.addNode(t);
 
             m.numberOfBookIssued++;
@@ -540,6 +554,9 @@ void LibrarySystem::returnBook(){
             if (t.memberId != memId){
                 cout << "Member ID doesn't match to  recorded transaction details\n";
                 return;
+            }else if(t.isReturned){
+                cout<<"This transaction is completed(Book already returned)\n";
+                return;
             }
 
             long long bookPos = availableBooks.search(t.bookId, t.serialNumber);
@@ -553,6 +570,7 @@ void LibrarySystem::returnBook(){
                 availableBooks.updateDataAtPos(bookPos, b);
 
                 t.isReturned = true;
+                t.returnTime = time(0);
                 transactionList.updateDataAtPos(transactionPos, t);
 
                 cout << "Transaction Details:\n";
