@@ -63,8 +63,8 @@ public:
             out.write((char*)&d, sizeof(T));
 
             out.close();
-        }        
-else{
+        }
+        else{
             cout << "Please Input the File Name first\n\n";
         }
 
@@ -113,8 +113,8 @@ else{
             out.seekp(pos);
             out.write((char*)&data, sizeof(T));
             out.close();
-        }        
-else {
+        }
+        else {
             cout << "Can't open file to update\n";
         }
     }
@@ -178,7 +178,8 @@ public:
             in.seekg(0, ios::end);
 
             if (in.tellg() != 0){
-                in.seekg(sizeof(Book), ios::end);
+                long long pos = (long long)in.tellg() - (long long)sizeof(Book);
+                in.seekg(pos, ios::beg);
                 Book b;
                 in.read((char*)&b, sizeof(Book));
                 Book::idCount = ++b.bookId;
@@ -200,12 +201,10 @@ public:
         }
 
         while (!input.eof()){
+            long long pos = input.tellg();
             input.read((char*)&b, sizeof(Book));
-
             if ((b.bookId == bookId && !b.isIssued)){
-                long long pos = input.tellg();
                 input.close();
-
                 return pos;
             }
         }
@@ -224,12 +223,11 @@ public:
         }
 
         while (!input.eof()){
+            long long pos = input.tellg();
             input.read((char*)&b, sizeof(Book));
 
             if ((b.bookId == bookId && b.serialNumber == serNum)){
-                long long pos = input.tellg();
                 input.close();
-
                 return pos;
             }
         }
@@ -289,7 +287,8 @@ public:
             in.seekg(0, ios::end);
 
             if (in.tellg() != 0){
-                in.seekg(sizeof(Member), ios::end);
+                long long pos = (long long)in.tellg() - (long long)sizeof(Book);
+                in.seekg(pos, ios::beg);
                 Member m;
                 in.read((char*)&m, sizeof(Member));
                 Member::CountMemberId = ++m.memberId;
@@ -309,12 +308,11 @@ public:
         }
 
         while (!input.eof()){
+            long long pos = input.tellg();
             input.read((char*)&m, sizeof(Member));
 
             if (m.memberId == mid){
-                long long pos = input.tellg();
                 input.close();
-
                 return pos;
             }
         }
@@ -365,7 +363,8 @@ public:
             in.seekg(0, ios::end);
 
             if (in.tellg() != 0){
-                in.seekg(sizeof(Transaction), ios::end);
+                long long pos = (long long)in.tellg() - (long long)sizeof(Book);
+                in.seekg(pos, ios::beg);
                 Transaction t;
                 in.read((char*)&t, sizeof(Transaction));
                 Transaction::TransIdCount = t.transactionId + 1;
@@ -385,10 +384,10 @@ public:
         }
 
         while (!input.eof()){
+            long long pos = input.tellg();
             input.read((char*)&t, sizeof(Transaction));
 
             if (t.transactionId == tid){
-                long long pos = input.tellg();
                 input.close();
 
                 return pos;
@@ -457,10 +456,12 @@ void LibrarySystem::addBook(){
         long long pos = availableBooks.search(id);
 
         b = Book(availableBooks.getDataAtPos(pos));
-        b.serialNumber = Book::serialCount++;
+        if (b.bookId >= 0) b.serialNumber = Book::serialCount++;
     }
 
-    availableBooks.addNode(b);
+    if(b.bookId >= 0)
+        availableBooks.addNode(b);
+    else cout<<"Invalid Book ID. Failed to add\n\n";
 }
 
 void LibrarySystem::addMember(){
