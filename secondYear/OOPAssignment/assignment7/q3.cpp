@@ -45,6 +45,7 @@ int main(){
                 cout << "No student in the line! Add some student first\n";
             }
             else{
+                //For testing purpose,generate a random score between 0 and 100
                 int score = rand() % 100;
                 Student st = studentqueue.front();
                 st.setScore(score);

@@ -178,32 +178,32 @@ int main(){
     cout << "Number of Objects in the list: " << arr.size() << "\n";
     cout << "Student with highest score:\n" << *(arr.highestScore()) << "\n";
 
-    // //Find students with a substring in name
-    // string substr = "";
-    // cout << "Enter the substring to find: ";
-    // while (substr == "") getline(cin, substr);
-    // StudentArray subArr = arr.findStudentsWithSubstring(substr);
-    // cout << "Found Student details: \n";
-    // cout << subArr << "\n";
+    //Find students with a substring in name
+    string substr = "";
+    cout << "Enter the substring to find: ";
+    while (substr == "") getline(cin, substr);
+    StudentArray subArr = arr.findStudentsWithSubstring(substr);
+    cout << "Found Student details: \n";
+    cout << subArr << "\n";
 
-    // //Find students without a substring in name
-    // substr = "";
-    // cout << "Enter the substring to find(which name excludes): ";
-    // while (substr == "") getline(cin, substr);
-    // StudentArray subArr2 = arr.findStudentsWithoutSubstring(substr);
-    // cout << "Found Student details: \n";
-    // cout << subArr2 << "\n";
+    //Find students without a substring in name
+    substr = "";
+    cout << "Enter the substring to find(which name excludes): ";
+    while (substr == "") getline(cin, substr);
+    StudentArray subArr2 = arr.findStudentsWithoutSubstring(substr);
+    cout << "Found Student details: \n";
+    cout << subArr2 << "\n";
 
-    // cout << "\n\nSorted Student List:\n";
-    // arr.sortDescending();
-    // cout << arr << "\n";
+    cout << "\n\nSorted Student List:\n";
+    arr.sortDescending();
+    cout << arr << "\n";
 
-    // cout << "Enter a roll to remove: ";
-    // int roll;cin >> roll;
+    cout << "Enter a roll to remove: ";
+    int roll;cin >> roll;
 
-    // arr.removeStudent(roll);
-    // cout << "After removing a student:\n";
-    // cout << arr << "\n";
+    arr.removeStudent(roll);
+    cout << "After removing a student:\n";
+    cout << arr << "\n";
 
     StudentArray arr2;
     size = 3;//for testing
