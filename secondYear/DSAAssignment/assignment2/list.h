@@ -45,7 +45,8 @@ int is_empty_s(list_s* list);
 int is_full_ns(list_ns* list);
 int is_full_s(list_s* list);
 
-
+void delete_list_ns(list_ns* list);
+void delete_list_s(list_s* list);
 /* Implementation */
 
 
@@ -61,8 +62,8 @@ list_ns* creat_list_ns(int size){
 list_s* creat_list_s(int size){
     list_s* ptr = (list_s*)malloc(sizeof(list_s));
     ptr->size = size;
-    ptr->arr = (int*)malloc(sizeof(int) * size);
-    for (int i = 0;i < size;i++) ptr->arr[i] = SENTINAL;
+    ptr->arr = (int*)malloc(sizeof(int) * (size+1));
+    for (int i = 0;i < size+1;i++) ptr->arr[i] = SENTINAL;
 
     return ptr;
 }
@@ -143,4 +144,17 @@ int is_full_ns(list_ns* list){
 }
 int is_full_s(list_s* list){
     return (list->arr[list->size-1] == SENTINAL);
+}
+
+void delete_list_ns(list_ns* list){
+    if(list){
+        if(list->arr) free(list->arr);
+        free(list);
+    }
+}
+void delete_list_s(list_s* list){
+    if (list){
+        if (list->arr) free(list->arr);
+        free(list);
+    }
 }

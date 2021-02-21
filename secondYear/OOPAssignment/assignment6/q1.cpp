@@ -299,7 +299,8 @@ public:
         }
     }
 
-    long long search(int mid){
+    long long search(int mid){        
+:-
         Member m;
 
         ifstream input(fileName, ios::in | ios::binary);
@@ -650,5 +651,3 @@ int main(){
         }
     }
 }
-
-//TODO: Debug runtime errors
