@@ -58,25 +58,27 @@ SET* create_set(int capacity){
     return set;
 }
 
-//Insert a key
-// void insert_key(int key, SET* set){
-//     if (!search_key(key, set) && set->size != set->capacity){
-//         if (set->size == 0) set->arr[set->size++] = key;
-//         else{
-//             for (int i = set->size;i > 0;i--){
-//                 if (key < set->arr[i - 1]){
-//                     set->arr[i] = set->arr[i - 1];
-//                 }
-//                 else{
-//                     set->arr[i] = key;
-//                 }
-//             }
+//Insert key in set-array maintaining the sorted order
+void insert_key(int key, SET* set){
+    if ((!search_key(key, set)) && set->size != set->capacity){
+        if (set->size == 0) set->arr[set->size++] = key;
+        else{
+            int i;
+            for (i = set->size;i > 0;i--){
+                if (key < set->arr[i - 1]){
+                    set->arr[i] = set->arr[i - 1];
+                }
+                else{
+                    break;
+                }
+            }
+            set->arr[i] = key;
 
-//             set->size++;
-//         }
+            set->size++;
+        }
 
-//     }
-// }
+    }
+}
 
 //Deete a key
 void delete_key(int key, SET* set){
@@ -99,7 +101,7 @@ int search_key(int key, SET* set){
     int start, middle, end;
 
     start = 0; end = set->size - 1;
-    while (start < end){
+    while (start <= end){
         middle = (start + end) / 2;
         if (set->arr[middle] == key) return 1;
         else if (set->arr[middle] > key){
@@ -120,15 +122,22 @@ SET* union_set(SET* set1, SET* set2){
 
     int i = 0, j = 0, k = 0;
     while (i < set1->size && j < set2->size){
-        if (set1->arr[i] < set2->arr[j]) set->arr[k++] = set->arr[i++];
-        else if (set1->arr[i] > set2->arr[j]) set->arr[k++] = set2->arr[j++];
+        if (set1->arr[i] < set2->arr[j]) set->arr[k] = set1->arr[i++];
+        else if (set1->arr[i] > set2->arr[j]) set->arr[k] = set2->arr[j++];
         else {
-            set->arr[k++] = set1->arr[i++];
+            set->arr[k] = set1->arr[i++];
             j++;
         }
+        k++;
     }
-    while (i < set1->size) set->arr[k++] = set->arr[i++];
-    while (j < set2->size) set->arr[k++] = set2->arr[j++];
+    while (i < set1->size){
+        set->arr[k] = set1->arr[i];
+        i++;k++;
+    }
+    while (j < set2->size){
+        set->arr[k] = set2->arr[j];
+        j++;k++;
+    }
     set->size = k;
 
     return set;
@@ -141,12 +150,12 @@ SET* intersection_set(SET* set1, SET* set2){
 
     int i = 0, j = 0, k = 0;
     while (i < set1->size && j < set2->size){
-        if (set1->arr[i] < set2->arr[j]) i++;
-        else if (set1->arr[i] > set2->arr[j]) j++;
-        else {
-            set->arr[k++] = set1->arr[i++];
-            j++;
+        if (set1->arr[i] == set2->arr[j]) {
+            set->arr[k] = set1->arr[i++];
+            j++;k++;
         }
+        else if (set1->arr[i] > set2->arr[j]) j++;
+        else i++;
     }
     set->size = k;
 

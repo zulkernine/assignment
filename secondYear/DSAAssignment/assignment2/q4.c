@@ -1,4 +1,4 @@
-#include"set.h"
+#include "set.h"
 #include<stdio.h>
 
 void print_set(SET* set){
@@ -7,27 +7,6 @@ void print_set(SET* set){
     printf("\n\n");
 }
 
-
-void insert_key(int key, SET* set){
-    if ((!search_key(key, set)) && set->size != set->capacity){
-        if (set->size == 0) set->arr[set->size++] = key;
-        else{
-            int i;
-            for (i = set->size;i > 0;i--){
-                if (key < set->arr[i - 1]){
-                    set->arr[i] = set->arr[i - 1];
-                }
-                else{
-                    break;
-                }
-            }
-            set->arr[i] = key;
-
-            set->size++;
-        }
-
-    }
-}
 
 int main(){
     SET* set1,*set2;
@@ -93,8 +72,10 @@ int main(){
 
             case 5:{
                 printf("Union of the sets: ");
+                printf("set1 ");print_set(set1);
+                printf("set2 ");print_set(set2);
+
                 SET* u = union_set(set1,set2);
-                print_set(u);
                 printf("New union set ");
                 print_set(u);
                 delete_set(u);
@@ -103,8 +84,10 @@ int main(){
 
             case 6:{
                 printf("Intersection of the sets: ");
-                SET* i = union_set(set1, set2);
-                print_set(i);
+                printf("set1 ");print_set(set1);
+                printf("set2 ");print_set(set2);
+
+                SET* i = intersection_set(set1, set2);
                 printf("New intersection set ");
                 print_set(i);
                 delete_set(i);
