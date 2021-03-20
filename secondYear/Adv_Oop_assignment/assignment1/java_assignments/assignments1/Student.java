@@ -1,8 +1,9 @@
 package java_assignments.assignments1;
 
 import java.time.*;
+import java.util.Comparator;
 
-class Student{
+public class Student{
     private static int totalNumberOfAdmission;
     private String roll;
     private String name;
@@ -61,27 +62,58 @@ class Student{
             System.out.println("INvalid Course");
         }
     }
-
     
+    public static Comparator<Student> StudentTotalScore = new Comparator<Student>(){
+        public int compare(Student s1,Student s2){
+            int totalScore1=0,totalScore2=0;
+
+            for(int s:s1.marks){
+                totalScore1 += s;
+            }
+            for (int s : s2.marks) {
+                totalScore2 += s;
+            }
+
+            return totalScore1-totalScore2 ;
+        }
+    };
+
+
     void displayMarksheet(){
         if(admissionDate == null){
             System.out.println("This Student is not admitted yet!");
         }else{
-            System.out.println("Name: " + this.name );
-            System.out.println("Roll: " + this.roll );
+            System.out.print("Name: " + this.name );
+            System.out.println(" \tRoll: " + this.roll );
             System.out.println("Course: "+this.course );
-
+            
             String subjects[] = { "Bengali","English","History","Geography","Science" };
-
+            
+            System.out.println("Marks:");
             for(int i=0;i<5;i++){
                 System.out.print(subjects[i] + ":" + marks[i] +"\t");
             }
             
         }
     }
-
+    String getCourse(){
+        return course;
+    }
+    String getName(){ return name; }
+    String getRoll(){ return roll; }
+    
     static public int getNumberOfAdmission(){
         return Student.totalNumberOfAdmission;
+    }
+
+    @Override
+    public String toString() {
+        int totalScore1 = 0;
+        for (int s : marks) {
+            totalScore1 += s;
+        }
+        
+        return ("Roll: "+roll+"  Name: "+name+"\t Total Score: "+totalScore1);
     }
 
 }
