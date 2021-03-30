@@ -1,0 +1,20 @@
+	LXI H,2500H
+	MOV A,M
+	MVI B,00H ;COUNT 0
+	MVI C,00H ;COUNT 1
+	MVI D,08H
+
+S1: RLC
+	JNC I0
+	INR C
+    JMP D1
+I0:	INR B
+D1:	DCR D
+	JNZ S1
+    
+    MOV A,C
+    STA 2610H
+    MOV A,B
+    STA 2511H
+    
+	HLT

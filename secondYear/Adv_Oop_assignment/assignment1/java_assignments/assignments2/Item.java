@@ -19,7 +19,7 @@ public class Item {
         this.quantity = quantity;
         ++Item.itemOrder;
 
-        this.itemCode = name.substring(0, 3) + String.format("%03d", Item.itemOrder);
+        this.itemCode = name.substring(0, 3).toUpperCase() + String.format("%03d", Item.itemOrder);
     }
 
     public void setRate(float r){
@@ -42,6 +42,7 @@ public class Item {
 
     public String getName(){ return itemName; }
     public String getItemCode(){ return itemCode; }
+    public int getSerial(){ return itemOrder; }//Return serial entry number
 
     @Override
     public String toString() {
