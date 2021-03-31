@@ -12,7 +12,18 @@ public class Item {
         itemOrder = 0;
     }
 
-    Item(){}
+    Item() {
+    }
+
+    Item(String name) {
+        this.itemName = new String(name);
+        this.rate = 0;
+        this.quantity = 0;
+        ++Item.itemOrder;
+
+        this.itemCode = name.substring(0, 3).toUpperCase() + String.format("%03d", Item.itemOrder);
+    }
+
     Item(String name,float rate,float quantity){
         this.itemName = new String(name);
         this.rate = rate;
@@ -46,7 +57,7 @@ public class Item {
 
     @Override
     public String toString() {
-        return ("Code: "+itemCode+" \tName: "+itemName+" \tQuantity: "+quantity+" \tRate: "+rate) ;
+        return ("Code: "+itemCode+" \tName: "+itemName+" \tQuantity: "+quantity+" \tRate: ₹"+rate) ;
     }
     @Override
     public boolean equals(Object obj) {
