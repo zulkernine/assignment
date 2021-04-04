@@ -7,7 +7,7 @@ public class Parentheses {
         Scanner scanner = new Scanner(System.in);
 
         String str;
-        System.out.println("String: ");
+        System.out.print("String: ");
         str = scanner.nextLine().trim();
         char[] charArray = str.toCharArray();
 
@@ -109,6 +109,7 @@ public class Parentheses {
         }
 
         if(count == 0) printMessage(true);
+        else printMessage(false);
 
         scanner.close();
         
