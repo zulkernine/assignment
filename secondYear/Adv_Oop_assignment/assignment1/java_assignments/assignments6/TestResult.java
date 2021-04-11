@@ -17,6 +17,6 @@ public class TestResult {
 
     @Override
     public String toString() {
-        return (recordTime+"\t"+testName+"\t"+value+"\t"+recordTime);
+        return (recordTime+"\t"+testName+"\t"+value+"\t"+unit);
     }
 }

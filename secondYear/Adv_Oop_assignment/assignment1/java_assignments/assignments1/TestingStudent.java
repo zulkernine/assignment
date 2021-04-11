@@ -75,10 +75,18 @@ public class TestingStudent {
                 System.out.print("Deartment name(BCSE/ETCE/BEEE/FTBE): ");
                 dept = scanner.next();
 
+                ArrayList<DepartmentalStudent> tempDept = new ArrayList<DepartmentalStudent>();
+
                 for (DepartmentalStudent st : students) {
                     if (st.getDepartment().equals(dept)) {
-                        System.out.println(st);
+                        tempDept.add(st);
                     }
+                }
+
+                Collections.sort(tempDept, Student.StudentTotalScore);
+
+                for (DepartmentalStudent st : tempDept) {
+                    System.out.println(st);
                 }
             }
                 break;
@@ -202,7 +210,7 @@ public class TestingStudent {
         System.out.println("\n\nChose Option:");
         System.out.println("1.Add Student");
         System.out.println("2.Remove a Student");
-        System.out.println("3.Display Student of certain department");
+        System.out.println("3.Display Student of certain department(Sorted)");
         System.out.println("4.Display all student sorted by score");
         System.out.println("5.Check Memory");
         System.out.println("6.Set Marks");

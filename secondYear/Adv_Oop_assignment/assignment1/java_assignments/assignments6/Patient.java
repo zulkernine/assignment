@@ -27,7 +27,7 @@ public class Patient {
         admissionDate = LocalDateTime.now().toString();
 
         assignedDoctorID = doctor.getID();
-        doctor.addPatient(this);
+        doctor.addPatient(patientID);
         dispatchDate = "Not Available";
 
         File file = new File(ManageFolders.patientFoldersPath() + patientID + "_record.txt");
@@ -37,8 +37,8 @@ public class Patient {
                 wrt.write(name + "\n");
                 wrt.write(patientID + "\n");
                 wrt.write(doctor.getName() + "\n" + doctor.getID() + "\n");
-                wrt.write(admissionDate);
-                wrt.write(dispatchDate);
+                wrt.write(admissionDate + "\n");
+                wrt.write(dispatchDate + "\n");
 
                 wrt.write("Test Results:\n");
 
@@ -101,6 +101,10 @@ public class Patient {
     }
 
     void disPatchPatient() {
+        if (isDispatched) {
+            System.out.println("Patient already dispatched on " + dispatchDate);
+            return;
+        }
         isDispatched = true;
         dispatchDate = LocalDateTime.now().toString();
 
@@ -127,18 +131,21 @@ public class Patient {
 
     @Override
     public String toString() {
-        return "Name: " + name + "\t" + "ID: " + patientID + "\n" + "Admission date: " + admissionDate + "\tDoctorID: "
-                + assignedDoctorID;
+        return "Name: " + name + "\t" + "ID: " + patientID + "\tDoctorID: " + assignedDoctorID + "\nAdmission date: "
+                + admissionDate + "\nDispatch Date: " + dispatchDate + "\n";
     }
 
     @Override
     public boolean equals(Object obj) {
-        if (!(obj instanceof Patient))
-            return false;
+        if (obj instanceof Patient) {
+            Patient d = (Patient) obj;
 
-        Patient d = (Patient) obj;
+            return patientID.equals(d.patientID);
+        } else if (obj instanceof String) {
+            return patientID.equals(obj);
+        }
 
-        return patientID.equals(d.patientID);
+        return false;
     }
 
     public boolean equals(String id) {

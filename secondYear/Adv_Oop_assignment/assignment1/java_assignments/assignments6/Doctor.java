@@ -27,6 +27,7 @@ public class Doctor {
 
         name = scanner.nextLine();
         doctorID = scanner.nextLine();
+        patients = new ArrayList<String>();
         while(scanner.hasNextLine()){
             patients.add(scanner.nextLine());
         }
@@ -46,12 +47,12 @@ public class Doctor {
         }
     }
 
-    void addPatient(Patient pt){
-        patients.add(pt.getId());
+    void addPatient(String  id){
+        patients.add(id);
     }
 
-    void removePatient(Patient pt){
-        patients.remove(pt.getId());
+    void removePatient(String id){
+        patients.remove(id);
     }
 
     String getID(){ return doctorID; }
@@ -59,14 +60,23 @@ public class Doctor {
 
     @Override
     public boolean equals(Object obj) {
-        if(!(obj instanceof Doctor)) return false;
+        if(obj instanceof Doctor){
+            Doctor d = (Doctor) obj;
 
-        Doctor d = (Doctor) obj;
-
-        return  doctorID.equals(d.doctorID);
+            return doctorID.equals(d.doctorID);
+        }else if(obj instanceof String){
+            return doctorID.equals(obj);
+        }
+        
+        return false; 
     }
-
-    public boolean equals(String ID) {
-        return ID.equals(doctorID);
+    
+    @Override
+    public String toString() {
+        String str = "";
+        str = "Name: "+name+"\t\tID: "+doctorID+"\t" + "Assigned patients' ID: ";
+        for(String id : patients) str += (id + ",");
+        str += "\n";
+        return str ;
     }
 }
