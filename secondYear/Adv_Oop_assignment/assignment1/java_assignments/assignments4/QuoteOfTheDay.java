@@ -4,7 +4,7 @@ import java.io.File;
 
 public class QuoteOfTheDay {
     public static void main(String[] args) {
-        String quoteFile = "/home/zulfiqar/assignmentGit/secondYear/Adv_Oop_assignment/assignment1/java_assignments/assignments4/Quote_List.txt";
+        String quoteFile = "./java_assignments/assignments4/Quote_List.txt";
         File file = new File(quoteFile);
         if(!file.exists()){
             System.out.println("Quote list,doesn't exist!");

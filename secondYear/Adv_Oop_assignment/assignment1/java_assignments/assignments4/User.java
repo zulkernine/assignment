@@ -17,9 +17,7 @@ public class User {
         // counter = 0;
         // history = new int[5];
 
-        File file = new File(
-                "/home/zulfiqar/assignmentGit/secondYear/Adv_Oop_assignment/assignment1/java_assignments/assignments4/"
-                        + name + "_quote_history.txt");
+        File file = new File("./java_assignments/assignments4/" +name + "_quote_history.txt");
         if (file.exists()) {
             try (Scanner sc = new Scanner(file)) {
                 name = sc.nextLine();
@@ -64,10 +62,7 @@ public class User {
     void save() {
         PrintWriter writer = null;
         try {
-            writer = new PrintWriter(
-                    "/home/zulfiqar/assignmentGit/secondYear/Adv_Oop_assignment/assignment1/java_assignments/assignments4/"
-                            + name + "_quote_history.txt",
-                    "UTF-8");
+            writer = new PrintWriter("./java_assignments/assignments4/"+name + "_quote_history.txt", "UTF-8");
             writer.println(name);
             writer.println(lastQuoteId);
 
