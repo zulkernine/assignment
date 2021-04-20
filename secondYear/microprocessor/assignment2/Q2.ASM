@@ -1,0 +1,15 @@
+	LXI H,2050H
+    MOV B,M
+    INR L
+    MOV E,M
+    MVI D,00H
+	MVI A,00H
+L1:	ADD E
+	JNC L2
+    INR D
+L2:	DCR B
+	JNZ L1
+    STA 2053H
+    MOV A,D 
+    STA 2052H
+	HLT
