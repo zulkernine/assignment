@@ -1,31 +1,29 @@
-JMP START
-
-START:	LXI H,2600H
-	XCHG; DE stores the starting address where storing starts
+	LXI H,2600H
+	XCHG		; DE stores the starting address where storing starts
 	LXI H,2500H
-	MOV B,M; B stores the number of numbers
+	MOV B,M		; B stores the number of numbers
 
-LOOP:	INX H
+L1:	INX H
 	MOV A,M
-	RRC
-	JNC CHECKD0; jump to COND2 if D7 is zero
-	RLC
-	XCHG
-	MOV M,A
+	RRC			;Right rotation to check lsb through carry
+	JNC L2		;Jump to L2 if D7 is zero
+	RLC			;Else
+	XCHG		;
+	MOV M,A		;Store it
 	INX H
 	XCHG
-	JMP SKIP
+	JMP L3
 	
 
-CHECKD0:	RLC
+L2:	RLC			;2 Left rotation through carry to check D0(msb)
 	RLC
-	JNC SKIP; if D0 also not = 1 then skip
-	RRC; if D0=1
+	JNC L3		;If D0 != 1 then skip
+	RRC			;Else
 	XCHG
-	MOV M,A
+	MOV M,A		;Store the number
 	INX H
 	XCHG
 
-SKIP:	DCR B
-	JNZ LOOP
+L3:	DCR B		;Decreament counter
+	JNZ L1		;Continue if counter not zero
 	HLT

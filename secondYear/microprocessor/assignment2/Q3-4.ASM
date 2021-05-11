@@ -7,7 +7,7 @@ ST:	LXI H,204FH
 L1:	MOV A,M
 	INX H
 	CMP M
-	JC L2	        ;If A<M skip to L2
+	JNC L2	        ;If A>M skip to L2
 	JZ L2	        ;If A==M skip to L2
 	MOV B,M         ;Else  swap the two elements
 	MOV M,A

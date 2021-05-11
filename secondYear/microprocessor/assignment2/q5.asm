@@ -1,23 +1,21 @@
-JMP START
-
-START:	LXI H,204FH; HL pair stores the number of numbers
-	MOV C,M;C stores number of numbers
+	LXI H,204FH	
+	MOV C,M			;C stores number of numbers
 	LDA 204EH
-	MOV B,A; B stores the number to be searched
-	MVI E,01H
+	MOV B,A			; B stores the number to be searched
+	MVI D,01H		;D stores the position of the number
 	LXI H,2050H
 
-LOOP2:	MOV A,M
-	CMP B
-	JNZ LOOP1; transferred to LOOP1 if no comparison
-	MOV A,E
-	STA 204DH; if found, store position in 204DH
-	HLT
+L2:	MOV A,M
+	CMP B			;Compare each element with B
+	JNZ L1			;If do not match, skip to L1
+	MOV A,E			;Else if match,
+	STA 204DH		;store position in 204DH
+	HLT				;Stop
 
-LOOP1:	MVI A,FF
-	STA 204DH; if not found, store FFH in 204DH
-	DCR C
-	INX H
-	INR E
-	JNZ LOOP2
+L1:	MVI A,FF		
+	STA 204DH		;If no match found, store FFH in 204DH
+	INX H			;Goto the next element
+	INR D			;Increament position counter
+	DCR C			;Decreament counter
+	JNZ L2			;If not zero, continue the loop L2
 	HLT

@@ -1,19 +1,16 @@
-LXI H,2500H
-MOV A,M
-MOV B,A
-MVI C,00H
-MVI D,00H
+LXI H,2500H     ;H=2500
+MOV B,M         ;B = M(H)
+MVI C,00H       ;C=00
 
-MOV A,B
-ANI 0FH
-MOV C,A
-MOV A,B
-ANI F0H
+MOV A,B         ;A = B
+ANI 0FH         ; A = A && 0F or A = 0000xxxx (first 4 bit is converted to 0)
+MOV C,A         ;C=A, C contains 4 lsb
+MOV A,B         ;A=B
+ANI F0H         ;A = A && F0 or A = xxxx0000
+RRC             ;4 right rotation converts A to 0000xxxx
 RRC
 RRC
-RRC
-RRC
-MOV D,A
-ADD C
-STA 2550H
+RRC             ;Now, A contains 4 msb
+ADD C           ; add msb and lsb
+STA 2550H       ; Store at 2550
 HLT

@@ -1,44 +1,42 @@
-JMP START
-
-;process for storing odd numbers start
-START:	LXI H,2050H
+;Store odd number
+	LXI H,2050H
 	LXI D,2100H
 	LDA 204FH
-	MOV C,A;store number of numbers in C
+	MOV C,A		;Store number of numbers in C
 	MVI B,00H
 
-LOOP1:	MOV A,M
-	ANI 01H
-	JZ LOOP
-	MOV A,M
-	STAX D; store the odd number
-	INX D; shift the location
-	INR B; increment odd number count
+L1:	MOV A,M
+	ANI 01H		; A = A&01H,
+	JZ L2		;If zero, then even, so skip to L2
+	MOV A,M		;Else
+	STAX D		;Store the odd number
+	INX D		;Increament the location
+	INR B		;Increament odd number count
 
-LOOP:	INX H
-	DCR C
-	JNZ LOOP1
+L2:	INX H		;Increament address
+	DCR C		;Decreament count
+	JNZ L1		;If count not zero, continue the loop L1
 	MOV A,B
-	STA 2301H; store number of odd numbers in 2301H
+	STA 2301H	;Else store number of odd numbers in 2301H
 
-;process for storing even numbers start
+;Store even number
 	LXI H,2050H
 	LXI D,2200H
 	LDA 204FH
 	MOV C,A
 	MVI B,00H
 	
-LOOP4:	MOV A,M
+L4:	MOV A,M
 	ANI 01H
-	JNZ LOOP3
-	MOV A,M
-	STAX D; store the even number
-	INX D; shift the location
-	INR B; increment even number count
+	JNZ L3		; If not zero, then odd, skip to L3
+	MOV A,M		;Else
+	STAX D		;Store the even number
+	INX D		;Increament the location
+	INR B		;Increament even number count
 
-LOOP3:	INX H
+L3:	INX H
 	DCR C
-	JNZ LOOP4
-	MOV A,B
-	STA 2300H; store number of even numbers in 2300H
+	JNZ L4		;If count not zero, continue loop L4
+	MOV A,B		;Else
+	STA 2300H	;Store number of even numbers in 2300H
 HLT

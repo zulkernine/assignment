@@ -1,31 +1,25 @@
     LXI H,21FFH
-	MOV B,M
+	MOV B,M			;B stores count or number of total elements
 	LXI H,2200H
-	MVI C,00H; C=0
-	MVI A,00H; A=0
+	MVI C,00H		; C=0, C stores carry
+	MVI D,00H		; D=0, D stores sum
 	
-LOOP:	STA 2600H
-	MOV A,M; number moved to Accumulator
-	ANI 81H; 1000 0001 ANDed
-	CPI 81H; check if LSB=1 and MSB=1
-	JNZ SKIP1; if LSB AND MSB not = 1 then goto SKIP1
-	LDA 2600H; stores the existing sum
-	ADD M; add the new number to sum
-	JNC SKIP
-	INR C
-	JMP SKIP
+L1:	MOV A,M			; number moved to Accumulator
+	ANI 81H			; 1000 0001 ANDed
+	CPI 81H			;Compare msb and lsb with 1
+	JNZ J2			;If not 1, then goto J1
+    MOV A,M			;Else A = M
+	ADD D			;Add previous sum
+	MOV D,A			;Store new sum at D
+	JNC J2
+	INR C			;If carry increament C
 
-SKIP1:	LDA 2600H
-	INX H
-	DCR B
-	JNZ LOOP
-	JMP LAST
+J2:	INX H
+	DCR B			;DECREAMENT COUNTER
+	JNZ L1			;If not zero, continue loop L1
 
-SKIP:	INX H
-	DCR B
-	JNZ LOOP
-
-LAST:	STA 2500H
+	MOV A,D
+	STA 2501H		;Store sum
 	MOV A,C
-	STA 2501H
+	STA 2500H		;Store carry
 	HLT
