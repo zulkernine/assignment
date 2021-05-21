@@ -10,7 +10,8 @@ def fibonacci_generator(n):
         cur = temp
         yield cur
 
-fib = fibonacci_generator(7)
+n = int(input("Count: "))
+fib = fibonacci_generator(n)
 for num in fib:
     print(num,end=", ")
 print()

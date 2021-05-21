@@ -373,7 +373,7 @@ class Faculty extends Person {
         if (willUpdate("Specialization", scanner)) {
             System.out.print("Specialization: ");
             specialization = scanner.nextLine();
-        }
+        }       
         super.updateData(scanner);
     }
 
