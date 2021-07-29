@@ -11,9 +11,11 @@ random_device generator;
 // uniform_int_distribution<int> distribution(0,1000);
 // auto generator = bind(distribution, gen);
 
-string injectError(string str){
+// Codeword should be minimum 12 character long
+string injectError(string str,int& bitFlips){
     int len = str.length();
-    int errNo = generator() % (len / 3);
+    int errNo = generator() % (len/3 - 4) + 4;    //Minimum 4 bit flips
+    bitFlips = errNo;
     for (int i = 0;i < errNo;i++){
         int ind = generator() % len;
         if (str[ind] == '0') str[ind] = '1';

@@ -5,11 +5,12 @@ using namespace std;
 
 int main(){
     string binData = "1110001101000111011010110111100000111111010011001010111110111101";
+    int bitFlips;
 
     //LRC
     string lrcEncoding = LRC::encodeData(binData);
     cout << "LRC encoding: " << lrcEncoding << "\n";
-    lrcEncoding = injectError(lrcEncoding);
+    lrcEncoding = injectError(lrcEncoding, bitFlips);
     cout << "Has error: " << LRC::hasError(lrcEncoding) << "\n";
 
     //VRC
@@ -20,7 +21,7 @@ int main(){
     // Checksum
     string checksumEncoding = CheckSum::encodeData(binData);
     cout << "Check sum encoding:   " << checksumEncoding << "\n";
-    checksumEncoding = injectError(checksumEncoding);
+    checksumEncoding = injectError(checksumEncoding, bitFlips);
     cout << "Afer injecting error: " << checksumEncoding << "\n";
     cout << "Has error: " << CheckSum::hasError(checksumEncoding) << "\n";
 
