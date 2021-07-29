@@ -83,6 +83,14 @@ int main(){
         push_queue(next,&queue);
     }
 
+    //For end boundary values, last average value is used.
+    do{
+        int prev = pop_queue(&queue);
+        insert_and_delete(avg, prev); // push average as next element
+        avg = (avg - prev / (float)arr_size + next / (float)arr_size);
+        fprintf(dest, "%d %d %d %f\n", sortedArr[arr_size - 1], sortedArr[0], sortedArr[(arr_size + 1) / 2], avg);
+    }while(queue.length > 1);
+
     fclose(source);
     fclose(dest);
 

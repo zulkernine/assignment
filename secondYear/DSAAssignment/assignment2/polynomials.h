@@ -28,9 +28,9 @@ void singleMult(polynomial p, term t);
 polynomial mult(polynomial p1, polynomial p2);
 void print_polynomial(polynomial p);
 polynomial create_polynomial();
-term min_term(term *arr, int start, int end, int *index_of_first_occurence);
-void mergesort(term *arr, int start, int end);
-void merge(term *arr, int start, int mid, int end);
+term min_term(term* arr, int start, int end, int* index_of_first_occurence);
+void mergesort(term* arr, int start, int end);
+void merge(term* arr, int start, int mid, int end);
 
 /*
     1.Each operation on polynomial will not alter the values of arguement polynomials.
@@ -109,7 +109,7 @@ void cmult(polynomial p, double k)
 {
     for (int i = p.startIndex; i <= p.endIndex; i++)
         TERMS[i].coefficient *= k;
-    
+
 }
 
 // – SingleMult - multiply a polynomial with a single term a.x^n
@@ -139,9 +139,9 @@ polynomial mult(polynomial p1, polynomial p2)
         }
     }
     p.endIndex = available - 1;
-    
+
     //Now merge all the terms with same exponent value
-    mergesort(TERMS,p.startIndex,p.endIndex);
+    mergesort(TERMS, p.startIndex, p.endIndex);
     int i = p.startIndex, j = p.startIndex + 1;
     while (j <= p.endIndex)
     {
@@ -197,7 +197,7 @@ polynomial create_polynomial()
 }
 
 //Merge Sort The Terms array for a specific polynomial
-void mergesort(term *arr, int start, int end)
+void mergesort(term* arr, int start, int end)
 {
     if (start == end)
     {
@@ -212,7 +212,7 @@ void mergesort(term *arr, int start, int end)
     merge(arr, start, mid, end);
 }
 
-void merge(term *arr, int start, int mid, int end)
+void merge(term* arr, int start, int mid, int end)
 {
     int n1 = (mid - start + 1), n2 = (end - mid);
     term temp_arr1[n1], temp_arr2[n2];
