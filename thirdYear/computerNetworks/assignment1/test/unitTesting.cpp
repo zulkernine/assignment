@@ -1,6 +1,6 @@
 #include<iostream>
-#include "errorDetection.hpp"
-#include "injecterror.hpp"
+#include "../header/injecterror.hpp"
+#include "../header/errorDetection.hpp"
 using namespace std;
 
 int main(){
