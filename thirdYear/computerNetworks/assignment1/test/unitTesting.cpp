@@ -10,7 +10,7 @@ int main(){
     //LRC
     string lrcEncoding = LRC::encodeData(binData);
     cout << "LRC encoding: " << lrcEncoding << "\n";
-    lrcEncoding = injectError(lrcEncoding, bitFlips);
+    lrcEncoding = injectErrorRandom(lrcEncoding, bitFlips);
     cout << "Has error: " << LRC::hasError(lrcEncoding) << "\n";
 
     //VRC
@@ -21,7 +21,7 @@ int main(){
     // Checksum
     string checksumEncoding = CheckSum::encodeData(binData);
     cout << "Check sum encoding:   " << checksumEncoding << "\n";
-    checksumEncoding = injectError(checksumEncoding, bitFlips);
+    checksumEncoding = injectErrorRandom(checksumEncoding, bitFlips);
     cout << "Afer injecting error: " << checksumEncoding << "\n";
     cout << "Has error: " << CheckSum::hasError(checksumEncoding) << "\n";
 
