@@ -53,15 +53,15 @@ int main(int argc, char const* argv[]){
 
     ifstream input("random_binary_stings.txt", ios::in);
 
-    ofstream output("log_report.txt", ios::out);
-    // ofstream output("detailed_report.txt", ios::out);
+    // ofstream output("log_report.txt", ios::out);
+    ofstream output("detailed_report.txt", ios::out);
 
     int totalCount=1;
     double accuracy[4]={0};   //{lrc,vrc,checksum,crc} accuracy array
     while (!input.eof()){
         output << totalCount << "\n";
-        server_task(new_socket, input, output, totalCount, accuracy); // log_report.txt
-        // server_task_randomError(new_socket, input, output, totalCount, accuracy);   //detailed_report.txt
+        // server_task(new_socket, input, output, totalCount, accuracy); // log_report.txt
+        server_task_randomError(new_socket, input, output, totalCount, accuracy);   //detailed_report.txt
         cout << (totalCount++) << "\n";
     }
     send(new_socket, "\0", 1, 0);

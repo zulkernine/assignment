@@ -4,7 +4,6 @@
 #include<functional>
 
 using namespace std;
-
 random_device generator;
 
 /* If random_device is not available, uncomment following code and comment above. */
