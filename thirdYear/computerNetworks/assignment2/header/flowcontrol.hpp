@@ -1,5 +1,5 @@
-#include "../header/networknode.hpp"
-#include "../header/errorDetection.hpp"
+#include "networknode.hpp"
+#include "errorDetection.hpp"
 #include <fstream>
 #include <sys/time.h>
 #include <unordered_map>
@@ -22,6 +22,7 @@ protected:
     unordered_map<int, vector<char>> storage;
     long long int timerTimeStamp;
     ifstream inputData;
+    bool transferComplete;
 
     long long int getCurrentTimestamp(){
         struct timeval tp;
@@ -48,18 +49,29 @@ protected:
             return 0;
         }
         else{
+            transferComplete = true;
+            data.resize(0);
+            inputData.close();
             return -1;
         }
     }
 
     void makeFrame(int sn){
         vector<char> temp_data(sizeof(DataHeader) + data.size() * sizeof(char));
-        DataHeader head = makeHeader(myPort, destPort, data.size(),RAW_DATA,sn);
+        if(transferComplete){
+            DataHeader head = makeHeader(myPort, destPort, 0, COMPLETION_ACK, -1);
 
-        memcpy(temp_data.data(), (char*)&head, sizeof(DataHeader));
-        memcpy(temp_data.data() + sizeof(DataHeader), data.data(), data.size() * sizeof(char));
+            memcpy(temp_data.data(), (char*)&head, sizeof(DataHeader));
 
-        frame = CRC::encodeData(temp_data);
+            frame = CRC::encodeData(temp_data);
+        }else{
+            DataHeader head = makeHeader(myPort, destPort, data.size(), RAW_DATA, sn);
+
+            memcpy(temp_data.data(), (char*)&head, sizeof(DataHeader));
+            memcpy(temp_data.data() + sizeof(DataHeader), data.data(), data.size() * sizeof(char));
+
+            frame = CRC::encodeData(temp_data);
+        }
     }
 
     void storeFrame(int sn){
@@ -83,6 +95,7 @@ public:
         timerTimeStamp = 0;
         inputData.open(dataFileName);
         data.resize(DATA_LENGTH);
+        transferComplete = false;
     }
 
     void run(){
@@ -100,46 +113,52 @@ protected:
     vector<char> data;
     vector<char> frame;
     vector<char> ackFrame;
-    unordered_map<int, vector<char>> storage;
+    bool transferComplete;
     ofstream ouputData;
 
-    int putData(){
-        ouputData.write(data.data(), DATA_LENGTH * sizeof(char));
-        
-        
+    int deliverData(){
+        if(transferComplete){
+            ouputData.close();
+            return -1;
+        }
+        else
+            ouputData.write(data.data(), data.size() * sizeof(char));
+        return 1;       
     }
 
-    void makeFrame(int sn){
-        vector<char> temp_data(sizeof(DataHeader) + data.size() * sizeof(char));
-        DataHeader head = makeHeader(myPort, destPort, data.size(), RAW_DATA, sn);
+    void makeAckFrame(long long int sn){
+        vector<char> temp_data(sizeof(DataHeader) + sizeof(sn));
+        DataHeader head = makeHeader(myPort, destPort, sizeof(sn), RAW_DATA, sn);
 
         memcpy(temp_data.data(), (char*)&head, sizeof(DataHeader));
-        memcpy(temp_data.data() + sizeof(DataHeader), data.data(), data.size() * sizeof(char));
+        memcpy(temp_data.data() + sizeof(DataHeader), (char*)&sn, sizeof(sn));
 
-        frame = CRC::encodeData(temp_data);
+        ackFrame = CRC::encodeData(temp_data);
     }
 
-    void storeFrame(int sn){
-        storage[sn] = frame;
-    }
-    void purgeFrame(int n){
-        storage.erase(n);
-    }
-
-    void sendFrame(int sn){
-        currentNode.sendData(storage[sn]);
+    void sendFrame(long long int sn){
+        makeAckFrame(sn);
+        currentNode.sendData(ackFrame);
     }
 
     int recvFrame(){
-        int status = currentNode.recieveData(ackFrame);
+        int status = currentNode.recieveData(frame);
         return status;
+    }
+
+    int extractData(){
+        DataHeader h;
+        memcpy(&h,frame.data(),sizeof(h));
+        data.resize(h.length - 16);
+        memcpy(data.data(),frame.data()+sizeof(h),data.size());
+        transferComplete = h.type == COMPLETION_ACK;
+        return h.type == COMPLETION_ACK;
     }
 
 public:
     RecieverNodeFlow(int my_port_num, int dest_port, string dataFileName) :currentNode(my_port_num), myPort(my_port_num), destPort(dest_port){
-        timerTimeStamp = 0;
-        inputData.open(dataFileName);
         data.resize(DATA_LENGTH);
+        transferComplete = false;
     }
 
     void run(){
