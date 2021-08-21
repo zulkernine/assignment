@@ -9,10 +9,45 @@
 
 using namespace std;
 
+
+class ConnectionSocket{
+public:
+    int id; //descriptor
+    struct sockaddr_in address;
+    ConnectionSocket(){
+        id = -1;
+    }
+};
+
+enum NetworkDataType{ RAW_DATA, ACK, NCK, COMPLETION_ACK };
+/*
+ * COMPLETION_ACK: file is completely transmitted
+ * RAW_DATA : binary data
+*/
+
+struct DataHeader{
+    char startByte;
+    int sourcePort;
+    int destPort;
+    NetworkDataType type;
+    int length; // Length of actual data + 16 bit crc flag
+};
+
+DataHeader makeHeader(int source_port,int dest_port,int actual_data_length,NetworkDataType type){
+    DataHeader head;
+    head.sourcePort = source_port;
+    head.destPort = dest_port;
+    head.length = actual_data_length + 16; //16 for crc redundancy bit
+    head.type = type;
+    head.startByte = 0b01010101;
+
+    return head;
+}
+
+
 class ComputerNode{
     const int assignedPort;
     ConnectionSocket listenerSocket;
-    char buffer[1024] = { 0 };
 
     ConnectionSocket getConnecteionSocket(int port){
         ConnectionSocket sock;
@@ -29,6 +64,33 @@ class ComputerNode{
             cout << "\nInvalid address/ Address not supported \n";
             // return 0;
             exit(1);
+        }
+
+        return sock;
+    }
+
+    ConnectionSocket acceptConnection()throw (string){
+        //Set socket in non-blocking mode
+        int flags = fcntl(listenerSocket.id, F_GETFL, 0);
+        if (fcntl(listenerSocket.id, F_SETFL, flags | O_NONBLOCK) < 0){
+            cerr << ("fcntl(F_SETFL) can't set socket to non_block mode");
+            exit(EXIT_FAILURE);
+        }
+
+        int new_socket;
+        ConnectionSocket sock;
+        socklen_t addrlen = sizeof(sock.address);
+        if ((new_socket = accept(listenerSocket.id, (struct sockaddr*)&(sock.address), (socklen_t*)&addrlen)) < 0){
+            cerr << "accept";
+            throw string("Connection backlog queue is empty!");
+        }
+        sock.id = new_socket;
+
+        //Set socket back to blocking mode
+        flags = fcntl(listenerSocket.id, F_GETFL, 0);
+        if (fcntl(listenerSocket.id, F_SETFL, flags ^ O_NONBLOCK) < 0){
+            cerr << ("fcntl(F_SETFL) can't set socket back to blocking mode");
+            exit(EXIT_FAILURE);
         }
 
         return sock;
@@ -62,35 +124,12 @@ public:
             exit(EXIT_FAILURE);
         }
     }
-
-    ConnectionSocket acceptConnection()throw (string){
-        //Set socket in non-blocking mode
-        int flags = fcntl(listenerSocket.id, F_GETFL, 0);
-        if (fcntl(listenerSocket.id, F_SETFL, flags | O_NONBLOCK) < 0){
-            cerr << ("fcntl(F_SETFL) can't set socket to non_block mode");
-            exit(EXIT_FAILURE);
-        }
-
-        int new_socket;
-        ConnectionSocket sock;
-        socklen_t addrlen = sizeof(sock.address);
-        if ((new_socket = accept(listenerSocket.id, (struct sockaddr*)&(sock.address), (socklen_t*)&addrlen)) < 0){
-            cerr << "accept";
-            throw string("Connection backlog queue is empty!");
-        }
-        sock.id = new_socket;
-
-        //Set socket back to blocking mode
-        flags = fcntl(listenerSocket.id, F_GETFL, 0);
-        if (fcntl(listenerSocket.id, F_SETFL, flags ^ O_NONBLOCK) < 0){
-            cerr << ("fcntl(F_SETFL) can't set socket back to blocking mode");
-            exit(EXIT_FAILURE);
-        }
-
-        return sock;
+    ComputerNode(const ComputerNode &node):assignedPort(node.assignedPort){
+        this->listenerSocket = node.listenerSocket;
     }
-
-    void sendData(vector<char> rawData, bool sendToChannel = true){
+    ComputerNode():assignedPort(-1){}
+    
+    void sendData(vector<char> &rawData, bool sendToChannel = true){
         ConnectionSocket destinaion;
         if (sendToChannel){
             destinaion = getConnecteionSocket(CHANNEL_PORT);
@@ -111,6 +150,8 @@ public:
             cout << "Filed to send\n";
             exit(1);
         }
+
+        close(destinaion.id);
     }
 
     int recieveData(vector<char>& rawData){
@@ -124,8 +165,9 @@ public:
                 memcpy(&h, rawData.data(), sizeof(DataHeader));
                 rawData.resize(sizeof(DataHeader) + h.length * sizeof(char));
             }
-            return valread;
 
+            close(source.id);
+            return valread;
         }
         catch (string e){
             cerr << e;
@@ -134,26 +176,3 @@ public:
     }
 };
 
-class ConnectionSocket{
-public:
-    int id; //descriptor
-    struct sockaddr_in address;
-    ConnectionSocket(){
-        id = -1;
-    }
-};
-
-struct DataHeader{
-    char startByte;
-    int sourcePort;
-    int destPort;
-    NetworkDataType type;
-    int length; // Length of actual data + 16 bit crc flag
-};
-
-
-enum NetworkDataType{ RAW_DATA, ACK, NCK, COMPLETION_ACK };
-/*
- * COMPLETION_ACK: file is completely transmitted
- * RAW_DATA : binary data
-*/
