@@ -54,7 +54,7 @@ protected:
 
     void makeFrame(int sn){
         vector<char> temp_data(sizeof(DataHeader) + data.size() * sizeof(char));
-        DataHeader head = makeHeader(myPort, destPort, data.size(), RAW_DATA);
+        DataHeader head = makeHeader(myPort, destPort, data.size(),RAW_DATA,sn);
 
         memcpy(temp_data.data(), (char*)&head, sizeof(DataHeader));
         memcpy(temp_data.data() + sizeof(DataHeader), data.data(), data.size() * sizeof(char));
@@ -101,41 +101,17 @@ protected:
     vector<char> frame;
     vector<char> ackFrame;
     unordered_map<int, vector<char>> storage;
-    long long int timerTimeStamp;
-    ifstream inputData;
+    ofstream ouputData;
 
-    long long int getCurrentTimestamp(){
-        struct timeval tp;
-        gettimeofday(&tp, NULL);
-        long long int micros = tp.tv_sec * 1000000 + tp.tv_usec;
-        return micros;
-    }
-    void startTimer(){
-        timerTimeStamp = getCurrentTimestamp();
-    }
-    void stopTimer(){
-        timerTimeStamp = 0;
-    }
-    bool isTimeOut(){
-        return (getCurrentTimestamp() > (timerTimeStamp + TIMEOUT));
-    }
-
-    int getData(){
-        if (!inputData.eof()){
-            inputData.read(data.data(), DATA_LENGTH * sizeof(char));
-            if (inputData.eof()){
-                data.resize(inputData.gcount());
-            }
-            return 0;
-        }
-        else{
-            return -1;
-        }
+    int putData(){
+        ouputData.write(data.data(), DATA_LENGTH * sizeof(char));
+        
+        
     }
 
     void makeFrame(int sn){
         vector<char> temp_data(sizeof(DataHeader) + data.size() * sizeof(char));
-        DataHeader head = makeHeader(myPort, destPort, data.size(), RAW_DATA);
+        DataHeader head = makeHeader(myPort, destPort, data.size(), RAW_DATA, sn);
 
         memcpy(temp_data.data(), (char*)&head, sizeof(DataHeader));
         memcpy(temp_data.data() + sizeof(DataHeader), data.data(), data.size() * sizeof(char));

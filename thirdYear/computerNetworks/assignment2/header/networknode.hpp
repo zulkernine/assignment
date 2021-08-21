@@ -30,16 +30,18 @@ struct DataHeader{
     int sourcePort;
     int destPort;
     NetworkDataType type;
+    long long seqNo;
     int length; // Length of actual data + 16 bit crc flag
 };
 
-DataHeader makeHeader(int source_port,int dest_port,int actual_data_length,NetworkDataType type){
+DataHeader makeHeader(int source_port,int dest_port,int actual_data_length,NetworkDataType type,long long int seqNo){
     DataHeader head;
     head.sourcePort = source_port;
     head.destPort = dest_port;
     head.length = actual_data_length + 16; //16 for crc redundancy bit
     head.type = type;
     head.startByte = 0b01010101;
+    head.seqNo = seqNo;
 
     return head;
 }
