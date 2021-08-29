@@ -4,7 +4,6 @@
 #include <sys/time.h>
 #include <unordered_map>
 
-#define TIMEOUT 1000000 //micro second
 #define DATA_LENGTH 64  //Byte or 512bits
 
 using namespace std;
@@ -20,7 +19,6 @@ protected:
     vector<char> frame;
     vector<char> ackFrame;
     unordered_map<int, vector<char>> storage;
-    long long int timerTimeStamp;
     ifstream inputData;
     bool transferComplete;
 
@@ -30,18 +28,10 @@ protected:
         long long int micros = tp.tv_sec * 1000000 + tp.tv_usec;
         return micros;
     }
-    void startTimer(){
-        timerTimeStamp = getCurrentTimestamp();
-    }
-    void stopTimer(){
-        timerTimeStamp = 0;
-    }
-    bool isTimeOut(){
-        return (getCurrentTimestamp() > (timerTimeStamp + TIMEOUT));
-    }
-
+    
     int getData(){
         if (!inputData.eof()){
+            data.resize(DATA_LENGTH);
             inputData.read(data.data(), DATA_LENGTH * sizeof(char));
             if (inputData.eof()){
                 data.resize(inputData.gcount());
@@ -57,7 +47,7 @@ protected:
     }
 
     void makeFrame(int sn){
-        vector<char> temp_data(sizeof(DataHeader) + data.size() * sizeof(char));
+        vector<char> temp_data(sizeof(DataHeader) + data.size() * sizeof(char),0);
         if(transferComplete){
             DataHeader head = makeHeader(myPort, destPort, 0, COMPLETION_ACK, -1);
 
@@ -83,24 +73,31 @@ protected:
 
     void sendFrame(int sn){
         currentNode.sendData(storage[sn]);
+        cout<<"Sending seq: "<<sn <<"  Size:"<< storage[sn].size() <<endl;
     }
 
-    int recvFrame(){
-        int status = currentNode.recieveData(ackFrame);
+    int recvFrame(bool blocking = false){
+        int status = currentNode.recieveData(ackFrame,blocking);
         return status;
+    }
+
+    int extractAck(DataHeader &h){
+        if(CRC::hasError(ackFrame)){
+            return -1;
+        }
+
+        memcpy(&h,ackFrame.data(),sizeof(DataHeader));
+        return h.seqNo;
     }
 
 public:
     SenderNodeFlow(int my_port_num, int dest_port, string dataFileName) :currentNode(my_port_num), myPort(my_port_num), destPort(dest_port){
-        timerTimeStamp = 0;
-        inputData.open(dataFileName);
+        inputData.open(dataFileName,ios::in  | ios::binary);
         data.resize(DATA_LENGTH);
         transferComplete = false;
     }
 
-    void run(){
-
-    }
+    virtual void run() = 0;
 
 };
 
@@ -126,42 +123,45 @@ protected:
         return 1;       
     }
 
-    void makeAckFrame(long long int sn){
-        vector<char> temp_data(sizeof(DataHeader) + sizeof(sn));
-        DataHeader head = makeHeader(myPort, destPort, sizeof(sn), RAW_DATA, sn);
+    void makeAckFrame(long long sn){
+        vector<char> temp_data;
+        temp_data.resize(sizeof(DataHeader) + (transferComplete ? 0 : sizeof(sn)));
+        DataHeader head = makeHeader(myPort, destPort, transferComplete ? 0 : sizeof(sn), transferComplete ? COMPLETION_ACK : RAW_DATA, sn);
 
         memcpy(temp_data.data(), (char*)&head, sizeof(DataHeader));
-        memcpy(temp_data.data() + sizeof(DataHeader), (char*)&sn, sizeof(sn));
+        if(!transferComplete) memcpy(temp_data.data() + sizeof(DataHeader), (char*)&sn, sizeof(sn));
 
         ackFrame = CRC::encodeData(temp_data);
     }
 
-    void sendFrame(long long int sn){
+    void sendFrame(long long sn){
         makeAckFrame(sn);
         currentNode.sendData(ackFrame);
     }
 
-    int recvFrame(){
-        int status = currentNode.recieveData(frame);
+    int recvFrame(bool blocking=false){
+        int status = currentNode.recieveData(frame,blocking);
         return status;
     }
 
-    int extractData(){
-        DataHeader h;
+    int extractData(DataHeader &h){
         memcpy(&h,frame.data(),sizeof(h));
-        data.resize(h.length - 16);
+        data.resize(h.length - 32);
         memcpy(data.data(),frame.data()+sizeof(h),data.size());
-        transferComplete = h.type == COMPLETION_ACK;
-        return h.type == COMPLETION_ACK;
+        transferComplete = (h.type == COMPLETION_ACK);
+        return (h.type == COMPLETION_ACK);
     }
 
 public:
     RecieverNodeFlow(int my_port_num, int dest_port, string dataFileName) :currentNode(my_port_num), myPort(my_port_num), destPort(dest_port){
         data.resize(DATA_LENGTH);
         transferComplete = false;
+        ouputData.open(dataFileName,ios::out|ios::binary);
     }
 
-    void run(){
-
-    }
+    virtual void run() = 0;
 };
+
+// class IntermediateChannel{
+
+// }

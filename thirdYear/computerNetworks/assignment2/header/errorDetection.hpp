@@ -4,7 +4,7 @@ using namespace std;
 
 class CRC{
 
-    static string const polynomial; //  X^16 + X^12 + X^5 + 1
+    static string const polynomial; // x32 + x31 + x30 + x28 + x27 + x25 + x24 + x22 + x21 + x20 + x16 + x10 + x9 + x6 + x0
 
     static string xor1(string a, string b){
         string result = "";
@@ -92,4 +92,4 @@ public:
     }
 };
 
-const string CRC::polynomial = "10001000000100001"; //  X^16 + X^12 + X^5 + 1
+const string CRC::polynomial = "111011011011100010000011001000001"; // x32 + x31 + x30 + x28 + x27 + x25 + x24 + x22 + x21 + x20 + x16 + x10 + x9 + x6 + x0
