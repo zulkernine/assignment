@@ -1,5 +1,4 @@
 #include "../header/flowcontrol.hpp"
-#include "../header/error_delay.hpp"
 #include <thread>
 
 #define MY_PORT 8080    //Channel port number
@@ -10,7 +9,6 @@ ComputerNode channel(MY_PORT, 10);
 
 
 void sendData(vector<char> rawData){
-    randomDelay();
     injectErrorRandom(rawData);
     channel.sendData(rawData,false);
 }

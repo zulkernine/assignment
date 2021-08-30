@@ -3,6 +3,7 @@
 #include <fstream>
 #include <sys/time.h>
 #include <unordered_map>
+#include "error_delay.hpp"
 
 #define DATA_LENGTH 64  //Byte or 512bits
 
@@ -21,6 +22,7 @@ protected:
     unordered_map<int, vector<char>> storage;
     ifstream inputData;
     bool transferComplete;
+    bool makingNewFrameComplete;
 
     long long int getCurrentTimestamp(){
         struct timeval tp;
@@ -49,11 +51,12 @@ protected:
     void makeFrame(int sn){
         vector<char> temp_data(sizeof(DataHeader) + data.size() * sizeof(char),0);
         if(transferComplete){
-            DataHeader head = makeHeader(myPort, destPort, 0, COMPLETION_ACK, -1);
+            DataHeader head = makeHeader(myPort, destPort, 0, COMPLETION_ACK, sn);
 
             memcpy(temp_data.data(), (char*)&head, sizeof(DataHeader));
 
             frame = CRC::encodeData(temp_data);
+            makingNewFrameComplete=true;
         }else{
             DataHeader head = makeHeader(myPort, destPort, data.size(), RAW_DATA, sn);
 
@@ -72,8 +75,8 @@ protected:
     }
 
     void sendFrame(int sn){
+        randomDelay();
         currentNode.sendData(storage[sn]);
-        cout<<"Sending seq: "<<sn <<"  Size:"<< storage[sn].size() <<endl;
     }
 
     int recvFrame(bool blocking = false){
@@ -95,6 +98,7 @@ public:
         inputData.open(dataFileName,ios::in  | ios::binary);
         data.resize(DATA_LENGTH);
         transferComplete = false;
+        makingNewFrameComplete = false;
     }
 
     virtual void run() = 0;
@@ -123,10 +127,10 @@ protected:
         return 1;       
     }
 
-    void makeAckFrame(long long sn){
+    void makeAckFrame(long long sn,bool isNack){
         vector<char> temp_data;
         temp_data.resize(sizeof(DataHeader) + (transferComplete ? 0 : sizeof(sn)));
-        DataHeader head = makeHeader(myPort, destPort, transferComplete ? 0 : sizeof(sn), transferComplete ? COMPLETION_ACK : RAW_DATA, sn);
+        DataHeader head = makeHeader(myPort, destPort, transferComplete ? 0 : sizeof(sn), transferComplete ? COMPLETION_ACK : (isNack ? NCK : ACK), sn);
 
         memcpy(temp_data.data(), (char*)&head, sizeof(DataHeader));
         if(!transferComplete) memcpy(temp_data.data() + sizeof(DataHeader), (char*)&sn, sizeof(sn));
@@ -134,8 +138,9 @@ protected:
         ackFrame = CRC::encodeData(temp_data);
     }
 
-    void sendFrame(long long sn){
-        makeAckFrame(sn);
+    void sendFrame(long long sn,bool isNack=false){
+        randomDelay();
+        makeAckFrame(sn, isNack);
         currentNode.sendData(ackFrame);
     }
 
