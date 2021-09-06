@@ -6,7 +6,7 @@
 
 #define MY_PORT 8081    //Current node port number
 #define DEST_PORT 8082    //Destination node port number
-#define TIMEOUT 1000000 //micro second
+#define TIMEOUT 20000 //micro second
 #define DATA_LENGTH 64  //Byte or 512bits
 #define MODULO 16   // m=4, 
 
@@ -84,7 +84,7 @@ public:
                 DataHeader h;
                 int ackNo = extractAck(h);
 
-                if(ackNo < -1) continue;//Corrupted frame
+                if(ackNo <= -1) continue;//Corrupted frame
 
                 cout << "Recieved ack: " << ackNo << "\n";
 

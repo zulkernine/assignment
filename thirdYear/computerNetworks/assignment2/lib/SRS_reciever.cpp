@@ -4,7 +4,7 @@
 
 #define MY_PORT 8084    //Current node port number
 #define DEST_PORT 8083    //Destination node port number
-#define TIMEOUT 1000000 //micro second
+#define TIMEOUT 20000 //micro second
 #define DATA_LENGTH 64  //Byte or 512bits
 #define MODULO 16   // m=4,     
 
@@ -16,14 +16,18 @@ class SelectiveRepeatReciever : public RecieverNodeFlow{
     bool nackSent;
     bool ackNeed;
 
-    unordered_map<int,vector<char>> frameWindow;
+    unordered_map<int, vector<char>> frameWindow;
+
+    //Performance purpose
+    long long initialTime = 0, totalDataRecived = 0;
 
     bool withinWindow(int n){
-        const int sw = MODULO/2;
-        if(sw + sn -1 < MODULO){
-            return (sn<=n && n<(sn+sw));
-        }else{
-            return (sn<=n && n<MODULO) || (0<=n && n<((sn+sw)%MODULO));
+        const int sw = MODULO / 2;
+        if (sw + sn - 1 < MODULO){
+            return (sn <= n && n < (sn + sw));
+        }
+        else{
+            return (sn <= n && n < MODULO) || (0 <= n && n < ((sn + sw) % MODULO));
         }
     }
 
@@ -55,10 +59,14 @@ public:
 
             int i = recvFrame(true);
 
+
+            if (!initialTime) initialTime = getCurrentTimestamp();
+            if (i > 0) totalDataRecived += i;
+
             bool corruptedFrame = CRC::hasError(frame);
 
             if (i >= 0 && corruptedFrame){
-                sendFrame(sn,true); //send NACK
+                sendFrame(sn, true); //send NACK
                 nackSent = true;
                 continue;
             }
@@ -69,21 +77,21 @@ public:
                 extractData(h);
                 cout << "Recieved seq: " << h.seqNo << endl;
 
-                if(h.seqNo != sn ){
-                    sendFrame(sn,true); //sendNAck
+                if (h.seqNo != sn){
+                    sendFrame(sn, true); //sendNAck
                 }
 
-                if(withinWindow(h.seqNo) && frameWindow.find(h.seqNo)==frameWindow.end()){
+                if (withinWindow(h.seqNo) && frameWindow.find(h.seqNo) == frameWindow.end()){
                     frameWindow[h.seqNo] = data; //store and mark the seqNo
 
-                    while(frameWindow.find(sn)!=frameWindow.end()){
+                    while (frameWindow.find(sn) != frameWindow.end()){
                         deliverData(sn);
                         frameWindow.erase(sn);
-                        sn = (sn+1)%MODULO;
+                        sn = (sn + 1) % MODULO;
                         ackNeed = true;
                     }
 
-                    if(ackNeed){
+                    if (ackNeed){
                         sendFrame(sn);
                         ackNeed = false;
                         nackSent = false;
@@ -92,6 +100,9 @@ public:
                     if (h.type == COMPLETION_ACK){
                         eventRequestToRecieve = false;
                         cout << "COMPLETEION_ACK recieved, terminationg the program\n";
+
+                        long long t = getCurrentTimestamp();
+                        cout << "Reciever thoroughput: " << ((double)totalDataRecived / (t - initialTime)) << endl;
                     }
                 }
             }

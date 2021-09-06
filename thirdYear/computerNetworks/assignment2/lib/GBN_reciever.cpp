@@ -3,7 +3,7 @@
 
 #define MY_PORT 8082    //Current node port number
 #define DEST_PORT 8081    //Destination node port number
-#define TIMEOUT 1000000 //micro second
+#define TIMEOUT 20000 //micro second
 #define DATA_LENGTH 64  //Byte or 512bits
 #define MODULO 16   // m=4,     
 
@@ -12,6 +12,9 @@ using namespace std;
 class GoBackNReciever : public RecieverNodeFlow{
     int sn;
     bool eventRequestToRecieve;
+
+    //Performance purpose
+    long long initialTime = 0, totalDataRecived = 0;
 
 
 public:
@@ -28,24 +31,31 @@ public:
             cout << "err: " << errno << endl;
 
             int i = recvFrame(true);
+
+            if (!initialTime) initialTime = getCurrentTimestamp();
+            if (i > 0) totalDataRecived += i;
+
             if (i >= 0 && !CRC::hasError(frame)){
                 cout << "Recieve status: " << i << endl;
                 // if (CRC::hasError(frame)) continue;
 
                 DataHeader h;
                 extractData(h);
-                cout<<"Recieved seq: "<<h.seqNo<<endl;
-                
+                cout << "Recieved seq: " << h.seqNo << endl;
+
                 if (h.seqNo == (sn % MODULO)){
                     deliverData();
-                    sn = (sn + 1) ;
+                    sn = (sn + 1);
                 }
 
                 sendFrame(sn % MODULO);  //send acknowledgement
-                cout<<"sneding ack: "<<sn << " - "<< (sn%MODULO) <<endl;
+                cout << "sneding ack: " << sn << " - " << (sn % MODULO) << endl;
                 if (h.type == COMPLETION_ACK){
                     eventRequestToRecieve = false;
-                    cout<<"COMPLETEION_ACK recieved, terminationg the program\n";
+                    cout << "COMPLETEION_ACK recieved, terminationg the program\n";
+
+                    long long t = getCurrentTimestamp();
+                    cout << "Reciever thoroughput: " << ((double)totalDataRecived / (t - initialTime)) << endl;
                 }
             }
 

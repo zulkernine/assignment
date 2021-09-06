@@ -6,7 +6,7 @@
 
 #define MY_PORT 8081    //Current node port number
 #define DEST_PORT 8082    //Destination node port number
-#define TIMEOUT 1000000 //micro second
+#define TIMEOUT 20000 //micro second
 #define DATA_LENGTH 64  //Byte or 512bits
 #define MODULO 2
 
@@ -23,6 +23,10 @@ class StopNWaitSender : public SenderNodeFlow{
     std::mutex mut;
     std::condition_variable data_cond;
 
+    //performance test
+    long long sendingTime,ackRecieveTime,totalRTT=0,count=0;
+    
+
     void startTimer(){
         timerTimeStamp = getCurrentTimestamp();
     }
@@ -31,6 +35,13 @@ class StopNWaitSender : public SenderNodeFlow{
     }
     bool isTimeOut(){
         return (getCurrentTimestamp() > (timerTimeStamp + TIMEOUT));
+    }
+
+    void updatertt(){
+        ackRecieveTime = getCurrentTimestamp();
+        totalRTT += (ackRecieveTime-sendingTime);
+        count++;
+        cout<<"Average RTT: "<<((double)totalRTT / count)<<"\n";
     }
 
 public:
@@ -54,6 +65,8 @@ public:
             getData();
             makeFrame(sn);
             storeFrame(sn);
+
+            sendingTime = getCurrentTimestamp();//performance pupose
             sendFrame(sn);
             startTimer();
             sn = (sn + 1) % MODULO;
@@ -74,6 +87,8 @@ public:
 
             if (recvFrame(true) > 0){
                 totalConsecutiveTimeout = 0;
+                updatertt();
+
                 DataHeader h;
                 int status = extractAck(h);
 
@@ -102,6 +117,7 @@ public:
 
             if (isTimeOut()){
                 startTimer();
+                sendingTime = getCurrentTimestamp();//performance pupose
                 sendFrame((sn - 1 + MODULO) % MODULO);
                 totalConsecutiveTimeout++;
 

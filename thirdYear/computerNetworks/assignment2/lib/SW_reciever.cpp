@@ -3,7 +3,7 @@
 
 #define MY_PORT 8082    //Current node port number
 #define DEST_PORT 8081    //Destination node port number
-#define TIMEOUT 1000000 //micro second
+#define TIMEOUT 20000 //micro second
 #define DATA_LENGTH 64  //Byte or 512bits
 #define MODULO 2
 
@@ -12,6 +12,9 @@ using namespace std;
 class StopNWaitReciever : public RecieverNodeFlow{
     int sn;
     bool eventRequestToRecieve;
+
+    //Performance purpose
+    long long initialTime = 0, totalDataRecived = 0;
 
 
 public:
@@ -22,12 +25,15 @@ public:
 
     void run(){
         sn = 0;
-        long long j=0;
+        long long j = 0;
         while (eventRequestToRecieve){
-            cout<<"Iteration count: "<< (j++) <<endl;
-            cout<<"err: "<<errno<<endl;
+            cout << "Iteration count: " << (j++) << endl;
+            cout << "err: " << errno << endl;
 
             int i = recvFrame(true);
+            if (!initialTime) initialTime = getCurrentTimestamp();
+            if (i > 0) totalDataRecived += i;
+
             if (i >= 0 && !CRC::hasError(frame)){
                 cout << "Recieve status: " << i << endl;
                 // if (CRC::hasError(frame)) continue;
@@ -40,7 +46,12 @@ public:
                 }
 
                 sendFrame(sn);
-                if (h.type == COMPLETION_ACK) eventRequestToRecieve = false;
+                if (h.type == COMPLETION_ACK){
+                    eventRequestToRecieve = false;
+
+                    long long t = getCurrentTimestamp();
+                    cout << "Reciever thoroughput: " << ((double)totalDataRecived / (t - initialTime)) << endl;
+                }
             }
 
         }

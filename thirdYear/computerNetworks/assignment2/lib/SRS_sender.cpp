@@ -6,7 +6,7 @@
 
 #define MY_PORT 8083   //Current node port number
 #define DEST_PORT 8084    //Destination node port number
-#define TIMEOUT 1000000 //micro second
+#define TIMEOUT 20000 //micro second
 #define DATA_LENGTH 64  //Byte or 512bits
 #define MODULO 16   // m=4, 
 
@@ -37,7 +37,7 @@ class SelectiveRepeatSender : public SenderNodeFlow{
         long long int curt = getCurrentTimestamp();
 
         for (auto p : timerTimeStamp){
-            if (curt > (p.second + TIMEOUT))
+            if (curt > (p.second + TIMEOUT * (MODULO/2)))
                 t.push_back(p.first);
         }
         return t;
@@ -91,16 +91,16 @@ public:
                 int ackNo = extractAck(h);
                 if (ackNo < 0) continue;//Corrupted frame
 
-                if(h.type == NCK && storage.find(ackNo)!=storage.end()){
+                if (h.type == NCK && storage.find(ackNo) != storage.end()){
                     std::lock_guard<std::mutex> lk(mut);
-                    cout<<"Recieved NCk: "<<ackNo<<endl;
+                    cout << "Recieved NCk: " << ackNo << endl;
                     sendFrame(ackNo);
                     startTimer(ackNo);
                     continue;
                 }
 
                 //Frame not corrupted and valid ack
-                if (sf < ackNo && (ackNo <= sn || ackNo < (sf+sw))){
+                if (sf < ackNo && (ackNo <= sn || ackNo < (sf + sw))){
                     // if ((ackNo > (sf % MODULO)) && (ackNo <= (sn % MODULO))){
                     {
                         std::lock_guard<std::mutex> lk(mut);
@@ -111,7 +111,7 @@ public:
                             purgeFrame(sf);
                             stopTimer(sf);
                             sf = (sf + 1) % MODULO;
-                            if(sf==0) break;
+                            if (sf == 0) break;
                         }
 
                         if (sn - sf < sw){
@@ -131,7 +131,7 @@ public:
                         cout << "Recieved__ ack: " << (ackNo) << "\n";
 
                         while (sf < MODULO){
-                            cout << "Purging frame: " << (sf)<< "\n";
+                            cout << "Purging frame: " << (sf) << "\n";
                             purgeFrame(sf);
                             stopTimer(sf);
                             sf = (sf + 1) % MODULO;
@@ -140,7 +140,7 @@ public:
 
                         //Now sender window also arived at next slot
                         while (sf < ackNo){
-                            cout << "Purging frame: " << (sf)  << "\n";
+                            cout << "Purging frame: " << (sf) << "\n";
                             purgeFrame(sf);
                             stopTimer(sf);
                             sf = (sf + 1) % MODULO;
@@ -167,7 +167,7 @@ public:
                 std::lock_guard<std::mutex> lk(mut);
                 startTimer(f);
                 sendFrame(f);
-                cout << "Re-Sending new frame, f:" << f  << endl;
+                cout << "Re-Sending new frame, f:" << f << endl;
             }
 
             if (tout.size()) totalConsecutiveTimeout++;
