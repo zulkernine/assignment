@@ -74,7 +74,7 @@ protected:
         storage.erase(n);
     }
 
-    void sendFrame(int sn){
+    void sendFrame(int sn){ 
         randomDelay();
         currentNode.sendData(storage[sn]);
     }
@@ -116,6 +116,13 @@ protected:
     vector<char> ackFrame;
     bool transferComplete;
     ofstream ouputData;
+
+    long long int getCurrentTimestamp(){
+        struct timeval tp;
+        gettimeofday(&tp, NULL);
+        long long int micros = tp.tv_sec * 1000000 + tp.tv_usec;
+        return micros;
+    }
 
     int deliverData(){
         if(transferComplete){

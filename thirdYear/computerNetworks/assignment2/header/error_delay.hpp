@@ -32,10 +32,10 @@ void randomDelay(){
     long long r = generator();
     int delay;
     if(r % 300 == 1){
-        delay = r % 50000;
+        delay = 10000 + r % 50000;
         std::this_thread::sleep_for(std::chrono::microseconds(delay));
     }else{
-        delay = r%10000 ;
-        std::this_thread::sleep_for(std::chrono::nanoseconds(delay));
+        delay = r%5000 ;
+        std::this_thread::sleep_for(std::chrono::microseconds(delay));
     }
 }

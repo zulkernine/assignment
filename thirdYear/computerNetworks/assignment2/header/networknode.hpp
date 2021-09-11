@@ -147,8 +147,11 @@ public:
     void sendData(vector<char> rawData, bool sendToChannel = true){
         ConnectionSocket destinaion;
         if (sendToChannel){
+            DataHeader h;
+            memcpy(&h, rawData.data(), sizeof(DataHeader));
+
             destinaion = getConnecteionSocket(CHANNEL_PORT);
-            cout<<"Sending to channel\n";
+            cout<<"Sending to channel seq: "<<h.seqNo<<"\n";
         }
         else{
             DataHeader h;
