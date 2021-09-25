@@ -23,8 +23,6 @@ public:
     struct myPoint{
         int x;
         int y;
-
-
     };
 
 private slots:
@@ -46,11 +44,20 @@ private slots:
 
     void on_pushButton_clicked();
 
+//    void on_draw_circle_clicked();
+
+    void on_circle_radius_valueChanged(int arg1);
+
+    void on_draw_mid_point_circle_clicked();
+
+    void on_draw_breshenham_circle_clicked();
+
+    void drawCircleBreshenham(int xc,int yc, int x1,int y1);
 private:
     Ui::MainWindow *ui;
     QPoint p1,p2;
-    myPoint mp1,mp2;
-    int gridSquareSize,gridHeight,gridWidth,XL,YL;
+    myPoint mp1,mp2,lastPoint;
+    int gridSquareSize,gridHeight,gridWidth,XL,YL,radius;
     QPixmap *pix;
     void point(int,int,int,int,int);
     void point(int,int,int);

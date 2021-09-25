@@ -39,8 +39,8 @@
    <widget class="QLabel" name="mouse_movement">
     <property name="geometry">
      <rect>
-      <x>530</x>
-      <y>140</y>
+      <x>480</x>
+      <y>80</y>
       <width>111</width>
       <height>31</height>
      </rect>
@@ -55,8 +55,8 @@
    <widget class="QLabel" name="label_3">
     <property name="geometry">
      <rect>
-      <x>530</x>
-      <y>120</y>
+      <x>470</x>
+      <y>60</y>
       <width>131</width>
       <height>20</height>
      </rect>
@@ -68,8 +68,8 @@
    <widget class="QLabel" name="mouse_pressed">
     <property name="geometry">
      <rect>
-      <x>530</x>
-      <y>210</y>
+      <x>610</x>
+      <y>80</y>
       <width>111</width>
       <height>31</height>
      </rect>
@@ -84,8 +84,8 @@
    <widget class="QLabel" name="label_5">
     <property name="geometry">
      <rect>
-      <x>550</x>
-      <y>190</y>
+      <x>620</x>
+      <y>50</y>
       <width>81</width>
       <height>20</height>
      </rect>
@@ -143,8 +143,8 @@ background-color: rgb(85, 255, 255);</string>
    <widget class="QCheckBox" name="show_axes">
     <property name="geometry">
      <rect>
-      <x>530</x>
-      <y>90</y>
+      <x>720</x>
+      <y>20</y>
       <width>91</width>
       <height>21</height>
      </rect>
@@ -169,24 +169,11 @@ background-color: rgb(85, 255, 255);</string>
    <widget class="QSpinBox" name="circle_radius">
     <property name="geometry">
      <rect>
-      <x>640</x>
-      <y>260</y>
-      <width>46</width>
-      <height>20</height>
+      <x>600</x>
+      <y>140</y>
+      <width>51</width>
+      <height>31</height>
      </rect>
-    </property>
-   </widget>
-   <widget class="QRadioButton" name="draw_circle">
-    <property name="geometry">
-     <rect>
-      <x>530</x>
-      <y>260</y>
-      <width>91</width>
-      <height>17</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Draw Circle</string>
     </property>
    </widget>
    <widget class="QRadioButton" name="draw_line">
@@ -231,7 +218,7 @@ background-color: rgb(85, 255, 255);</string>
    <widget class="QPushButton" name="drawGridButton">
     <property name="geometry">
      <rect>
-      <x>530</x>
+      <x>470</x>
       <y>20</y>
       <width>80</width>
       <height>26</height>
@@ -244,7 +231,7 @@ background-color: rgb(85, 255, 255);</string>
    <widget class="QSpinBox" name="gridSquareWidthInput">
     <property name="geometry">
      <rect>
-      <x>630</x>
+      <x>560</x>
       <y>20</y>
       <width>46</width>
       <height>27</height>
@@ -260,8 +247,8 @@ background-color: rgb(85, 255, 255);</string>
    <widget class="QPushButton" name="clearScreenButton">
     <property name="geometry">
      <rect>
-      <x>600</x>
-      <y>390</y>
+      <x>590</x>
+      <y>460</y>
       <width>80</width>
       <height>26</height>
      </rect>
@@ -273,7 +260,7 @@ background-color: rgb(85, 255, 255);</string>
    <widget class="QPushButton" name="drawGridAxisButton">
     <property name="geometry">
      <rect>
-      <x>700</x>
+      <x>620</x>
       <y>20</y>
       <width>80</width>
       <height>26</height>
@@ -294,6 +281,83 @@ background-color: rgb(85, 255, 255);</string>
     </property>
     <property name="text">
      <string>Bresenham</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="dda_computation_time">
+    <property name="geometry">
+     <rect>
+      <x>520</x>
+      <y>370</y>
+      <width>81</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="autoFillBackground">
+     <bool>true</bool>
+    </property>
+    <property name="frameShape">
+     <enum>QFrame::Panel</enum>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
+   <widget class="QLabel" name="breshenham_line_computation_time">
+    <property name="geometry">
+     <rect>
+      <x>610</x>
+      <y>370</y>
+      <width>81</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="autoFillBackground">
+     <bool>true</bool>
+    </property>
+    <property name="frameShape">
+     <enum>QFrame::Box</enum>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="draw_mid_point_circle">
+    <property name="geometry">
+     <rect>
+      <x>480</x>
+      <y>130</y>
+      <width>101</width>
+      <height>26</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Mid point circle</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="draw_breshenham_circle">
+    <property name="geometry">
+     <rect>
+      <x>670</x>
+      <y>130</y>
+      <width>131</width>
+      <height>26</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>breshenham circle</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label">
+    <property name="geometry">
+     <rect>
+      <x>600</x>
+      <y>120</y>
+      <width>41</width>
+      <height>18</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Radius</string>
     </property>
    </widget>
   </widget>

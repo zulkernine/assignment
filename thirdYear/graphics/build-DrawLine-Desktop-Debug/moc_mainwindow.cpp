@@ -21,8 +21,8 @@ QT_BEGIN_MOC_NAMESPACE
 QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
 struct qt_meta_stringdata_MainWindow_t {
-    QByteArrayData data[16];
-    char stringdata0[286];
+    QByteArrayData data[24];
+    char stringdata0[416];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -46,7 +46,15 @@ QT_MOC_LITERAL(11, 163, 36), // "on_gridSquareWidthInput_value..."
 QT_MOC_LITERAL(12, 200, 4), // "arg1"
 QT_MOC_LITERAL(13, 205, 28), // "on_clearScreenButton_clicked"
 QT_MOC_LITERAL(14, 234, 29), // "on_drawGridAxisButton_clicked"
-QT_MOC_LITERAL(15, 264, 21) // "on_pushButton_clicked"
+QT_MOC_LITERAL(15, 264, 21), // "on_pushButton_clicked"
+QT_MOC_LITERAL(16, 286, 29), // "on_circle_radius_valueChanged"
+QT_MOC_LITERAL(17, 316, 32), // "on_draw_mid_point_circle_clicked"
+QT_MOC_LITERAL(18, 349, 33), // "on_draw_breshenham_circle_cli..."
+QT_MOC_LITERAL(19, 383, 20), // "drawCircleBreshenham"
+QT_MOC_LITERAL(20, 404, 2), // "xc"
+QT_MOC_LITERAL(21, 407, 2), // "yc"
+QT_MOC_LITERAL(22, 410, 2), // "x1"
+QT_MOC_LITERAL(23, 413, 2) // "y1"
 
     },
     "MainWindow\0Mouse_Pressed\0\0showMousePosition\0"
@@ -56,7 +64,11 @@ QT_MOC_LITERAL(15, 264, 21) // "on_pushButton_clicked"
     "on_gridSquareWidthInput_valueChanged\0"
     "arg1\0on_clearScreenButton_clicked\0"
     "on_drawGridAxisButton_clicked\0"
-    "on_pushButton_clicked"
+    "on_pushButton_clicked\0"
+    "on_circle_radius_valueChanged\0"
+    "on_draw_mid_point_circle_clicked\0"
+    "on_draw_breshenham_circle_clicked\0"
+    "drawCircleBreshenham\0xc\0yc\0x1\0y1"
 };
 #undef QT_MOC_LITERAL
 
@@ -66,7 +78,7 @@ static const uint qt_meta_data_MainWindow[] = {
        8,       // revision
        0,       // classname
        0,    0, // classinfo
-      11,   14, // methods
+      15,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -74,17 +86,21 @@ static const uint qt_meta_data_MainWindow[] = {
        0,       // signalCount
 
  // slots: name, argc, parameters, tag, flags
-       1,    0,   69,    2, 0x0a /* Public */,
-       3,    1,   70,    2, 0x0a /* Public */,
-       6,    0,   73,    2, 0x08 /* Private */,
-       7,    0,   74,    2, 0x08 /* Private */,
-       8,    0,   75,    2, 0x08 /* Private */,
-       9,    0,   76,    2, 0x08 /* Private */,
-      10,    0,   77,    2, 0x08 /* Private */,
-      11,    1,   78,    2, 0x08 /* Private */,
-      13,    0,   81,    2, 0x08 /* Private */,
-      14,    0,   82,    2, 0x08 /* Private */,
-      15,    0,   83,    2, 0x08 /* Private */,
+       1,    0,   89,    2, 0x0a /* Public */,
+       3,    1,   90,    2, 0x0a /* Public */,
+       6,    0,   93,    2, 0x08 /* Private */,
+       7,    0,   94,    2, 0x08 /* Private */,
+       8,    0,   95,    2, 0x08 /* Private */,
+       9,    0,   96,    2, 0x08 /* Private */,
+      10,    0,   97,    2, 0x08 /* Private */,
+      11,    1,   98,    2, 0x08 /* Private */,
+      13,    0,  101,    2, 0x08 /* Private */,
+      14,    0,  102,    2, 0x08 /* Private */,
+      15,    0,  103,    2, 0x08 /* Private */,
+      16,    1,  104,    2, 0x08 /* Private */,
+      17,    0,  107,    2, 0x08 /* Private */,
+      18,    0,  108,    2, 0x08 /* Private */,
+      19,    4,  109,    2, 0x08 /* Private */,
 
  // slots: parameters
     QMetaType::Void,
@@ -98,6 +114,10 @@ static const uint qt_meta_data_MainWindow[] = {
     QMetaType::Void,
     QMetaType::Void,
     QMetaType::Void,
+    QMetaType::Void, QMetaType::Int,   12,
+    QMetaType::Void,
+    QMetaType::Void,
+    QMetaType::Void, QMetaType::Int, QMetaType::Int, QMetaType::Int, QMetaType::Int,   20,   21,   22,   23,
 
        0        // eod
 };
@@ -119,6 +139,10 @@ void MainWindow::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, 
         case 8: _t->on_clearScreenButton_clicked(); break;
         case 9: _t->on_drawGridAxisButton_clicked(); break;
         case 10: _t->on_pushButton_clicked(); break;
+        case 11: _t->on_circle_radius_valueChanged((*reinterpret_cast< int(*)>(_a[1]))); break;
+        case 12: _t->on_draw_mid_point_circle_clicked(); break;
+        case 13: _t->on_draw_breshenham_circle_clicked(); break;
+        case 14: _t->drawCircleBreshenham((*reinterpret_cast< int(*)>(_a[1])),(*reinterpret_cast< int(*)>(_a[2])),(*reinterpret_cast< int(*)>(_a[3])),(*reinterpret_cast< int(*)>(_a[4]))); break;
         default: ;
         }
     }
@@ -153,13 +177,13 @@ int MainWindow::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 11)
+        if (_id < 15)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 11;
+        _id -= 15;
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 11)
+        if (_id < 15)
             *reinterpret_cast<int*>(_a[0]) = -1;
-        _id -= 11;
+        _id -= 15;
     }
     return _id;
 }

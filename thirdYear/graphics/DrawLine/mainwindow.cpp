@@ -7,6 +7,14 @@
 #include <QPainter>
 #include <QPaintDevice>
 #include <QPoint>
+#include <sys/time.h>
+
+long long int getCurrentTimestamp(){
+    struct timeval tp;
+    gettimeofday(&tp, nullptr);
+    long long int micros = tp.tv_sec * 1000000 + tp.tv_usec;
+    return micros;
+}
 
 int nearestInt(float x){
     int ix=int(x);
@@ -22,6 +30,7 @@ MainWindow::MainWindow(QWidget *parent) :
     gridSquareSize=2;
     gridHeight = 450;
     gridWidth = 450;
+    radius=0;
     XL=gridWidth/gridSquareSize;
     YL=gridHeight/gridSquareSize;
 
@@ -45,7 +54,7 @@ void MainWindow::point(int x,int y,int r)
     r=0;
     for(a=-r;a<=r;a++){
         for(b=-r;b<=r;b++){
-                img.setPixelColor(x+a,y+b,qRgb(255,0,0));
+            img.setPixelColor(x+a,y+b,qRgb(255,0,0));
         }
     }
     ui->frame->setPixmap(QPixmap::fromImage(img));
@@ -66,7 +75,7 @@ void MainWindow::Mouse_Pressed()
     int y=ui->frame->y;
     myPoint p;
     p.x=x/gridSquareSize;p.y=y/gridSquareSize;
-
+    lastPoint = p;
     markPoint(p.x,p.y,3);
 }
 
@@ -108,7 +117,10 @@ void MainWindow::on_set_point2_clicked()
 
 void MainWindow::on_Draw_clicked()
 {
+    long long startTime = getCurrentTimestamp();
     ddaLine();
+    long long endTime = getCurrentTimestamp();
+    ui->dda_computation_time->setText(QString::number(endTime-startTime)+"μs");
 }
 
 void MainWindow::on_drawGridButton_clicked()
@@ -197,7 +209,7 @@ void MainWindow::bshLine(){
     int x0=sourcex,y0=sourcey,x1=destx,y1=desty;
 
 
-//    int dx=p2.x()-p1.x(),dy=p2.y()-p1.y();
+    //    int dx=p2.x()-p1.x(),dy=p2.y()-p1.y();
     int stepx,stepy;
     if(dy<0){dy=-dy; stepy=-1;} else {stepy=1;}
     if(dx<0){dx=-dx; stepx=-1;} else {stepx=1;}
@@ -302,8 +314,115 @@ void MainWindow::on_drawGridAxisButton_clicked()
 
 void MainWindow::on_pushButton_clicked()
 {
+    long long startTime = getCurrentTimestamp();
     bshLine();
+    long long endTime = getCurrentTimestamp();
+    ui->breshenham_line_computation_time->setText(QString::number(endTime-startTime)+"μs");
+
 }
+
+void MainWindow::on_circle_radius_valueChanged(int arg1)
+{
+    radius = arg1;
+}
+
+
+void MainWindow::on_draw_mid_point_circle_clicked()
+{
+    int centerx=lastPoint.x,centery=lastPoint.y;
+    int x1=radius,y1=0;
+    markPoint(x1+centerx,y1+centery,2);
+    if(radius>0)
+    {
+        markPoint(-x1+centerx,-y1+centery,2);
+        markPoint(y1+centerx,x1+centery,2);
+        markPoint(-y1+centerx,-x1+centery,2);
+    }
+
+    int p=(1-radius);
+    while(x1>y1)
+    {
+        y1+=1;
+        if(p<=0)
+            p=p+2*y1+1;
+        else
+        {
+            x1-=1;
+            p=p+2*y1-2*x1+1;
+        }
+        if(x1<y1) break;
+        markPoint(x1+centerx,y1+centery,2);
+        markPoint(-x1+centerx,y1+centery,2);
+        markPoint(x1+centerx,-y1+centery,2);
+        markPoint(-x1+centerx,-y1+centery,2);
+        if(x1!=y1)
+        {
+            markPoint(y1+centerx,x1+centery,2);
+            markPoint(-y1+centerx,x1+centery,2);
+            markPoint(y1+centerx,-x1+centery,2);
+            markPoint(-y1+centerx,-x1+centery,2);
+        }
+    }
+}
+
+void MainWindow::drawCircleBreshenham(int xc,int yc, int x1,int y1)
+{
+    markPoint(xc+x1, yc+y1,2);
+    markPoint(xc-x1, yc+y1,2);
+    markPoint(xc+x1, yc-y1,2);
+    markPoint(xc-x1, yc-y1,2);
+    markPoint(xc+y1, yc+x1,2);
+    markPoint(xc-y1, yc+x1,2);
+    markPoint(xc+y1, yc-x1,2);
+    markPoint(xc-y1, yc-x1,2);
+}
+
+void MainWindow::on_draw_breshenham_circle_clicked()
+{
+    int centerx=lastPoint.x,centery=lastPoint.y;
+
+    int x1 = 0, y1 = radius;
+    int decision_parameter = (3 - 2 * radius);
+    while (y1 >= x1)
+    {
+        drawCircleBreshenham(centerx,centery, x1, y1);
+        x1+=1;
+
+        if (decision_parameter > 0)
+        {
+            y1-=1;
+            decision_parameter = decision_parameter + 4 * (x1 - y1) + 10;
+        }
+        else
+            decision_parameter = decision_parameter + 4 * x1 + 6;
+        drawCircleBreshenham(centerx,centery, x1, y1);
+    }
+
+}
+
+//****************midpoint circle***********************
+
+
+
+//void MainWindow::on_bresenhamCircleButton_clicked()
+//{
+//    int radius=ui->circle_radius->value();
+//    QPainter painter(&img);
+//    QPen pen;
+//    pen.setWidth(1);
+//    pen.setColor(Qt::green);
+//    painter.setPen(Qt::green);
+
+//    ui->frame->setPixmap(QPixmap::fromImage(img));
+//}
+
+
+
+
+
+
+
+
 
 
 
