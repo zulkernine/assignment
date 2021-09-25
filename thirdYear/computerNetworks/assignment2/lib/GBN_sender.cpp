@@ -145,7 +145,6 @@ public:
 
                 }
             }
-
             std::this_thread::sleep_for(150ms);
         }
     }

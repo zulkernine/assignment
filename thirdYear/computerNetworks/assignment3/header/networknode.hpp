@@ -5,6 +5,8 @@
 #include <iostream>
 #include <vector>
 #include <cstring>
+#include <sys/time.h>
+#include <errno.h>
 #define CHANNEL_PORT 8080
 
 using namespace std;
@@ -24,6 +26,12 @@ enum NetworkDataType{ RAW_DATA, ACK, NCK, COMPLETION_ACK };
  * COMPLETION_ACK: file is completely transmitted
  * RAW_DATA : binary data
 */
+long long int getCurrentTimestamp(){
+    struct timeval tp;
+    gettimeofday(&tp, NULL);
+    long long int micros = tp.tv_sec * 1000000 + tp.tv_usec;
+    return micros;
+}
 
 struct DataHeader{
     char startByte;
@@ -41,7 +49,7 @@ struct DataHeader{
     }
 };
 
-DataHeader makeHeader(int source_port, int dest_port, int actual_data_length = 0, NetworkDataType type = RAW_DATA, long long int seqNo = 0){
+DataHeader makeHeader(int source_port, int dest_port, long long int seqNo = 0, int actual_data_length = 0, NetworkDataType type = RAW_DATA){
     DataHeader head;
     head.sourcePort = source_port;
     head.destPort = dest_port;
@@ -61,7 +69,7 @@ class ComputerNode{
 
     ConnectionSocket getConnecteionSocket(int port, bool non_blocking = false){
         ConnectionSocket sock;
-        if ((sock.id = socket(AF_INET, non_blocking ? SOCK_STREAM | O_NONBLOCK : SOCK_STREAM, 0)) < 0){
+        if ((sock.id = socket(AF_INET, non_blocking ? (SOCK_STREAM | O_NONBLOCK) : SOCK_STREAM, 0)) < 0){
             cerr << "socket failed";
             exit(EXIT_FAILURE);
         }
@@ -83,9 +91,11 @@ class ComputerNode{
         int new_socket;
         ConnectionSocket sock;
         socklen_t addrlen = sizeof(sock.address);
+
         if ((new_socket = accept(listenerSocket.id, (struct sockaddr*)&(sock.address), (socklen_t*)&addrlen)) < 0){
             cerr << "can't accept";
-            throw string("Connection backlog queue is empty!");
+            cout<<"errno: "<<errno<<endl;
+            throw string("Connection backlog queue is empty!\n");
         }
         sock.id = new_socket;
 
@@ -115,16 +125,24 @@ public:
             exit(EXIT_FAILURE);
         }
 
+        listen(listenerSocket.id,incomingConnectionQueue);
+
         cout << "Started listening to port: " << port << "\n";
 
     }
 
-
     bool isChannelIdle(){
-        ConnectionSocket destinaion = getConnecteionSocket(CHANNEL_PORT, true);
+        ConnectionSocket destinaion = getConnecteionSocket(CHANNEL_PORT);
+        long long startTime = getCurrentTimestamp();
         int status = connect(destinaion.id, (const struct sockaddr*)&(destinaion.address),
             sizeof(destinaion.address));
+
+        cout << "Channel status: " << status << " errno: " << errno << endl;
         close(destinaion.id);
+        long long endTime = getCurrentTimestamp();
+
+        cout << "Sending channel time: " << (endTime - startTime) << " 	μs\n";
+
         return status == 0;
     }
 
@@ -134,15 +152,15 @@ public:
             DataHeader h;
             memcpy(&h, rawData.data(), sizeof(DataHeader));
 
-            destinaion = getConnecteionSocket(CHANNEL_PORT, true);
+            destinaion = getConnecteionSocket(CHANNEL_PORT, false);
             cout << "Sending to channel seq: " << h.seqNo << "\n";
         }
         else{
             DataHeader h;
             memcpy(&h, rawData.data(), sizeof(DataHeader));
-            if (h.destPort < 8080 || h.destPort > 65536){
+            if (h.destPort <= 8000 || h.destPort > 65536){
                 cout << "\nConnection Failed, invalid destination address, packet droppped:" << h.destPort << "\n";
-                return;
+                return false;
             }
             destinaion = getConnecteionSocket(h.destPort);
             cout << "Sending:-\n";
@@ -163,23 +181,30 @@ public:
         }
 
         close(destinaion.id);
-        return status>=0;
+        return status >= 0;
     }
 
     int recieveData(vector<char>& rawData, bool blocking = true){
-        rawData.resize(1024);
+        try{
+            rawData.resize(1024);
 
-        int valread = recv(listenerSocket.id, rawData.data(), 1024, blocking ? MSG_WAITALL : MSG_DONTWAIT);
+            ConnectionSocket sock = acceptConnection();
 
-        if (valread > 0){
-            DataHeader h;
-            memcpy(&h, rawData.data(), sizeof(DataHeader));
-            rawData.resize(valread);
-            cout << "Recieved:-\n";
-            h.print();
+            int valread = read(sock.id, rawData.data(), 1024);
+            if (valread > 0){
+                DataHeader h;
+                memcpy(&h, rawData.data(), sizeof(DataHeader));
+                rawData.resize(valread);
+                cout << "Recieved:-\n";
+                h.print();
+            }
+
+            return valread;
         }
-
-        return valread;
+        catch (string s){
+            cout << s;
+        }
+        return -1;
     }
 };
 
