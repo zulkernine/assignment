@@ -16,9 +16,19 @@ random_device generator;
 // auto generator = bind(distribution, gen);
 
 
-void randomDelay(){
-    long long r = generator();
-    int delay;
-    delay = 1000 + r % 5000;
+void randomDelay(int delay = -1){
+    if (delay < 0){
+        long long r = generator();
+        delay = r % 500;
+    }
+
     std::this_thread::sleep_for(std::chrono::microseconds(delay));
 }
+
+//Assumption p is between 0 and 1
+bool p_probability_check(float p){
+    int num = generator()%100;
+    p *= 100;
+    return (p>=num) ;
+}
+

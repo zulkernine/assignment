@@ -3,11 +3,25 @@
 #include<thread>
 #include<mutex>
 
-#define TRIP_COUNT 30
+#define TRIP_COUNT 500
 #define SENDER_PORT 8000
-// #define CHANNEL_PORT 8080
+#define CHANNEL_PORT 8080
 #define RS_GAP 180
+#define TIME_SLOT 500 // micro second
 
+vector<char> getData(int senderPort, int seq){
+    DataHeader h = makeHeader(senderPort, senderPort + RS_GAP, getCurrentTimestamp());
+    vector<char> data;
+    data.resize(sizeof(h));
+    memcpy(data.data(), (char*)&h, sizeof(h));
+    return data;
+}
+
+long long transmissionDelay(vector<char> data){
+    DataHeader h;
+    memcpy((char*)&h, data.data(), sizeof(char) * data.size());
+    return (getCurrentTimestamp() - h.seqNo);
+}
 
 class PairedNode_1P{
     ComputerNode channel;
@@ -17,14 +31,6 @@ class PairedNode_1P{
 public:
     PairedNode_1P() :channel(CHANNEL_PORT, false, 1){
         isChannelIdle = true;
-    }
-
-    vector<char> getData(int senderPort, int seq){
-        DataHeader h = makeHeader(senderPort, senderPort + RS_GAP, seq);
-        vector<char> data;
-        data.resize(sizeof(h));
-        memcpy(data.data(), (char*)&h, sizeof(h));
-        return data;
     }
 
     void senderProgramme(const int senderPort){
@@ -46,9 +52,8 @@ public:
                 vector<char> data = getData(senderPort, count);
                 bool flag = senderNode.sendData(data);
                 if (flag) count++;
-            }else{
-                randomDelay();
             }
+            
             loopCount++;
             cout << senderPort << ":Sender side  Count: " << count << " Loop count: " << loopCount << endl;
 
@@ -63,6 +68,7 @@ public:
         vector<char> data;
         data.resize(sizeof(DataHeader));
         long long startTime = getCurrentTimestamp(); //micro second
+        double tatalTransmissionTime=0;
 
         while (count < TRIP_COUNT){
             recieverNode.recieveData(data);
@@ -70,9 +76,11 @@ public:
                 std::lock_guard<std::mutex> lk(mut);
                 isChannelIdle = true;
             }
-            cout << recieverPort << ":reciever count: " << count++ << endl;
+
             long long endTime = getCurrentTimestamp();
             cout << "Frame rate: " << (count * 1000000) / ((double)(endTime - startTime)) << " per second\n";
+            tatalTransmissionTime += transmissionDelay(data);
+            cout << recieverPort << ":reciever count: " << ++count << "\t delay: " << (tatalTransmissionTime/ count) << endl;
         }
 
         cout << recieverPort << ":Reciever process finished\n";
@@ -110,8 +118,6 @@ public:
 };
 
 
-
-
 class PairedNode_NonP{
     ComputerNode channel;
     bool isChannelIdle;
@@ -122,13 +128,6 @@ public:
         isChannelIdle = true;
     }
 
-    vector<char> getData(int senderPort, int seq){
-        DataHeader h = makeHeader(senderPort, senderPort + RS_GAP, seq);
-        vector<char> data;
-        data.resize(sizeof(h));
-        memcpy(data.data(), (char*)&h, sizeof(h));
-        return data;
-    }
 
     void senderProgramme(const int senderPort){
         ComputerNode senderNode(senderPort, false, 1);
@@ -167,6 +166,7 @@ public:
         vector<char> data;
         data.resize(sizeof(DataHeader));
         long long startTime = getCurrentTimestamp(); //micro second
+        long long tatalTransmissionTime=0;
 
         while (count < TRIP_COUNT){
             recieverNode.recieveData(data);
@@ -174,9 +174,10 @@ public:
                 std::lock_guard<std::mutex> lk(mut);
                 isChannelIdle = true;
             }
-            cout << recieverPort << ":reciever count: " << count++ << endl;
             long long endTime = getCurrentTimestamp();
             cout << "Frame rate: " << (count * 1000000) / ((double)(endTime - startTime)) << " per second\n";
+            tatalTransmissionTime += transmissionDelay(data);
+            cout << recieverPort << ":reciever count: " << ++count << "\t delay: " << (tatalTransmissionTime / count) << endl;
         }
 
         cout << recieverPort << ":Reciever process finished\n";
@@ -224,15 +225,7 @@ public:
         isChannelIdle = true;
     }
 
-    vector<char> getData(int senderPort, int seq){
-        DataHeader h = makeHeader(senderPort, senderPort + RS_GAP, seq);
-        vector<char> data;
-        data.resize(sizeof(h));
-        memcpy(data.data(), (char*)&h, sizeof(h));
-        return data;
-    }
-
-    void senderProgramme(const int senderPort){
+    void senderProgramme(const int senderPort,const int numberOfNodes){
         ComputerNode senderNode(senderPort, false, 1);
         cout << "Sender programme starts\n";
 
@@ -243,8 +236,10 @@ public:
             {
                 std::lock_guard<std::mutex> lk(mut);
                 if (isChannelIdle){
-                    isChannelIdle = false;
-                    canSend = true;
+                    if(p_probability_check(1.0 / (double)numberOfNodes)){
+                        isChannelIdle = false;
+                        canSend = true;
+                    }
                 }
             }
             if (canSend){
@@ -253,7 +248,7 @@ public:
                 if (flag) count++;
             }
             else{
-                randomDelay();
+                randomDelay(TIME_SLOT);
             }
             loopCount++;
             cout << senderPort << ":Sender side  Count: " << count << " Loop count: " << loopCount << endl;
@@ -269,6 +264,7 @@ public:
         vector<char> data;
         data.resize(sizeof(DataHeader));
         long long startTime = getCurrentTimestamp(); //micro second
+        long long tatalTransmissionTime=0;
 
         while (count < TRIP_COUNT){
             recieverNode.recieveData(data);
@@ -276,9 +272,10 @@ public:
                 std::lock_guard<std::mutex> lk(mut);
                 isChannelIdle = true;
             }
-            cout << recieverPort << ":reciever count: " << count++ << endl;
             long long endTime = getCurrentTimestamp();
             cout << "Frame rate: " << (count * 1000000) / ((double)(endTime - startTime)) << " per second\n";
+            tatalTransmissionTime += transmissionDelay(data);
+            cout << recieverPort << ":reciever count: " << ++count << "\t delay: " << (tatalTransmissionTime / count) << endl;
         }
 
         cout << recieverPort << ":Reciever process finished\n";
@@ -301,7 +298,7 @@ public:
         vector<thread> thd;
         thread channel(&PairedNode_PPersistent::channelProgramme, this);
         for (int i = 0;i < n;i++){
-            thread tsend(&PairedNode_PPersistent::senderProgramme, this, SENDER_PORT + i);
+            thread tsend(&PairedNode_PPersistent::senderProgramme, this, SENDER_PORT + i,n);
             thread trecieve(&PairedNode_PPersistent::recieverProgramme, this, SENDER_PORT + RS_GAP + i);
 
             thd.push_back(move(tsend));
