@@ -1,74 +1,42 @@
-  
+;Write and test a MASM program to Convert a letter from uppercase to lowercase.
 
- section .data                           ;Data segment
-    str1 db "Enter a letter: "
-	str2 db "The letter you entered (in lowercase): "
-    str3 db "Output: "
-    lens1 equ $-str1             ;The length of the message
-    lens2 equ $-str2             ;The length of the message
-    lens3 equ $-str3             ;The length of the message
+.MODEL SMALL
+ .STACK 100H
 
-    SYS_EXIT  equ 1
-    SYS_READ  equ 3
-    SYS_WRITE equ 4
-    STDIN     equ 0
-    STDOUT    equ 1 
+ .DATA
+    INPUT db 13,10, "Enter a letter : $"
+	OUTPUT db  13, 10, "The letter you entered (in lowercase) : $"
 
-segment .bss
-    num1 resb 1
+ .CODE
+ 	MAIN PROC
+	 	MOV AX, @DATA	;initialize DS
+	 	MOV DS, AX
 
-section .text
-    global _start
+	 	LEA DX, INPUT	;show the input prompt
+	 	MOV AH, 9
+	 	INT 21H
 
-_start:	
-    mov eax, SYS_WRITE  ;write message
-    mov ebx, STDOUT
-    mov ecx, str1
-    mov edx, lens1
-    int 80h             ;call kernel
+	 	MOV AH, 1		;read letter
+	 	INT 21H
 
-    mov eax, SYS_READ   ;read character
-    mov ebx, STDIN  
-    mov ecx, num1 
-    mov edx, 2
-    int 0x80
+	 	LEA DX, OUTPUT	;show output prompt
+	 	MOV AH, 9
+	 	INT 21H
 
-    mov eax, SYS_WRITE  ;write message
-    mov ebx, STDOUT
-    mov ecx, str2
-    mov edx, lens2
-    int 80h 
+	 	MOV BL, AL		;store the letter in BL
 
-    mov eax, SYS_WRITE  ;show char
-    mov ebx, STDOUT
-    mov ecx, num1
-    mov edx, 1
-    int 80h
+	 	CMP BL, 'A'		;if the character is <A goto loop1
+	 	JL LOOP1
+	 	CMP BL, 'Z'		;if the character is >Z goto loop1
+	 	JG LOOP1
+	 	ADD BL, 20H		;else convert into lowercase 
 
-    MOV BL, num1		;store the letter in BL
+	LOOP1:MOV AH, 2		;write the output letter
+		MOV DL, BL
+	 	INT 21H
 
-    CMP BL, 'A'		;if the character is <A goto loop1
-    JL LOOP1
-    CMP BL, 'Z'		;if the character is >Z goto loop1
-    JG LOOP1
-    ADD BL, 20H		;else convert into lowercase 
-    MOV [num1],BL
+	 	MOV AH, 4CH		;return control to DOS
+	 	INT 21H
 
-LOOP1:
-    MOV [num1],BL
-    mov eax, SYS_WRITE  ;write message
-    mov ebx, STDOUT
-    mov ecx, str3
-    mov edx, lens3
-    int 80h 
-
-    mov eax, SYS_WRITE  ;write message
-    mov ebx, STDOUT
-    mov ecx, num1
-    mov edx, 1
-    int 80h 
-
-    ; Exit code
-    mov eax, 1
-    mov ebx, 0
-    int 80h
+	 MAIN ENDP
+END MAIN

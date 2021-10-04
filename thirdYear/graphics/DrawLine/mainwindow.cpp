@@ -120,7 +120,7 @@ void MainWindow::on_Draw_clicked()
     long long startTime = getCurrentTimestamp();
     ddaLine();
     long long endTime = getCurrentTimestamp();
-    ui->dda_computation_time->setText(QString::number(endTime-startTime)+"μs");
+    ui->dda_computation_time->setText(QString::number(endTime-startTime)+" μs");
 }
 
 void MainWindow::on_drawGridButton_clicked()
@@ -262,9 +262,9 @@ void MainWindow::markPoint(int x,int y,int c){
     paint->begin(pix);
 
     switch(c){
-    case 0:paint->setPen(Qt::red);break;
-    case 1:paint->setPen(Qt::white);break;
-    case 2:paint->setPen(Qt::green);break;
+    case 0:paint->setPen(Qt::white);break;
+    case 1:paint->setPen(Qt::green);break;
+    case 2:paint->setPen(Qt::red);break;
     case 3:paint->setPen(Qt::yellow);break;
     }
 
@@ -311,13 +311,12 @@ void MainWindow::on_drawGridAxisButton_clicked()
     }
 }
 
-
 void MainWindow::on_pushButton_clicked()
 {
     long long startTime = getCurrentTimestamp();
     bshLine();
     long long endTime = getCurrentTimestamp();
-    ui->breshenham_line_computation_time->setText(QString::number(endTime-startTime)+"μs");
+    ui->breshenham_line_computation_time->setText(QString::number(endTime-startTime)+" μs");
 
 }
 
@@ -329,14 +328,16 @@ void MainWindow::on_circle_radius_valueChanged(int arg1)
 
 void MainWindow::on_draw_mid_point_circle_clicked()
 {
+    long long startTime = getCurrentTimestamp();
+
     int centerx=lastPoint.x,centery=lastPoint.y;
     int x1=radius,y1=0;
-    markPoint(x1+centerx,y1+centery,2);
+    markPoint(x1+centerx,y1+centery,1);
     if(radius>0)
     {
-        markPoint(-x1+centerx,-y1+centery,2);
-        markPoint(y1+centerx,x1+centery,2);
-        markPoint(-y1+centerx,-x1+centery,2);
+        markPoint(-x1+centerx,-y1+centery,1);
+        markPoint(y1+centerx,x1+centery,1);
+        markPoint(-y1+centerx,-x1+centery,1);
     }
 
     int p=(1-radius);
@@ -351,18 +352,21 @@ void MainWindow::on_draw_mid_point_circle_clicked()
             p=p+2*y1-2*x1+1;
         }
         if(x1<y1) break;
-        markPoint(x1+centerx,y1+centery,2);
-        markPoint(-x1+centerx,y1+centery,2);
-        markPoint(x1+centerx,-y1+centery,2);
-        markPoint(-x1+centerx,-y1+centery,2);
+        markPoint(x1+centerx,y1+centery,1);
+        markPoint(-x1+centerx,y1+centery,1);
+        markPoint(x1+centerx,-y1+centery,1);
+        markPoint(-x1+centerx,-y1+centery,1);
         if(x1!=y1)
         {
-            markPoint(y1+centerx,x1+centery,2);
-            markPoint(-y1+centerx,x1+centery,2);
-            markPoint(y1+centerx,-x1+centery,2);
-            markPoint(-y1+centerx,-x1+centery,2);
+            markPoint(y1+centerx,x1+centery,1);
+            markPoint(-y1+centerx,x1+centery,1);
+            markPoint(y1+centerx,-x1+centery,1);
+            markPoint(-y1+centerx,-x1+centery,1);
         }
     }
+
+    long long endTime = getCurrentTimestamp();
+    ui->dda_computation_time->setText(QString::number(endTime-startTime)+" μs");
 }
 
 void MainWindow::drawCircleBreshenham(int xc,int yc, int x1,int y1)
@@ -379,6 +383,8 @@ void MainWindow::drawCircleBreshenham(int xc,int yc, int x1,int y1)
 
 void MainWindow::on_draw_breshenham_circle_clicked()
 {
+    long long startTime = getCurrentTimestamp();
+
     int centerx=lastPoint.x,centery=lastPoint.y;
 
     int x1 = 0, y1 = radius;
@@ -397,6 +403,9 @@ void MainWindow::on_draw_breshenham_circle_clicked()
             decision_parameter = decision_parameter + 4 * x1 + 6;
         drawCircleBreshenham(centerx,centery, x1, y1);
     }
+
+    long long endTime = getCurrentTimestamp();
+    ui->breshenham_line_computation_time->setText(QString::number(endTime-startTime)+" μs");
 
 }
 

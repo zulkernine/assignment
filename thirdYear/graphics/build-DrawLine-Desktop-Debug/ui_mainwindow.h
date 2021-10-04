@@ -54,6 +54,8 @@ public:
     QPushButton *draw_mid_point_circle;
     QPushButton *draw_breshenham_circle;
     QLabel *label;
+    QLabel *label_2;
+    QLabel *label_4;
     QMenuBar *menuBar;
     QToolBar *mainToolBar;
     QStatusBar *statusBar;
@@ -138,12 +140,12 @@ public:
         pushButton->setGeometry(QRect(610, 340, 81, 31));
         dda_computation_time = new QLabel(centralWidget);
         dda_computation_time->setObjectName(QString::fromUtf8("dda_computation_time"));
-        dda_computation_time->setGeometry(QRect(520, 370, 81, 31));
+        dda_computation_time->setGeometry(QRect(500, 200, 81, 31));
         dda_computation_time->setAutoFillBackground(true);
         dda_computation_time->setFrameShape(QFrame::Panel);
         breshenham_line_computation_time = new QLabel(centralWidget);
         breshenham_line_computation_time->setObjectName(QString::fromUtf8("breshenham_line_computation_time"));
-        breshenham_line_computation_time->setGeometry(QRect(610, 370, 81, 31));
+        breshenham_line_computation_time->setGeometry(QRect(650, 200, 81, 31));
         breshenham_line_computation_time->setAutoFillBackground(true);
         breshenham_line_computation_time->setFrameShape(QFrame::Box);
         draw_mid_point_circle = new QPushButton(centralWidget);
@@ -155,6 +157,12 @@ public:
         label = new QLabel(centralWidget);
         label->setObjectName(QString::fromUtf8("label"));
         label->setGeometry(QRect(600, 120, 41, 18));
+        label_2 = new QLabel(centralWidget);
+        label_2->setObjectName(QString::fromUtf8("label_2"));
+        label_2->setGeometry(QRect(500, 240, 58, 18));
+        label_4 = new QLabel(centralWidget);
+        label_4->setObjectName(QString::fromUtf8("label_4"));
+        label_4->setGeometry(QRect(670, 240, 58, 18));
         MainWindow->setCentralWidget(centralWidget);
         menuBar = new QMenuBar(MainWindow);
         menuBar->setObjectName(QString::fromUtf8("menuBar"));
@@ -195,6 +203,8 @@ public:
         draw_mid_point_circle->setText(QApplication::translate("MainWindow", "Mid point circle", nullptr));
         draw_breshenham_circle->setText(QApplication::translate("MainWindow", "breshenham circle", nullptr));
         label->setText(QApplication::translate("MainWindow", "Radius", nullptr));
+        label_2->setText(QApplication::translate("MainWindow", "time 1", nullptr));
+        label_4->setText(QApplication::translate("MainWindow", "time 2", nullptr));
     } // retranslateUi
 
 };
