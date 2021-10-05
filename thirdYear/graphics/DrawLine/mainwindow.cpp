@@ -8,6 +8,7 @@
 #include <QPaintDevice>
 #include <QPoint>
 #include <sys/time.h>
+#include <cmath>
 
 long long int getCurrentTimestamp(){
     struct timeval tp;
@@ -62,11 +63,11 @@ void MainWindow::point(int x,int y,int r)
 
 void MainWindow::showMousePosition(QPoint &pos)
 {
-    ui->mouse_movement->setText(" X : "+QString::number(pos.x())+", Y : "+QString::number(pos.y()));
+    ui->mouse_movement->setText(" X : "+QString::number(pos.x()/gridSquareSize - (XL/2))+", Y : "+QString::number((YL/2) - pos.y()/gridSquareSize));
 }
 void MainWindow::Mouse_Pressed()
 {
-    ui->mouse_pressed->setText(" X : "+QString::number(ui->frame->x)+", Y : "+QString::number(ui->frame->y));
+    ui->mouse_pressed->setText(" X : "+QString::number(ui->frame->x/gridSquareSize - (XL/2))+", Y : "+QString::number((YL/2) - ui->frame->y/gridSquareSize));
     point(ui->frame->x,ui->frame->y,3);
     ui->x_axis->move(0,ui->frame->y);
     ui->y_axis->move(ui->frame->x,0);
@@ -266,6 +267,9 @@ void MainWindow::markPoint(int x,int y,int c){
     case 1:paint->setPen(Qt::green);break;
     case 2:paint->setPen(Qt::red);break;
     case 3:paint->setPen(Qt::yellow);break;
+    case 4:paint->setPen(Qt::blue);break;
+    case 5:paint->setPen(Qt::magenta);break;
+    default:paint->setPen(Qt::cyan);break;
     }
 
     for(int i=0;i<gridSquareSize;i+=1){
@@ -325,7 +329,6 @@ void MainWindow::on_circle_radius_valueChanged(int arg1)
     radius = arg1;
 }
 
-
 void MainWindow::on_draw_mid_point_circle_clicked()
 {
     long long startTime = getCurrentTimestamp();
@@ -369,16 +372,16 @@ void MainWindow::on_draw_mid_point_circle_clicked()
     ui->dda_computation_time->setText(QString::number(endTime-startTime)+" μs");
 }
 
-void MainWindow::drawCircleBreshenham(int xc,int yc, int x1,int y1)
+void MainWindow::drawCircleBreshenham(int xc,int yc, int x1,int y1,int colorCode = 2)
 {
-    markPoint(xc+x1, yc+y1,2);
-    markPoint(xc-x1, yc+y1,2);
-    markPoint(xc+x1, yc-y1,2);
-    markPoint(xc-x1, yc-y1,2);
-    markPoint(xc+y1, yc+x1,2);
-    markPoint(xc-y1, yc+x1,2);
-    markPoint(xc+y1, yc-x1,2);
-    markPoint(xc-y1, yc-x1,2);
+    markPoint(xc+x1, yc+y1,colorCode);
+    markPoint(xc-x1, yc+y1,colorCode);
+    markPoint(xc+x1, yc-y1,colorCode);
+    markPoint(xc-x1, yc-y1,colorCode);
+    markPoint(xc+y1, yc+x1,colorCode);
+    markPoint(xc-y1, yc+x1,colorCode);
+    markPoint(xc+y1, yc-x1,colorCode);
+    markPoint(xc-y1, yc-x1,colorCode);
 }
 
 void MainWindow::on_draw_breshenham_circle_clicked()
@@ -388,7 +391,7 @@ void MainWindow::on_draw_breshenham_circle_clicked()
     int centerx=lastPoint.x,centery=lastPoint.y;
 
     int x1 = 0, y1 = radius;
-    int decision_parameter = (3 - 2 * radius);
+    int decision_parameter = (1 -  radius);
     while (y1 >= x1)
     {
         drawCircleBreshenham(centerx,centery, x1, y1);
@@ -397,10 +400,10 @@ void MainWindow::on_draw_breshenham_circle_clicked()
         if (decision_parameter > 0)
         {
             y1-=1;
-            decision_parameter = decision_parameter + 4 * (x1 - y1) + 10;
+            decision_parameter = decision_parameter + 2 * (x1 - y1) + 1;
         }
         else
-            decision_parameter = decision_parameter + 4 * x1 + 6;
+            decision_parameter = decision_parameter + 2 * x1 + 1;
         drawCircleBreshenham(centerx,centery, x1, y1);
     }
 
@@ -409,21 +412,112 @@ void MainWindow::on_draw_breshenham_circle_clicked()
 
 }
 
-//****************midpoint circle***********************
+void MainWindow::on_drawPolarCircle_clicked()
+{
+    long long startTime = getCurrentTimestamp();
+
+    int cx=lastPoint.x,cy=lastPoint.y;
+
+    int rad = radius;
+
+    const double conversionFactor = (M_PI)/(double)180 ;
+
+    for(int i=0;i<=45;i++){
+//        markPoint((int)( cx+round( cos(i * conversionFactor) * rad  )), (int)( cy+round( sin(i * conversionFactor) * rad  )),4);
+        drawCircleBreshenham(cx,cy,(int)(round( cos(i * conversionFactor) * rad  )),(int)(round( sin(i * conversionFactor) * rad  )),4);
+    }
+
+    long long endTime = getCurrentTimestamp();
+    ui->breshenham_line_computation_time->setText(QString::number(endTime-startTime)+" μs");
+
+}
+
+void MainWindow::ellipseQuadPoint(int centerx,int centery,int x1,int y1,int color=5)
+{
+    markPoint(centerx+x1,centery+y1,color);
+    markPoint(centerx+x1,centery-y1,color);
+    markPoint(centerx-x1,centery+y1,color);
+    markPoint(centerx-x1,centery-y1,color);
+}
+
+void MainWindow::on_drawBreshenhamEllipse_clicked()
+{
+    int x1, y1, p;
+    int eRa=ui->ellipseRa->value();
+    int eRb=ui->ellipseRb->value();
+    int xc=lastPoint.x,yc=lastPoint.y;
+
+//    xc=(xc/gridsize)*gridsize+gridsize/2;
+//    yc=(yc/gridsize)*gridsize+gridsize/2;
+
+    x1=0;
+    y1=eRb;
+    p=(eRb*eRb)-(eRa*eRa*eRb)+((eRa*eRa)/4);
+    while((2*x1*eRb*eRb)<(2*y1*eRa*eRa))
+    {
+        ellipseQuadPoint(xc,yc,x1,y1);
+
+        if(p<0)
+        {
+            x1=x1+1;
+            p=p+(2*eRb*eRb*x1)+(eRb*eRb);
+        }
+        else
+        {
+            x1=x1+1;
+            y1=y1-1;
+            p=p+(2*eRb*eRb*x1+eRb*eRb)-(2*eRa*eRa*y1);
+        }
+    }
+    p=((float)x1+0.5)*((float)x1+0.5)*eRb*eRb+(y1-1)*(y1-1)*eRa*eRa-eRa*eRa*eRb*eRb;
+
+    while(y1>=0)
+    {
+        ellipseQuadPoint(xc,yc,x1,y1);
+
+        if(p>0)
+        {
+            y1=y1-1;
+            p=p-(2*eRa*eRa*y1)+(eRa*eRa);
+        }
+        else
+        {
+            y1=y1-1;
+            x1=x1+1;
+        p=p+(2*eRb*eRb*x1)-(2*eRa*eRa*y1)-(eRa*eRa);
+        }
+   }
+
+}
+
+void MainWindow::on_drawpollarEllipse_clicked()
+{
+    long long startTime = getCurrentTimestamp();
+
+    int cx=lastPoint.x,cy=lastPoint.y;
+    int eRa=ui->ellipseRa->value();
+    int eRb=ui->ellipseRb->value();
+
+
+    const double conversionFactor = (M_PI)/(double)180 ;
+
+    for(int i=0;i<=360;i++){
+        ellipseQuadPoint(cx,cy,(int)round( cos(i * conversionFactor) * eRa  ),(int)round( sin(i * conversionFactor) * eRb  ),9);
+//        markPoint((int)( cx+round( cos(i * conversionFactor) * eRa  )), (int)( cy+round( sin(i * conversionFactor) * eRb  )),9);
+//        drawCircleBreshenham(cx,cy,(int)( cx+round( cos(i * conversionFactor) * rad  )),(int)( cy+round( sin(i * conversionFactor) * rad  )),4);
+    }
+
+    long long endTime = getCurrentTimestamp();
+    ui->breshenham_line_computation_time->setText(QString::number(endTime-startTime)+" μs");
+
+}
 
 
 
-//void MainWindow::on_bresenhamCircleButton_clicked()
-//{
-//    int radius=ui->circle_radius->value();
-//    QPainter painter(&img);
-//    QPen pen;
-//    pen.setWidth(1);
-//    pen.setColor(Qt::green);
-//    painter.setPen(Qt::green);
 
-//    ui->frame->setPixmap(QPixmap::fromImage(img));
-//}
+
+
+
 
 
 

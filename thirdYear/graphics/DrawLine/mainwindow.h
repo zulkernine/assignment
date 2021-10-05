@@ -52,7 +52,14 @@ private slots:
 
     void on_draw_breshenham_circle_clicked();
 
-    void drawCircleBreshenham(int xc,int yc, int x1,int y1);
+    void drawCircleBreshenham(int xc,int yc, int x1,int y1,int c);
+
+    void on_drawPolarCircle_clicked();
+
+    void on_drawBreshenhamEllipse_clicked();
+
+    void on_drawpollarEllipse_clicked();
+
 private:
     Ui::MainWindow *ui;
     QPoint p1,p2;
@@ -64,6 +71,7 @@ private:
     void ddaLine();
     void bshLine();
     void markPoint(int x,int y,int c);
+    void ellipseQuadPoint(int centerx,int centery,int x1,int y1,int color);
 };
 
 #endif // MAINWINDOW_H
