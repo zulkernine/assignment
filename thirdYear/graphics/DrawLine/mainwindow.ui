@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>820</width>
-    <height>579</height>
+    <width>977</width>
+    <height>693</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -19,8 +19,8 @@
      <rect>
       <x>0</x>
       <y>0</y>
-      <width>450</width>
-      <height>450</height>
+      <width>600</width>
+      <height>600</height>
      </rect>
     </property>
     <property name="mouseTracking">
@@ -39,8 +39,8 @@
    <widget class="QLabel" name="mouse_movement">
     <property name="geometry">
      <rect>
-      <x>480</x>
-      <y>80</y>
+      <x>630</x>
+      <y>90</y>
       <width>111</width>
       <height>31</height>
      </rect>
@@ -55,8 +55,8 @@
    <widget class="QLabel" name="label_3">
     <property name="geometry">
      <rect>
-      <x>470</x>
-      <y>60</y>
+      <x>620</x>
+      <y>70</y>
       <width>131</width>
       <height>20</height>
      </rect>
@@ -68,8 +68,8 @@
    <widget class="QLabel" name="mouse_pressed">
     <property name="geometry">
      <rect>
-      <x>610</x>
-      <y>80</y>
+      <x>760</x>
+      <y>90</y>
       <width>111</width>
       <height>31</height>
      </rect>
@@ -84,8 +84,8 @@
    <widget class="QLabel" name="label_5">
     <property name="geometry">
      <rect>
-      <x>620</x>
-      <y>50</y>
+      <x>770</x>
+      <y>60</y>
       <width>81</width>
       <height>20</height>
      </rect>
@@ -143,8 +143,8 @@ background-color: rgb(85, 255, 255);</string>
    <widget class="QCheckBox" name="show_axes">
     <property name="geometry">
      <rect>
-      <x>720</x>
-      <y>20</y>
+      <x>870</x>
+      <y>30</y>
       <width>91</width>
       <height>21</height>
      </rect>
@@ -156,8 +156,8 @@ background-color: rgb(85, 255, 255);</string>
    <widget class="QPushButton" name="Draw">
     <property name="geometry">
      <rect>
-      <x>510</x>
-      <y>380</y>
+      <x>660</x>
+      <y>390</y>
       <width>81</width>
       <height>31</height>
      </rect>
@@ -169,8 +169,8 @@ background-color: rgb(85, 255, 255);</string>
    <widget class="QSpinBox" name="circle_radius">
     <property name="geometry">
      <rect>
-      <x>600</x>
-      <y>140</y>
+      <x>750</x>
+      <y>150</y>
       <width>51</width>
       <height>31</height>
      </rect>
@@ -179,8 +179,8 @@ background-color: rgb(85, 255, 255);</string>
    <widget class="QRadioButton" name="draw_line">
     <property name="geometry">
      <rect>
-      <x>500</x>
-      <y>350</y>
+      <x>650</x>
+      <y>360</y>
       <width>91</width>
       <height>17</height>
      </rect>
@@ -192,8 +192,8 @@ background-color: rgb(85, 255, 255);</string>
    <widget class="QPushButton" name="set_point1">
     <property name="geometry">
      <rect>
-      <x>610</x>
-      <y>340</y>
+      <x>760</x>
+      <y>350</y>
       <width>81</width>
       <height>23</height>
      </rect>
@@ -205,8 +205,8 @@ background-color: rgb(85, 255, 255);</string>
    <widget class="QPushButton" name="set_point2">
     <property name="geometry">
      <rect>
-      <x>710</x>
-      <y>340</y>
+      <x>860</x>
+      <y>350</y>
       <width>81</width>
       <height>23</height>
      </rect>
@@ -218,8 +218,8 @@ background-color: rgb(85, 255, 255);</string>
    <widget class="QPushButton" name="drawGridButton">
     <property name="geometry">
      <rect>
-      <x>470</x>
-      <y>20</y>
+      <x>620</x>
+      <y>30</y>
       <width>80</width>
       <height>26</height>
      </rect>
@@ -231,8 +231,8 @@ background-color: rgb(85, 255, 255);</string>
    <widget class="QSpinBox" name="gridSquareWidthInput">
     <property name="geometry">
      <rect>
-      <x>560</x>
-      <y>20</y>
+      <x>710</x>
+      <y>30</y>
       <width>46</width>
       <height>27</height>
      </rect>
@@ -247,8 +247,8 @@ background-color: rgb(85, 255, 255);</string>
    <widget class="QPushButton" name="clearScreenButton">
     <property name="geometry">
      <rect>
-      <x>590</x>
-      <y>460</y>
+      <x>750</x>
+      <y>580</y>
       <width>80</width>
       <height>26</height>
      </rect>
@@ -260,8 +260,8 @@ background-color: rgb(85, 255, 255);</string>
    <widget class="QPushButton" name="drawGridAxisButton">
     <property name="geometry">
      <rect>
-      <x>620</x>
-      <y>20</y>
+      <x>770</x>
+      <y>30</y>
       <width>80</width>
       <height>26</height>
      </rect>
@@ -273,8 +273,8 @@ background-color: rgb(85, 255, 255);</string>
    <widget class="QPushButton" name="pushButton">
     <property name="geometry">
      <rect>
-      <x>620</x>
-      <y>380</y>
+      <x>770</x>
+      <y>390</y>
       <width>81</width>
       <height>31</height>
      </rect>
@@ -286,8 +286,8 @@ background-color: rgb(85, 255, 255);</string>
    <widget class="QLabel" name="dda_computation_time">
     <property name="geometry">
      <rect>
-      <x>600</x>
-      <y>300</y>
+      <x>750</x>
+      <y>310</y>
       <width>81</width>
       <height>31</height>
      </rect>
@@ -305,8 +305,8 @@ background-color: rgb(85, 255, 255);</string>
    <widget class="QLabel" name="breshenham_line_computation_time">
     <property name="geometry">
      <rect>
-      <x>700</x>
-      <y>300</y>
+      <x>850</x>
+      <y>310</y>
       <width>81</width>
       <height>31</height>
      </rect>
@@ -324,8 +324,8 @@ background-color: rgb(85, 255, 255);</string>
    <widget class="QPushButton" name="draw_mid_point_circle">
     <property name="geometry">
      <rect>
-      <x>480</x>
-      <y>130</y>
+      <x>630</x>
+      <y>140</y>
       <width>101</width>
       <height>26</height>
      </rect>
@@ -337,8 +337,8 @@ background-color: rgb(85, 255, 255);</string>
    <widget class="QPushButton" name="draw_breshenham_circle">
     <property name="geometry">
      <rect>
-      <x>670</x>
-      <y>120</y>
+      <x>820</x>
+      <y>130</y>
       <width>131</width>
       <height>26</height>
      </rect>
@@ -350,8 +350,8 @@ background-color: rgb(85, 255, 255);</string>
    <widget class="QLabel" name="label">
     <property name="geometry">
      <rect>
-      <x>600</x>
-      <y>120</y>
+      <x>750</x>
+      <y>130</y>
       <width>41</width>
       <height>18</height>
      </rect>
@@ -363,8 +363,8 @@ background-color: rgb(85, 255, 255);</string>
    <widget class="QLabel" name="label_2">
     <property name="geometry">
      <rect>
-      <x>610</x>
-      <y>280</y>
+      <x>760</x>
+      <y>290</y>
       <width>58</width>
       <height>18</height>
      </rect>
@@ -376,8 +376,8 @@ background-color: rgb(85, 255, 255);</string>
    <widget class="QLabel" name="label_4">
     <property name="geometry">
      <rect>
-      <x>710</x>
-      <y>280</y>
+      <x>860</x>
+      <y>290</y>
       <width>58</width>
       <height>18</height>
      </rect>
@@ -389,8 +389,8 @@ background-color: rgb(85, 255, 255);</string>
    <widget class="QPushButton" name="drawPolarCircle">
     <property name="geometry">
      <rect>
-      <x>680</x>
-      <y>150</y>
+      <x>830</x>
+      <y>160</y>
       <width>80</width>
       <height>26</height>
      </rect>
@@ -402,8 +402,8 @@ background-color: rgb(85, 255, 255);</string>
    <widget class="QPushButton" name="drawBreshenhamEllipse">
     <property name="geometry">
      <rect>
-      <x>470</x>
-      <y>180</y>
+      <x>620</x>
+      <y>190</y>
       <width>121</width>
       <height>31</height>
      </rect>
@@ -415,8 +415,8 @@ background-color: rgb(85, 255, 255);</string>
    <widget class="QPushButton" name="drawpollarEllipse">
     <property name="geometry">
      <rect>
-      <x>730</x>
-      <y>190</y>
+      <x>880</x>
+      <y>200</y>
       <width>80</width>
       <height>26</height>
      </rect>
@@ -428,8 +428,8 @@ background-color: rgb(85, 255, 255);</string>
    <widget class="QSpinBox" name="ellipseRa">
     <property name="geometry">
      <rect>
-      <x>600</x>
-      <y>200</y>
+      <x>750</x>
+      <y>210</y>
       <width>46</width>
       <height>27</height>
      </rect>
@@ -438,8 +438,8 @@ background-color: rgb(85, 255, 255);</string>
    <widget class="QSpinBox" name="ellipseRb">
     <property name="geometry">
      <rect>
-      <x>650</x>
-      <y>200</y>
+      <x>800</x>
+      <y>210</y>
       <width>46</width>
       <height>27</height>
      </rect>
@@ -448,8 +448,8 @@ background-color: rgb(85, 255, 255);</string>
    <widget class="QLabel" name="label_7">
     <property name="geometry">
      <rect>
-      <x>610</x>
-      <y>180</y>
+      <x>760</x>
+      <y>190</y>
       <width>21</width>
       <height>18</height>
      </rect>
@@ -461,8 +461,8 @@ background-color: rgb(85, 255, 255);</string>
    <widget class="QLabel" name="label_8">
     <property name="geometry">
      <rect>
-      <x>660</x>
-      <y>180</y>
+      <x>810</x>
+      <y>190</y>
       <width>21</width>
       <height>18</height>
      </rect>
@@ -471,13 +471,52 @@ background-color: rgb(85, 255, 255);</string>
      <string>Rb</string>
     </property>
    </widget>
+   <widget class="QPushButton" name="setVertexOfPolygon">
+    <property name="geometry">
+     <rect>
+      <x>630</x>
+      <y>470</y>
+      <width>80</width>
+      <height>26</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>set vertex</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="scanlineFillPolygon">
+    <property name="geometry">
+     <rect>
+      <x>740</x>
+      <y>470</y>
+      <width>80</width>
+      <height>26</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>scanline fill</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="clearPolygonVertex">
+    <property name="geometry">
+     <rect>
+      <x>840</x>
+      <y>470</y>
+      <width>80</width>
+      <height>26</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>clear vertex</string>
+    </property>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>820</width>
+     <width>977</width>
      <height>23</height>
     </rect>
    </property>

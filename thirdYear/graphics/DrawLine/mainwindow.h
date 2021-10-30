@@ -60,6 +60,12 @@ private slots:
 
     void on_drawpollarEllipse_clicked();
 
+    void on_setVertexOfPolygon_clicked();
+
+    void on_clearPolygonVertex_clicked();
+
+    void on_scanlineFillPolygon_clicked();
+
 private:
     Ui::MainWindow *ui;
     QPoint p1,p2;
@@ -69,9 +75,10 @@ private:
     void point(int,int,int,int,int);
     void point(int,int,int);
     void ddaLine();
-    void bshLine();
+    void bshLine(int);
     void markPoint(int x,int y,int c);
     void ellipseQuadPoint(int centerx,int centery,int x1,int y1,int color);
+    void ScanlineFill();
 };
 
 #endif // MAINWINDOW_H

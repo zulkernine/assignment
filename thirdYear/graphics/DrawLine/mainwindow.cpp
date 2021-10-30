@@ -5,10 +5,71 @@
 #include <iostream>
 #include <QMouseEvent>
 #include <QPainter>
+#include <QThread>
 #include <QPaintDevice>
 #include <QPoint>
 #include <sys/time.h>
 #include <cmath>
+#include <vector>
+#include<functional>
+#include<chrono>
+#include<thread>
+
+
+#define maxHt 600
+#define maxWd 600
+#define maxVer 10000
+
+
+/* If random_device is not available, uncomment following code and comment above. */
+// default_random_engine gen;
+// uniform_int_distribution<int> distribution(0,1000);
+// auto generator = bind(distribution, gen);
+
+
+class Sleeper : public QThread
+{
+public:
+    static void msleep(unsigned long msecs = 500){QThread::msleep(msecs);}
+};
+void randomDelay(){
+    Sleeper::msleep();
+}
+
+// Start from lower left corner
+typedef struct edgebucket
+{
+    int ymax;   //max y-coordinate of edge
+    float xofymin;  //x-coordinate of lowest edge point updated only in aet
+    float slopeinverse;
+}EdgeBucket;
+
+typedef struct edgetabletup
+{
+    // the array will give the scanline number
+    // The edge table (ET) with edges entries sorted
+    // in increasing y and x of the lower end
+
+    int countEdgeBucket;    //no. of edgebuckets
+    EdgeBucket buckets[maxVer];
+}EdgeTableTuple;
+
+
+/* *********************  Globals  **********************  */
+EdgeTableTuple EdgeTable[maxHt], ActiveEdgeTuple;
+std::vector<std::pair<int,int> > vertex_list;
+
+
+void initEdgeTable()
+{
+    int i;
+    for (i=0; i<maxHt; i++)
+    {
+        EdgeTable[i].countEdgeBucket = 0;
+    }
+
+    ActiveEdgeTuple.countEdgeBucket = 0;
+}
 
 long long int getCurrentTimestamp(){
     struct timeval tp;
@@ -24,16 +85,133 @@ int nearestInt(float x){
     return (f>0.5)?(ix+1):ix ;
 }
 
+/* Function to sort an array using insertion sort*/
+void insertionSort(EdgeTableTuple *ett)
+{
+    int i,j;
+    EdgeBucket temp;
+
+    for (i = 1; i < ett->countEdgeBucket; i++)
+    {
+        temp.ymax = ett->buckets[i].ymax;
+        temp.xofymin = ett->buckets[i].xofymin;
+        temp.slopeinverse = ett->buckets[i].slopeinverse;
+        j = i - 1;
+
+    while ((temp.xofymin < ett->buckets[j].xofymin) && (j >= 0))
+    {
+        ett->buckets[j + 1].ymax = ett->buckets[j].ymax;
+        ett->buckets[j + 1].xofymin = ett->buckets[j].xofymin;
+        ett->buckets[j + 1].slopeinverse = ett->buckets[j].slopeinverse;
+        j = j - 1;
+    }
+    ett->buckets[j + 1].ymax = temp.ymax;
+    ett->buckets[j + 1].xofymin = temp.xofymin;
+    ett->buckets[j + 1].slopeinverse = temp.slopeinverse;
+    }
+}
+
+void storeEdgeInTuple (EdgeTableTuple *receiver,int ym,int xm,float slopInv)
+{
+    // both used for edgetable and active edge table..
+    // The edge tuple sorted in increasing ymax and x of the lower end.
+    (receiver->buckets[(receiver)->countEdgeBucket]).ymax = ym;
+    (receiver->buckets[(receiver)->countEdgeBucket]).xofymin = (float)xm;
+    (receiver->buckets[(receiver)->countEdgeBucket]).slopeinverse = slopInv;
+
+    // sort the buckets
+    insertionSort(receiver);
+
+    (receiver->countEdgeBucket)++;
+
+
+}
+
+void storeEdgeInTable (int x1,int y1, int x2, int y2)
+{
+    float m,minv;
+    int ymaxTS,xwithyminTS, scanline; //ts stands for to store
+
+    if (x2==x1)
+    {
+        minv=0.000000;
+    }
+    else
+    {
+    m = ((float)(y2-y1))/((float)(x2-x1));
+
+    // horizontal lines are not stored in edge table
+    if (y2==y1)
+        return;
+
+    minv = (float)1.0/m;
+    printf("\nSlope string for %d %d & %d %d: %f",x1,y1,x2,y2,minv);
+    }
+
+    if (y1>y2)
+    {
+        scanline=y2;
+        ymaxTS=y1;
+        xwithyminTS=x2;
+    }
+    else
+    {
+        scanline=y1;
+        ymaxTS=y2;
+        xwithyminTS=x1;
+    }
+    // the assignment part is done..now storage..
+    storeEdgeInTuple(&EdgeTable[scanline],ymaxTS,xwithyminTS,minv);
+
+
+}
+
+void removeEdgeByYmax(EdgeTableTuple *Tup,int yy)
+{
+    int i,j;
+    for (i=0; i< Tup->countEdgeBucket; i++)
+    {
+        if (Tup->buckets[i].ymax == yy)
+        {
+            printf("\nRemoved at %d",yy);
+
+            for ( j = i ; j < Tup->countEdgeBucket -1 ; j++ )
+                {
+                Tup->buckets[j].ymax =Tup->buckets[j+1].ymax;
+                Tup->buckets[j].xofymin =Tup->buckets[j+1].xofymin;
+                Tup->buckets[j].slopeinverse = Tup->buckets[j+1].slopeinverse;
+                }
+                Tup->countEdgeBucket--;
+            i--;
+        }
+    }
+}
+
+
+void updatexbyslopeinv(EdgeTableTuple *Tup)
+{
+    int i;
+
+    for (i=0; i<Tup->countEdgeBucket; i++)
+    {
+        (Tup->buckets[i]).xofymin =(Tup->buckets[i]).xofymin + (Tup->buckets[i]).slopeinverse;
+    }
+}
+
+
+
+
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
     gridSquareSize=2;
-    gridHeight = 450;
-    gridWidth = 450;
+    gridHeight = maxHt;
+    gridWidth = maxWd;
     radius=0;
     XL=gridWidth/gridSquareSize;
     YL=gridHeight/gridSquareSize;
+    initEdgeTable();
 
     pix=new QPixmap(gridHeight,gridWidth);
     ui->setupUi(this);
@@ -199,7 +377,7 @@ void MainWindow::ddaLine(){
     }
 }
 
-void MainWindow::bshLine(){
+void MainWindow::bshLine(int color=2){
     int sourcex=mp1.x;
     int sourcey=mp1.y;
     int destx=mp2.x;
@@ -217,7 +395,7 @@ void MainWindow::bshLine(){
 
     dy<<=1;dx<<=1;
 
-    markPoint(x0,y0,2);
+    markPoint(x0,y0,color);
 
     if(dx>dy)
     {
@@ -231,7 +409,7 @@ void MainWindow::bshLine(){
                 fraction-=dx;
             }
             fraction+=dy;
-            markPoint(x0,y0,2);
+            markPoint(x0,y0,color);
         }
     }
 
@@ -247,7 +425,7 @@ void MainWindow::bshLine(){
                 fraction-=dy;
             }
             fraction+=dx;
-            markPoint(x0,y0,2);
+            markPoint(x0,y0,color);
         }
     }
 
@@ -280,6 +458,8 @@ void MainWindow::markPoint(int x,int y,int c){
     }
     ui->frame->setPixmap(*pix);
     paint->end();
+
+    randomDelay();
 }
 
 void MainWindow::point(int x,int y,int r,int g,int b)
@@ -512,8 +692,157 @@ void MainWindow::on_drawpollarEllipse_clicked()
 
 }
 
+void MainWindow::on_setVertexOfPolygon_clicked()
+{
+    vertex_list.push_back(std::make_pair((lastPoint.x),(lastPoint.y)));
+    int i=vertex_list.size();
+    if(i>=2)
+    {
+        storeEdgeInTable(vertex_list[i-2].first, vertex_list[i-2].second, vertex_list[i-1].first, vertex_list[i-1].second);//storage of edges in edge table.
+        mp1.x = vertex_list[i-1].first; mp1.y = vertex_list[i-1].second;
+        mp2.x = vertex_list[i-2].first; mp2.y = vertex_list[i-2].second;
+
+        bshLine();
+    }
+}
 
 
+
+void MainWindow::on_clearPolygonVertex_clicked()
+{
+    vertex_list.clear();
+    initEdgeTable();
+}
+
+void MainWindow::ScanlineFill()
+{
+
+    int i, j, x1, ymax1, x2, ymax2, FillFlag = 0, coordCount;
+
+    for (i=0; i<maxHt; i++)//4. Increment y by 1 (next scan line)
+    {
+
+        for (j=0; j<EdgeTable[i].countEdgeBucket; j++)
+        {
+            storeEdgeInTuple(&ActiveEdgeTuple,EdgeTable[i].buckets[j].
+                     ymax,EdgeTable[i].buckets[j].xofymin,
+                    EdgeTable[i].buckets[j].slopeinverse);
+        }
+
+        removeEdgeByYmax(&ActiveEdgeTuple, i);
+
+        //sort AET (remember: ET is presorted)
+        insertionSort(&ActiveEdgeTuple);
+
+
+        //3. Fill lines on scan line y by using pairs of x-coords from AET
+        j = 0;
+        FillFlag = 0;
+        coordCount = 0;
+        x1 = 0;
+        x2 = 0;
+        ymax1 = 0;
+        ymax2 = 0;
+        while (j<ActiveEdgeTuple.countEdgeBucket)
+        {
+            if (coordCount%2==0)
+            {
+                x1 = (int)(ActiveEdgeTuple.buckets[j].xofymin);
+                ymax1 = ActiveEdgeTuple.buckets[j].ymax;
+                if (x1==x2)
+                {
+                /* three cases can arrive-
+                    1. lines are towards top of the intersection
+                    2. lines are towards bottom
+                    3. one line is towards top and other is towards bottom
+                */
+                    if (((x1==ymax1)&&(x2!=ymax2))||((x1!=ymax1)&&(x2==ymax2)))
+                    {
+                        x2 = x1;
+                        ymax2 = ymax1;
+                    }
+
+                    else
+                    {
+                        coordCount++;
+                    }
+                }
+
+                else
+                {
+                        coordCount++;
+                }
+
+
+            }
+            else
+            {
+                x2 = (int)ActiveEdgeTuple.buckets[j].xofymin;
+                ymax2 = ActiveEdgeTuple.buckets[j].ymax;
+
+                FillFlag = 0;
+
+                // checking for intersection...
+                if (x1==x2)
+                {
+                /*three cases can arrive-
+                    1. lines are towards top of the intersection
+                    2. lines are towards bottom
+                    3. one line is towards top and other is towards bottom
+                */
+                    if (((x1==ymax1)&&(x2!=ymax2))||((x1!=ymax1)&&(x2==ymax2)))
+                    {
+                        x1 = x2;
+                        ymax1 = ymax2;
+                    }
+                    else
+                    {
+                        coordCount++;
+                        FillFlag = 1;
+                    }
+                }
+                else
+                {
+                        coordCount++;
+                        FillFlag = 1;
+                }
+
+
+                if(FillFlag)
+                {
+    //                glVertex2i(x1,i);
+    //                glVertex2i(x2,i);
+
+                    mp1.x = x1; mp1.y=i;
+                    mp2.x=x2; mp2.y = i;
+    //                p1.setX(x1);p1.setY(i);
+    //                p2.setX(x2);p2.setY(i);
+    //                on_DDAButton_clicked();
+
+                    bshLine(3);
+
+                    // printf("\nLine drawn from %d,%d to %d,%d",x1,i,x2,i);
+                }
+
+            }
+
+            j++;
+        }
+
+
+        // 5. For each nonvertical edge remaining in AET, update x for new y
+        updatexbyslopeinv(&ActiveEdgeTuple);
+    }
+
+
+    printf("\nScanline filling complete");
+
+}
+
+void MainWindow::on_scanlineFillPolygon_clicked()
+{
+    ScanlineFill();
+}
 
 
 
