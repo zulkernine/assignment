@@ -1,31 +1,34 @@
-section .data                           ;Data segment
-   name db 'My name: Mohiuddin Mondal', 0ah ;My name
-   lenName equ $-name             ;The length of the message
-   pTitle db 'Program title: Assembly Programming',0ah
-   lenTitle equ $-pTitle                 
-   linefeed db 13, 10, "$"
-section .bss           ;Uninitialized data
-	
-section .text          ;Code Segment
-   global _start
-	
-_start:                ;name
-   mov eax, 4
-   mov ebx, 1
-   mov ecx, name
-   mov edx, lenName
-   int 80h
-	
+ ;Write and test a MASM program to Display your name and program title on the output screen.
 
+ .MODEL SMALL
+ .STACK 100H
 
-   ;Output 2nd message 
-   mov eax, 4
-   mov ebx, 1
-   mov ecx, pTitle
-   mov edx, lenTitle
-   int 80h  
-   
-   ; Exit code
-   mov eax, 1
-   mov ebx, 0
-   int 80h
+ .DATA
+    STRING_1  DB  'My name: Mohiuddin MOndal$'
+    STRING_2  DB  'Assembly Programming$'
+
+ .CODE
+   MAIN PROC
+     MOV AX, @DATA                ; initialize DS
+     MOV DS, AX
+
+     LEA DX, STRING_1             ; load & display the STRING_1  
+     MOV AH, 9            
+     INT 21H
+
+     MOV AH, 2                    ; carriage return
+     MOV DL, 0DH
+     INT 21H
+ 
+     MOV DL, 0AH                  ; line feed
+     INT 21H
+
+     LEA DX, STRING_2             ; load & display the STRING_2  
+     MOV AH, 9
+     INT 21H
+
+     MOV AH, 4CH                  ; return control to DOS
+     INT 21H
+   MAIN ENDP
+ END MAIN
+ 
