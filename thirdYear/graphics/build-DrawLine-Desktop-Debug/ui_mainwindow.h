@@ -35,7 +35,6 @@ public:
     QLabel *label_3;
     QLabel *mouse_pressed;
     QLabel *label_5;
-    QLabel *label_6;
     QFrame *x_axis;
     QFrame *y_axis;
     QCheckBox *show_axes;
@@ -66,6 +65,9 @@ public:
     QPushButton *setVertexOfPolygon;
     QPushButton *scanlineFillPolygon;
     QPushButton *clearPolygonVertex;
+    QPushButton *boundaryFillButton;
+    QPushButton *colourTest;
+    QPushButton *floodFillButton;
     QMenuBar *menuBar;
     QToolBar *mainToolBar;
     QStatusBar *statusBar;
@@ -97,9 +99,6 @@ public:
         label_5 = new QLabel(centralWidget);
         label_5->setObjectName(QString::fromUtf8("label_5"));
         label_5->setGeometry(QRect(770, 60, 81, 20));
-        label_6 = new QLabel(centralWidget);
-        label_6->setObjectName(QString::fromUtf8("label_6"));
-        label_6->setGeometry(QRect(180, 460, 81, 20));
         x_axis = new QFrame(centralWidget);
         x_axis->setObjectName(QString::fromUtf8("x_axis"));
         x_axis->setGeometry(QRect(0, 225, 450, 2));
@@ -138,7 +137,7 @@ public:
         gridSquareWidthInput->setObjectName(QString::fromUtf8("gridSquareWidthInput"));
         gridSquareWidthInput->setGeometry(QRect(710, 30, 46, 27));
         gridSquareWidthInput->setMinimum(2);
-        gridSquareWidthInput->setMaximum(15);
+        gridSquareWidthInput->setMaximum(200);
         clearScreenButton = new QPushButton(centralWidget);
         clearScreenButton->setObjectName(QString::fromUtf8("clearScreenButton"));
         clearScreenButton->setGeometry(QRect(750, 580, 80, 26));
@@ -203,6 +202,15 @@ public:
         clearPolygonVertex = new QPushButton(centralWidget);
         clearPolygonVertex->setObjectName(QString::fromUtf8("clearPolygonVertex"));
         clearPolygonVertex->setGeometry(QRect(840, 470, 80, 26));
+        boundaryFillButton = new QPushButton(centralWidget);
+        boundaryFillButton->setObjectName(QString::fromUtf8("boundaryFillButton"));
+        boundaryFillButton->setGeometry(QRect(640, 510, 111, 26));
+        colourTest = new QPushButton(centralWidget);
+        colourTest->setObjectName(QString::fromUtf8("colourTest"));
+        colourTest->setGeometry(QRect(640, 270, 80, 26));
+        floodFillButton = new QPushButton(centralWidget);
+        floodFillButton->setObjectName(QString::fromUtf8("floodFillButton"));
+        floodFillButton->setGeometry(QRect(760, 510, 80, 26));
         MainWindow->setCentralWidget(centralWidget);
         menuBar = new QMenuBar(MainWindow);
         menuBar->setObjectName(QString::fromUtf8("menuBar"));
@@ -228,7 +236,6 @@ public:
         label_3->setText(QApplication::translate("MainWindow", "    Mouse Movement", nullptr));
         mouse_pressed->setText(QString());
         label_5->setText(QApplication::translate("MainWindow", "Mouse Pressed", nullptr));
-        label_6->setText(QApplication::translate("MainWindow", "(350 X 350)", nullptr));
         show_axes->setText(QApplication::translate("MainWindow", "Show Axes", nullptr));
         Draw->setText(QApplication::translate("MainWindow", "Draw DDA", nullptr));
         draw_line->setText(QApplication::translate("MainWindow", "Draw Line", nullptr));
@@ -253,6 +260,9 @@ public:
         setVertexOfPolygon->setText(QApplication::translate("MainWindow", "set vertex", nullptr));
         scanlineFillPolygon->setText(QApplication::translate("MainWindow", "scanline fill", nullptr));
         clearPolygonVertex->setText(QApplication::translate("MainWindow", "clear vertex", nullptr));
+        boundaryFillButton->setText(QApplication::translate("MainWindow", "BOUNDARY FILL", nullptr));
+        colourTest->setText(QApplication::translate("MainWindow", "color test", nullptr));
+        floodFillButton->setText(QApplication::translate("MainWindow", "flood Fill", nullptr));
     } // retranslateUi
 
 };

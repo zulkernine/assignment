@@ -94,19 +94,6 @@
      <string>Mouse Pressed</string>
     </property>
    </widget>
-   <widget class="QLabel" name="label_6">
-    <property name="geometry">
-     <rect>
-      <x>180</x>
-      <y>460</y>
-      <width>81</width>
-      <height>20</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>(350 X 350)</string>
-    </property>
-   </widget>
    <widget class="Line" name="x_axis">
     <property name="geometry">
      <rect>
@@ -241,7 +228,7 @@ background-color: rgb(85, 255, 255);</string>
      <number>2</number>
     </property>
     <property name="maximum">
-     <number>15</number>
+     <number>200</number>
     </property>
    </widget>
    <widget class="QPushButton" name="clearScreenButton">
@@ -508,6 +495,45 @@ background-color: rgb(85, 255, 255);</string>
     </property>
     <property name="text">
      <string>clear vertex</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="boundaryFillButton">
+    <property name="geometry">
+     <rect>
+      <x>640</x>
+      <y>510</y>
+      <width>111</width>
+      <height>26</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>BOUNDARY FILL</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="colourTest">
+    <property name="geometry">
+     <rect>
+      <x>640</x>
+      <y>270</y>
+      <width>80</width>
+      <height>26</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>color test</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="floodFillButton">
+    <property name="geometry">
+     <rect>
+      <x>760</x>
+      <y>510</y>
+      <width>80</width>
+      <height>26</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>flood Fill</string>
     </property>
    </widget>
   </widget>

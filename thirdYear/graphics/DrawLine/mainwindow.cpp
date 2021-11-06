@@ -8,6 +8,7 @@
 #include <QThread>
 #include <QPaintDevice>
 #include <QPoint>
+#include <QTime>
 #include <sys/time.h>
 #include <cmath>
 #include <vector>
@@ -27,14 +28,6 @@
 // auto generator = bind(distribution, gen);
 
 
-class Sleeper : public QThread
-{
-public:
-    static void msleep(unsigned long msecs = 500){QThread::msleep(msecs);}
-};
-void randomDelay(){
-    Sleeper::msleep();
-}
 
 // Start from lower left corner
 typedef struct edgebucket
@@ -59,6 +52,12 @@ typedef struct edgetabletup
 EdgeTableTuple EdgeTable[maxHt], ActiveEdgeTuple;
 std::vector<std::pair<int,int> > vertex_list;
 
+void randomDelay(int  n = 20) {
+//    QTime dieTime= QTime::currentTime().addSecs(n);
+    QTime dieTime= QTime::currentTime().addMSecs(n);
+    while (QTime::currentTime() < dieTime)
+    QCoreApplication::processEvents(QEventLoop::AllEvents, 10);
+}
 
 void initEdgeTable()
 {
@@ -255,7 +254,7 @@ void MainWindow::Mouse_Pressed()
     myPoint p;
     p.x=x/gridSquareSize;p.y=y/gridSquareSize;
     lastPoint = p;
-    markPoint(p.x,p.y,3);
+    markPoint(p.x,p.y,5);
 }
 
 void MainWindow::on_show_axes_clicked()
@@ -432,6 +431,7 @@ void MainWindow::bshLine(int color=2){
 }
 
 void MainWindow::markPoint(int x,int y,int c){
+//    std::cout<<"mark point x:"<<x<<"y:"<<y<<endl;
     x=x*gridSquareSize;
     y=y*gridSquareSize;
     QPainter *paint=new QPainter();
@@ -819,7 +819,7 @@ void MainWindow::ScanlineFill()
     //                p2.setX(x2);p2.setY(i);
     //                on_DDAButton_clicked();
 
-                    bshLine(3);
+                    bshLine();
 
                     // printf("\nLine drawn from %d,%d to %d,%d",x1,i,x2,i);
                 }
@@ -843,6 +843,77 @@ void MainWindow::on_scanlineFillPolygon_clicked()
 {
     ScanlineFill();
 }
+
+QColor MainWindow::getPixel(int x, int y){
+//    std::cout<<"x:"<<x<<"y:"<<y<<endl;
+    QColor qc = pix->toImage().pixelColor(x*gridSquareSize+gridSquareSize/2,y*gridSquareSize+gridSquareSize/2);
+//    std::cout<<"color: "<<qc.blue()<<"\n n";
+//    std::cout<<"red: "<<QColor(Qt::red).blue()<<"\n";
+    return qc;
+}
+
+void MainWindow::boundaryFill8(int x, int y)
+{
+    if(x<0 || x>= XL || y<0 || y >= YL) return;
+    if(getPixel(x, y).red() >0 || getPixel(x, y).green() >0 || getPixel(x, y).blue() >0) return;
+//    std::cout<<"\nfill: "<<fill_color.value()<<"\n";
+    markPoint(x,y,5);
+    {
+        markPoint(x,y,4);
+        boundaryFill8(x + 1, y);
+        boundaryFill8(x, y + 1);
+        boundaryFill8(x - 1, y);
+        boundaryFill8(x, y - 1);
+
+        // 8 point coloring will leak from corner
+//        boundaryFill8(x - 1, y - 1, fill_color, boundary_color);
+//        boundaryFill8(x - 1, y + 1, fill_color, boundary_color);
+//        boundaryFill8(x + 1, y - 1, fill_color, boundary_color);
+//        boundaryFill8(x + 1, y + 1, fill_color, boundary_color);
+    }
+}
+
+void MainWindow::on_boundaryFillButton_clicked()
+{
+    boundaryFill8(lastPoint.x+1, lastPoint.y+1);
+}
+
+void MainWindow::on_floodFillButton_clicked()
+{
+    floodFill(lastPoint.x+1, lastPoint.y+1);
+}
+
+void MainWindow::floodFill(int x, int y)
+{
+    if(x<0 || x>= XL || y<0 || y >= YL) return;
+    if(getPixel(x, y).red() >0 || getPixel(x, y).green() >0 || getPixel(x, y).blue() >0) return;
+
+    markPoint(x,y,5);
+    {
+        markPoint(x,y,4);
+        boundaryFill8(x + 1, y);
+        boundaryFill8(x - 1, y);
+        boundaryFill8(x, y + 1);
+        boundaryFill8(x, y - 1);
+    }
+}
+
+void MainWindow::on_colourTest_clicked()
+{
+    for(int x=0;x<XL;x++){
+        for(int y=0;y<YL;y++){
+            QColor c = getPixel(y,x);
+//            std::cout<<"color test r: "<<c.red()<<"  g: "<<c.green()<<"  b: "<<c.blue()<<"\n";
+//            std::cout<<"x:"<<x<<"y:"<<y<<
+              std::cout<<c.blackF()<<" ";
+        }
+        std::cout<<"\n";
+    }
+}
+
+
+
+
 
 
 
