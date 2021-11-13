@@ -52,7 +52,7 @@ typedef struct edgetabletup
 EdgeTableTuple EdgeTable[maxHt], ActiveEdgeTuple;
 std::vector<std::pair<int,int> > vertex_list;
 
-void randomDelay(int  n = 20) {
+void randomDelay(int  n = 10) {
 //    QTime dieTime= QTime::currentTime().addSecs(n);
     QTime dieTime= QTime::currentTime().addMSecs(n);
     while (QTime::currentTime() < dieTime)
@@ -891,10 +891,10 @@ void MainWindow::floodFill(int x, int y)
     markPoint(x,y,5);
     {
         markPoint(x,y,4);
-        boundaryFill8(x + 1, y);
-        boundaryFill8(x - 1, y);
-        boundaryFill8(x, y + 1);
-        boundaryFill8(x, y - 1);
+        floodFill(x + 1, y);
+        floodFill(x - 1, y);
+        floodFill(x, y + 1);
+        floodFill(x, y - 1);
     }
 }
 

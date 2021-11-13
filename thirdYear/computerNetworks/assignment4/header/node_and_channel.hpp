@@ -26,8 +26,11 @@ class Station{
 public:
     Station(int index,bool willRecieve):stationId(index){
         if(willRecieve) data="";
-        else
+        else{
             data = randomData();
+        }
+        cout<<"Station Id: "<<index<<"  Generated data to be sent: "<<data<<"\n";
+            
     }
 
     int getData(){

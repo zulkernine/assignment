@@ -1,6 +1,5 @@
 #include "networknode.hpp"
-#include<thread>
-#include<mutex>
+
 
 
 using namespace std;
@@ -95,26 +94,4 @@ public:
         cout<<endl;
     }
 
-    // Driver Code
-    // static void main(String[] args)
-    // {
-    //     int stationCounts = 4;
-
-    //     int[] data = new int[stationCounts];
-
-    //     //data bits corresponding to each station
-    //     data[0] = -1;
-    //     data[1] = -1;
-    //     data[2] = 0;
-    //     data[3] = 1;
-
-    //     CDMA channel = new CDMA();
-
-    //     channel.setUp(data, stationCounts);
-
-    //     // station you want to listen to
-    //     int sourceStation = 3;
-
-    //     channel.listenTo(sourceStation, stationCounts);
-    // }
 };
