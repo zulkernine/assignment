@@ -40,7 +40,6 @@ public:
                 }
                 sem_post(&readerSem);
 
-
                 //Reading section
                 cout << "Current thread id: " << std::this_thread::get_id() << "\t is reading,count:" << readCount << "\tread data: " << DATA << "\n";
                 
