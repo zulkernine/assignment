@@ -12,26 +12,12 @@ vector<char> getFileContent(string fileName){
     if(!input) return raw;
 
     raw.resize(MAX_BUFFER_SIZE);
-
-    // input.seekg(0, input.end);
-    // int length = input.tellg();
-    // input.seekg(0, input.beg);
-
-    // raw.resize(length);
+    
     input.read(raw.data(), MAX_BUFFER_SIZE);
     raw.resize(input.gcount());
     input.close();
     return raw;
 
-    // if (input){
-    //     input.close();
-    //     return raw;
-    // } 
-    // else{
-    //     raw.resize(input.gcount());
-    //     input.close();
-    //     return raw;
-    // }
 }
 
 class FTPServer{
