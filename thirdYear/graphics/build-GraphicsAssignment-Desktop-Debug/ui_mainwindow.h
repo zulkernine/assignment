@@ -10,7 +10,6 @@
 #define UI_MAINWINDOW_H
 
 #include <QtCore/QVariant>
-#include <QtWidgets/QAction>
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QCheckBox>
 #include <QtWidgets/QComboBox>
@@ -19,8 +18,6 @@
 #include <QtWidgets/QGroupBox>
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QMainWindow>
-#include <QtWidgets/QMenu>
-#include <QtWidgets/QMenuBar>
 #include <QtWidgets/QPushButton>
 #include <QtWidgets/QSpinBox>
 #include <QtWidgets/QStatusBar>
@@ -105,8 +102,6 @@ public:
     QPushButton *setCorner2;
     QPushButton *lineclipping;
     QPushButton *polygonclipping;
-    QMenuBar *menuBar;
-    QMenu *menuDebargha_s_Graphics_Assignment;
     QToolBar *mainToolBar;
     QStatusBar *statusBar;
 
@@ -364,20 +359,12 @@ public:
         polygonclipping->setObjectName(QString::fromUtf8("polygonclipping"));
         polygonclipping->setGeometry(QRect(280, 30, 91, 31));
         MainWindow->setCentralWidget(centralWidget);
-        menuBar = new QMenuBar(MainWindow);
-        menuBar->setObjectName(QString::fromUtf8("menuBar"));
-        menuBar->setGeometry(QRect(0, 0, 1274, 23));
-        menuDebargha_s_Graphics_Assignment = new QMenu(menuBar);
-        menuDebargha_s_Graphics_Assignment->setObjectName(QString::fromUtf8("menuDebargha_s_Graphics_Assignment"));
-        MainWindow->setMenuBar(menuBar);
         mainToolBar = new QToolBar(MainWindow);
         mainToolBar->setObjectName(QString::fromUtf8("mainToolBar"));
         MainWindow->addToolBar(Qt::TopToolBarArea, mainToolBar);
         statusBar = new QStatusBar(MainWindow);
         statusBar->setObjectName(QString::fromUtf8("statusBar"));
         MainWindow->setStatusBar(statusBar);
-
-        menuBar->addAction(menuDebargha_s_Graphics_Assignment->menuAction());
 
         retranslateUi(MainWindow);
 
@@ -447,7 +434,6 @@ public:
         setCorner2->setText(QApplication::translate("MainWindow", "Right bottom corner", nullptr));
         lineclipping->setText(QApplication::translate("MainWindow", "Clip Lines", nullptr));
         polygonclipping->setText(QApplication::translate("MainWindow", "Clip Polygon", nullptr));
-        menuDebargha_s_Graphics_Assignment->setTitle(QApplication::translate("MainWindow", "SkS Graphics Assignment", nullptr));
     } // retranslateUi
 
 };

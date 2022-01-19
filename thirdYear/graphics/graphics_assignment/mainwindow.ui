@@ -981,22 +981,6 @@ background-color: rgb(85, 255, 255);</string>
     </widget>
    </widget>
   </widget>
-  <widget class="QMenuBar" name="menuBar">
-   <property name="geometry">
-    <rect>
-     <x>0</x>
-     <y>0</y>
-     <width>1274</width>
-     <height>23</height>
-    </rect>
-   </property>
-   <widget class="QMenu" name="menuDebargha_s_Graphics_Assignment">
-    <property name="title">
-     <string>SkS Graphics Assignment</string>
-    </property>
-   </widget>
-   <addaction name="menuDebargha_s_Graphics_Assignment"/>
-  </widget>
   <widget class="QToolBar" name="mainToolBar">
    <attribute name="toolBarArea">
     <enum>TopToolBarArea</enum>
