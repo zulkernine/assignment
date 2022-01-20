@@ -29,9 +29,7 @@ public class KeyFetchClient {
             DataOutputStream request = new DataOutputStream(out);
 
             request.writeUTF("Connection request from guest");
-            request.flush();
-
-            System.out.println("Connected to server.");
+            // request.flush();
 
             String initialMessage = response.readUTF();
 
@@ -52,7 +50,7 @@ public class KeyFetchClient {
                 System.out.print("remote> ");
                 String command = scanner.nextLine();
                 request.writeUTF(command);
-                request.flush();
+                // request.flush();
 
                 System.out.println(response.readUTF());
 
