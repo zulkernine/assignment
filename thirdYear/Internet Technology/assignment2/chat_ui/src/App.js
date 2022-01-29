@@ -30,15 +30,26 @@ class App extends Component {
     });
   }
 
+  componentWillUnmount(){
+    socket.off(EventNames.registrationSuccessful);
+  }
+
   render() {
     return (
-      <div>
-        <ToastContainer />
-        {!this.state.isRegistered ? (
-          <MessageRootScreen />
-        ) : (
-          <GetUserName />
-        )}
+      <div style={{ position: "relative" }}>
+        <ToastContainer
+          position="top-right"
+          autoClose={2000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          limit={1}
+        />
+        {this.state.isRegistered ? <MessageRootScreen /> : <GetUserName />}
       </div>
     );
   }
