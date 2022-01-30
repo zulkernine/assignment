@@ -9,7 +9,7 @@ void main() {
   // Add this code below
 
   doWhenWindowReady(() {
-    final initialSize = Size(600, 450);
+    const initialSize = Size(800, 650);
     appWindow.minSize = initialSize;
     appWindow.size = initialSize;
     appWindow.alignment = Alignment.center;
@@ -29,34 +29,46 @@ class RootApp extends StatelessWidget {
             body: WindowBorder(
                 color: borderColor,
                 width: 1,
-                child:
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        WindowTitleBarBox(
-                            child: Container(
-                              decoration: BoxDecoration(
-                                color: Theme.of(context).primaryColor
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    WindowTitleBarBox(
+                        child: Container(
+                      decoration:
+                          BoxDecoration(color: Theme.of(context).primaryColor),
+                      child: Row(children: [
+                        Expanded(
+                            child: MoveWindow(
+                          child: Row(
+                            children: [
+                              Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 8.0),
+                                child: Text(
+                                  "Students' Data Manager",
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .headline6
+                                      ?.copyWith(
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .onPrimary),
+                                ),
                               ),
-                              child: Row(children: [
-                                Expanded(child: MoveWindow(
-                                  child: Row(
-                                    children: [
-                                      Padding(
-                                        padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                                        child: Text("AddSubtract",style: Theme.of(context).textTheme.headline6?.copyWith(color: Theme.of(context).colorScheme.onPrimary),),
-                                      ),
-                                      const CurrentDateTimeWidget(),
-                                    ],
-                                  ),
-                                )),
-                                WindowButtons()
-                              ]),
-                            )),
-                        const Expanded(child: HomePage()),
-                      ],
-                    )
+                            ],
+                          ),
+                        )),
+                        WindowButtons()
+                      ]),
+                    )),
+                    const Expanded(
+                        child: MaterialApp(
+                      home: HomePage(),
+                      debugShowCheckedModeBanner: false,
+                    )),
+                  ],
+                )
                 // Row(children: [LeftSide(), RightSide()])
-            )));
+                )));
   }
 }

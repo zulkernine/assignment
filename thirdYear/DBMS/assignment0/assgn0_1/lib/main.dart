@@ -29,34 +29,38 @@ class RootApp extends StatelessWidget {
             body: WindowBorder(
                 color: borderColor,
                 width: 1,
-                child:
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        WindowTitleBarBox(
-                            child: Container(
-                              decoration: BoxDecoration(
-                                color: Theme.of(context).primaryColor
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    WindowTitleBarBox(
+                        child: Container(
+                      decoration: BoxDecoration(color: Theme.of(context).primaryColor),
+                      child: Row(children: [
+                        Expanded(
+                            child: MoveWindow(
+                          child: Row(
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                                child: Text(
+                                  "AddSubtract",
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .headline6
+                                      ?.copyWith(color: Theme.of(context).colorScheme.onPrimary),
+                                ),
                               ),
-                              child: Row(children: [
-                                Expanded(child: MoveWindow(
-                                  child: Row(
-                                    children: [
-                                      Padding(
-                                        padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                                        child: Text("AddSubtract",style: Theme.of(context).textTheme.headline6?.copyWith(color: Theme.of(context).colorScheme.onPrimary),),
-                                      ),
-                                      const CurrentDateTimeWidget(),
-                                    ],
-                                  ),
-                                )),
-                                WindowButtons()
-                              ]),
-                            )),
-                        const Expanded(child: HomePage()),
-                      ],
-                    )
+                              const CurrentDateTimeWidget(),
+                            ],
+                          ),
+                        )),
+                        WindowButtons()
+                      ]),
+                    )),
+                    const Expanded(child: HomePage()),
+                  ],
+                )
                 // Row(children: [LeftSide(), RightSide()])
-            )));
+                )));
   }
 }

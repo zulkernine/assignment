@@ -3,7 +3,6 @@ import 'package:intl/intl.dart';
 import 'package:bitsdojo_window/bitsdojo_window.dart';
 import 'package:flutter/material.dart';
 
-
 final buttonColors = WindowButtonColors(
     iconNormal: Color(0xFFE8D5B3),
     mouseOver: Color(0xFFF6A00C),
@@ -29,36 +28,3 @@ class WindowButtons extends StatelessWidget {
     );
   }
 }
-
-class CurrentDateTimeWidget extends StatefulWidget {
-  const CurrentDateTimeWidget({Key? key}) : super(key: key);
-
-  @override
-  _CurrentDateTimeWidgetState createState() => _CurrentDateTimeWidgetState();
-}
-
-class _CurrentDateTimeWidgetState extends State<CurrentDateTimeWidget> {
-
-  late String _timeString;
-
-  @override
-  void initState() {
-    _timeString='';
-    super.initState();
-    Timer.periodic(Duration(seconds: 1), (Timer t) => _getTime());
-  }
-
-  void _getTime() {
-    final String formattedDateTime = DateFormat('yyyy-MM-dd | kk:mm:ss').format(DateTime.now()).toString();
-    setState(() {
-      _timeString = formattedDateTime;
-      print(_timeString);
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Text("($_timeString)",style: Theme.of(context).textTheme.bodyText1?.copyWith(color: Theme.of(context).colorScheme.onPrimary),);
-  }
-}
-

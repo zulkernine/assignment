@@ -3,7 +3,6 @@ import 'package:intl/intl.dart';
 import 'package:bitsdojo_window/bitsdojo_window.dart';
 import 'package:flutter/material.dart';
 
-
 final buttonColors = WindowButtonColors(
     iconNormal: Color(0xFFE8D5B3),
     mouseOver: Color(0xFFF6A00C),
@@ -38,12 +37,11 @@ class CurrentDateTimeWidget extends StatefulWidget {
 }
 
 class _CurrentDateTimeWidgetState extends State<CurrentDateTimeWidget> {
-
   late String _timeString;
 
   @override
   void initState() {
-    _timeString='';
+    _timeString = '';
     super.initState();
     Timer.periodic(Duration(seconds: 1), (Timer t) => _getTime());
   }
@@ -57,7 +55,9 @@ class _CurrentDateTimeWidgetState extends State<CurrentDateTimeWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return Text("($_timeString)",style: Theme.of(context).textTheme.bodyText1?.copyWith(color: Theme.of(context).colorScheme.onPrimary),);
+    return Text(
+      "($_timeString)",
+      style: Theme.of(context).textTheme.bodyText1?.copyWith(color: Theme.of(context).colorScheme.onPrimary),
+    );
   }
 }
-
