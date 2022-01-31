@@ -28,7 +28,10 @@ class _AddUserWidgetState extends State<AddUserWidget> {
               child: TextFormField(
                 autovalidateMode: AutovalidateMode.onUserInteraction,
                 validator: (value) {
-                  int r = int.parse(value ?? '0');
+                  if(value?.isEmpty??true) return null;
+
+                  print("value: $value");
+                  int r = int.parse(value!);
                   if (r <= 0 || StudentDao.containsRoll(r)) {
                     return "Invalid roll or it already exist!";
                   }
