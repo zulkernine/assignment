@@ -71,6 +71,7 @@ class _StudentSearchPageWidgetState extends State<StudentSearchPageWidget> {
 
     return Container(
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         // mainAxisSize: MainAxisSize.min,
         children: [
           Row(

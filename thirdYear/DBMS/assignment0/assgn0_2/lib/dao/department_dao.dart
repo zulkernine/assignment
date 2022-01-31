@@ -6,6 +6,6 @@ class DepartmentDao {
     "CSE01B": Department(name: "MCSE", deptCode: "CSE01B"),
     "CSE02C": Department(name: "MCA", deptCode: "CSE02C"),
     "ETC022": Department(name: "ETCE", deptCode: "ETC022"),
-    "ITO11A": Department(name: "IT", deptCode: "IT011A"),
+    "IT011A": Department(name: "IT", deptCode: "IT011A"),
   };
 }

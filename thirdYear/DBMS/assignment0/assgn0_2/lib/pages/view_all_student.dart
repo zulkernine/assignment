@@ -10,6 +10,17 @@ class ViewAllStudent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      child: SingleChildScrollView(
+        child: PaginatedDataTable(
+          source: MyData(studentList),
+          columns: const [DataColumn(label: SizedBox.shrink())],
+          dataRowHeight: 175,
+          rowsPerPage: 3,
+        ),
+      ),
+    );
+
+    return Container(
       padding: const EdgeInsets.all(16),
       child: ListView.separated(
           itemBuilder: (context, index) {
@@ -24,5 +35,26 @@ class ViewAllStudent extends StatelessWidget {
           },
           itemCount: studentList.length),
     );
+  }
+}
+
+class MyData extends DataTableSource {
+  final List<Student> data;
+
+  MyData(this.data);
+
+  @override
+  bool get isRowCountApproximate => false;
+  @override
+  int get rowCount => data.length;
+  @override
+  int get selectedRowCount => 0;
+  @override
+  DataRow getRow(int index) {
+    return DataRow(cells: [
+      DataCell(StudentCardWidget(
+        student: data.elementAt(index),
+      )),
+    ]);
   }
 }

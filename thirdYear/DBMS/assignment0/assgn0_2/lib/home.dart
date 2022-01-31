@@ -80,7 +80,7 @@ class _HomePageState extends State<HomePage> {
         ),
         Expanded(
           child: [
-            const StudentSearchPageWidget(),
+            StudentSearchPageWidget(),
             const AddUserWidget(),
             ViewAllStudent(
               studentList: StudentDao.studentList.values.toList(),
