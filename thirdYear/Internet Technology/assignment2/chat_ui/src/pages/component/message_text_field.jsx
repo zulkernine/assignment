@@ -101,7 +101,7 @@ class MessageTextField extends Component {
           <Grid item xs={6}>
             <Button variant="contained" component="label">
               Upload File
-              <input type="file" hidden onChange={this.handleFileSelect} />
+              <input type="file" hidden onChange={this.handleFileSelect} accept="image/*"/>
             </Button>
             <Typography>{this.state.attachment?.name}</Typography>
           </Grid>
