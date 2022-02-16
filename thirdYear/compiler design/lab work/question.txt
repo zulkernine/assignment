@@ -1,0 +1,17 @@
+lab-1.
+Read a text and extract the following words from the text:
+1) words starting with a vowel
+2) words having exactly two vowels
+3) words containing vowels a, e, i, o, u exactly in this order.
+count the numbers and show the positions of such words.
+
+
+##################################################################################
+
+
+lab-2.
+
+
+
+
+

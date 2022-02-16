@@ -2,10 +2,11 @@ const app = require("express")();
 const http = require("http").Server(app);
 const io = require("socket.io")(http, {
   cors: {
-    origin: "http://192.168.43.218:3000",
+    origin: "*",
   },
 });
 const port = process.env.PORT || 5000;
+
 const cors = require("cors");
 
 app.use(cors());
@@ -17,6 +18,7 @@ const eventNames = {
   userLeft: "USER_LEFT",
   sendMessage: "SEND_MESSAGE",
   recieveMessage: "RECIEVE_MESSAGE",
+  broadcast: "BROADCAST",
 };
 
 var users = {};
@@ -31,11 +33,23 @@ app.get("/users", function (req, res) {
 
 io.on("connection", (socket) => {
   //Transfer messages
-  socket.on(eventNames.sendMessage, ({ id, text }) => {
-    users[id].skt.emit(eventNames.recieveMessage, {
-      id: socket.id,
-      text,
-    });
+  socket.on(eventNames.sendMessage, ({ id, text, image, broadcast }) => {
+    if (broadcast) {
+      io.emit(eventNames.broadcast, {
+        senderName: users[socket.id].u.name,
+        senderId: socket.id,
+        text,
+        image,
+        broadcast,
+      });
+    } else {
+      users[id].skt.emit(eventNames.recieveMessage, {
+        id: socket.id,
+        text,
+        image,
+        broadcast,
+      });
+    }
   });
 
   // Register user and inform everyone else about new user

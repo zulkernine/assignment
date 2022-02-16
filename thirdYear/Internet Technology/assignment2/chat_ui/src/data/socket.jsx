@@ -1,5 +1,7 @@
 import { io } from "socket.io-client";
+import config from "../config.json";
 
-const socket = io("http://192.168.43.218:5000/");
+
+const socket = io(config.server_base);
 
 export default socket;

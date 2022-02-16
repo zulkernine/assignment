@@ -5,6 +5,7 @@ const EventNames = {
   userLeft: "USER_LEFT",
   sendMessage: "SEND_MESSAGE",
   recieveMessage: "RECIEVE_MESSAGE",
+  broadcast: "BROADCAST",
 };
 
 export default EventNames;

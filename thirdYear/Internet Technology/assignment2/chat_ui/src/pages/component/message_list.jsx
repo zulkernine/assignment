@@ -1,4 +1,4 @@
-import { Grid, Box } from "@mui/material";
+import { Grid, Box, Typography } from "@mui/material";
 import React, { Component } from "react";
 
 class MessageList extends Component {
@@ -49,6 +49,14 @@ class MessageList extends Component {
                   borderRadius={2}
                   bgcolor={e.sentByMyself ? "#0ee6b0" : "#4fb885"}
                 >
+                  <div>
+                    <Typography variant="h5" color={"blue"}>
+                      <u>
+                        <b>{e.senderName}</b>
+                      </u>
+                      {e.broadcast && " 📢📢📢"}
+                    </Typography>
+                  </div>
                   <div>{e.text}</div>
                   <div>
                     <img
@@ -63,11 +71,11 @@ class MessageList extends Component {
               </Grid>
             </Grid>
           ))}
-          <Grid item style={{height:"200px"}}></Grid>
+          <Grid item style={{ height: "300px" }}></Grid>
         </Grid>
 
         <div
-          style={{ float: "left", clear: "both", }}
+          style={{ float: "left", clear: "both" }}
           ref={(el) => {
             this.messagesEnd = el;
           }}

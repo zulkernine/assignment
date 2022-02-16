@@ -1,8 +1,8 @@
 import axios from "axios";
-
+import config from "../config.json";
 
 const http = axios.create({
-  baseURL: "http://192.168.43.218:5000/",
+  baseURL: config.server_base,
   timeout: 20000,
   headers: { "X-Custom-Header": "foobar" },
 });
