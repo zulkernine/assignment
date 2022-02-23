@@ -1,0 +1,23 @@
+You can use this technique with any flow-control
+construct, including if...fi, case...esac, select...done, and
+461until...done. This makes sense because these are all
+compound statements that the shell treats as single
+commands for these purposes. This technique works
+fine—the read command reads a line at a time—as long
+as all of the input is done within the compound statement.
+462Command blocks
+But if you want to redirect I/O to or from an arbitrary
+group of commands without creating a separate process,
+you need to use a construct that we haven't seen yet. If
+you surround some code with { and }, the code will
+behave like a function that has no name. This is another
+type of compound statement. In accordance with the
+equivalent concept in the C language, we'll call this a
+command block.
+What good is a block? In this case, it means that the code
+within the curly brackets ({}) will take standard I/O
+descriptors just as we described in the last block of code.
+This construct is appropriate for the current example
+because the code needs to be called only once, and the
+entire script is not really large enough to merit breaking
+down into functions. Here is how we use a block in the

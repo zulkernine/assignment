@@ -1,0 +1,80 @@
+user@zulkernine:~/c programme/assignments/assignment3$ gcc divisble.c -o divisible_by_n
+user@zulkernine:~/c programme/assignments/assignment3$ ./divisible_by_n
+Enter a number=12
+12	24	36	48	60	72	84	96	
+user@zulkernine:~/c programme/assignments/assignment3$ ./divisible_by_n
+Enter a number=24
+24	48	72	96	
+user@zulkernine:~/c programme/assignments/assignment3$ ./divisible_by_n
+Enter a number=36
+36	72	
+user@zulkernine:~/c programme/assignments/assignment3$ ./divisible_by_n
+Enter a number=19
+19	38	57	76	95	
+user@zulkernine:~/c programme/assignments/assignment3$ ./divisible_by_n
+Enter a number=79
+79	
+user@zulkernine:~/c programme/assignments/assignment3$ 
+
+
+
+
+
+user@zulkernine:~/c programme/assignments/assignment3$ gcc series1.c -o sum_of_series
+user@zulkernine:~/c programme/assignments/assignment3$ ./sum_of_series
+Enter a number=1
+Sum of the series=2
+user@zulkernine:~/c programme/assignments/assignment3$ ./sum_of_series
+Enter a number=3
+Sum of the series=20
+user@zulkernine:~/c programme/assignments/assignment3$ ./sum_of_series
+Enter a number=7
+Sum of the series=168
+user@zulkernine:~/c programme/assignments/assignment3$ ./sum_of_series
+Enter a number=19
+Sum of the series=2660
+
+
+
+user@zulkernine:~/c programme/assignments/assignment3$ gcc fact_series.c -o sum_of_factorial
+user@zulkernine:~/c programme/assignments/assignment3$ ./sum_of_factorial
+Enter a number=1
+ Sum =1
+user@zulkernine:~/c programme/assignments/assignment3$ ./sum_of_factorial
+Enter a number=2
+ Sum =3
+user@zulkernine:~/c programme/assignments/assignment3$ ./sum_of_factorial
+Enter a number=3
+ Sum =9
+user@zulkernine:~/c programme/assignments/assignment3$ ./sum_of_factorial
+Enter a number=5
+ Sum =153
+user@zulkernine:~/c programme/assignments/assignment3$ ./sum_of_factorial
+Enter a number=9
+ Sum =409113
+user@zulkernine:~/c programme/assignments/assignment3$ 
+
+
+
+
+
+user@zulkernine:~/c programme/assignments/assignment3$ gcc series2.c -o sum_of_@series
+user@zulkernine:~/c programme/assignments/assignment3$ ./sum_of_@series
+Enter a number=2
+Sum of the series=4
+user@zulkernine:~/c programme/assignments/assignment3$ ./sum_of_@series
+Enter a number=6
+Sum of the series=33
+user@zulkernine:~/c programme/assignments/assignment3$ ./sum_of_@series
+Enter a number=11
+Sum of the series=99
+user@zulkernine:~/c programme/assignments/assignment3$ ./sum_of_@series
+Enter a number=15
+Sum of the series=189
+user@zulkernine:~/c programme/assignments/assignment3$ ./sum_of_@series
+Enter a number=7
+Sum of the series=41
+user@zulkernine:~/c programme/assignments/assignment3$ 
+
+
+
