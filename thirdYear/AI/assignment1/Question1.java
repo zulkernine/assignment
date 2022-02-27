@@ -5,10 +5,11 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
+import java.util.Stack;
 
 public class Question1 {
 
-    public static LinkedList<Integer> findPathFromGraph(HashMap<Integer, LinkedList<Integer>> graph, int src, int dst) {
+    public static LinkedList<Integer> findPathFromGraphBFS(HashMap<Integer, LinkedList<Integer>> graph, int src, int dst) {
         LinkedList<Integer> path = new LinkedList<>();
 
         // Create and initialize distance and visited array.
@@ -63,12 +64,66 @@ public class Question1 {
         return path;
     }
 
+    public static LinkedList<Integer> findPathFromGraphDFS(HashMap<Integer, LinkedList<Integer>> graph, int src, int dst) {
+        LinkedList<Integer> path = new LinkedList<>();
+
+        // Create and initialize distance and visited array.
+        ArrayList<Integer> distance = new ArrayList<>(List.of(Integer.MIN_VALUE));
+        ArrayList<Integer> pred = new ArrayList<>(List.of(Integer.MIN_VALUE));
+        ArrayList<Boolean> visited = new ArrayList<>(List.of(false));
+        for (int key : graph.keySet()) {
+            if (key == src)
+                distance.add(0);
+            else
+                distance.add(Integer.MAX_VALUE);
+
+            visited.add(false);
+            pred.add(-1);
+        }
+        Stack<Integer> q = new Stack<>();
+        q.push(src);
+        boolean found = false;
+
+        // BFS
+        while (!(q.isEmpty()) && !found) {
+            int curKey = q.pop();
+
+            for (int adjk : graph.get(curKey)) {
+                if (!visited.get(adjk)) {
+                    // mark current not visited
+                    visited.set(curKey, true);
+
+                    q.push(adjk);
+                    distance.set(adjk, (distance.get(curKey) + 1));
+                    pred.set(adjk, curKey);
+                    if (adjk == dst) {
+                        found = true;
+                        break;
+                    }
+                }
+            }
+        }
+
+        if (!found) {
+            return null;
+        }
+
+        System.out.println("Shortest distance: " + distance.get(dst));
+
+        while (dst != -1) {
+            path.addFirst(dst);
+            dst = pred.get(dst);
+        }
+
+        return path;
+    }
+
     public static void main(String args[]) {
         HashMap<Integer, LinkedList<Integer>> _graph = _getSampleGraph();
 
         // System.out.println(_graph.get(1));
         
-        LinkedList<Integer> path = findPathFromGraph(_graph, 5, 7);
+        LinkedList<Integer> path = findPathFromGraphDFS(_graph, 5, 7);
         System.out.println("Found path: " + path);
     }
 

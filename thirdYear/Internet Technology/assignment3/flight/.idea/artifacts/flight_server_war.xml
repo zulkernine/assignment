@@ -1,0 +1,14 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="flight_server:war">
+    <output-path>$PROJECT_DIR$/target</output-path>
+    <properties id="maven-jee-properties">
+      <options>
+        <module>flight_server</module>
+        <packaging>war</packaging>
+      </options>
+    </properties>
+    <root id="archive" name="flight_server-1.0-SNAPSHOT.war">
+      <element id="artifact" artifact-name="flight_server:war exploded" />
+    </root>
+  </artifact>
+</component>
