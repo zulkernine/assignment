@@ -15,7 +15,7 @@ public class MongoContextListener implements ServletContextListener {
     @Override
     public void contextInitialized(ServletContextEvent sce) {
         ServletContext ctx = sce.getServletContext();
-        MongoClient mongo = MongoClients.create("mongodb://127.0.0.1:27017/?directConnection=true&serverSelectionTimeoutMS=2000&appName=mongosh+1.1.9");
+        MongoClient mongo = MongoClients.create("mongodb+srv://zulqarnain:abcd1234@cluster-zulqarnain.ckwdf.mongodb.net/myFirstDatabase?retryWrites=true&w=majority");
         System.out.println("MongoClient initialized successfully");
         sce.getServletContext().setAttribute("MONGO_CLIENT", mongo);
     }

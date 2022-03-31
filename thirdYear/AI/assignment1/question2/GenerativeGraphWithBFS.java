@@ -1,16 +1,14 @@
 package assignment1.question2;
 
-import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
-import java.util.TreeMap;
 
 public class GenerativeGraphWithBFS {
     HashMap<Vertex,List<Vertex>> graph = new HashMap<>();
-    TreeMap<Vertex,Vertex> previousVertexInPath = new TreeMap<>();
+    HashMap<Vertex,Vertex> previousVertexInPath = new HashMap<>();
 
     GenerativeGraphWithBFS(Vertex root){
         graph.put(root, new LinkedList<>());
@@ -43,33 +41,40 @@ public class GenerativeGraphWithBFS {
         vertices.add(source);
 
         do{
-
             Vertex v = vertices.poll();
-            if(visited.get(v)==null || !visited.get(v)){
-                // if(v.canibals>v.misonary) continue;
-                visited.put(v, true);
-            }
+            System.out.println(v);
 
             // Go to adjascent nodes and add to quese if valid and not visited
             for(EdgeWeight e : possibleWeights){
                 Vertex nv = v.traverseEdge(e);
                 // avoid invalid states.
-                if(nv.isValid() && !visited.containsKey(nv)){
+                if(nv.isValid() && !visited.containsKey(nv) && v.hasBoat!=e.direction){
                     previousVertexInPath.put(nv, v);
+                    if (visited.get(v) == null || !visited.get(v)) {
+                        // if(v.canibals>v.misonary) continue;
+                        visited.put(v, true);
 
-                    if(v == dest){
-                        return _makePath(previousVertexInPath, dest);
+                        if (v == dest) {
+                            return _makePath(previousVertexInPath, dest);
+                        }
+                        vertices.offer(nv);
                     }
-                    vertices.offer(nv);
                 }
             }
             
         }while(!vertices.isEmpty());
 
-        return List.of();
+        while(dest!=null){
+            path.add(dest);
+            dest = previousVertexInPath.get(dest);
+        }
+
+        Collections.reverse(path);
+
+        return path;
     }
 
-    List<Vertex> _makePath(TreeMap<Vertex,Vertex> previousVertexInPath,Vertex dest){
+    List<Vertex> _makePath(HashMap<Vertex,Vertex> previousVertexInPath,Vertex dest){
         List<Vertex> path = new LinkedList<>();
 
         while(dest != null){

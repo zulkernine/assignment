@@ -1,20 +1,19 @@
-package mocker.zulqarnain.dao;
-
+package com.example.dao;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoCursor;
-import mocker.zulqarnain.models.Airport;
+import com.example.models.Airport;
 import org.bson.Document;
 
 import javax.servlet.ServletContext;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AirportDao {
+public class AirportDAO {
     MongoCollection<Document> collection;
 
-    public AirportDao(ServletContext context) {
-        this.collection = ((MongoClient)context.getAttribute("MONGO_CLIENT")).getDatabase("flight_data").getCollection("airports");
+    public AirportDAO(ServletContext context) {
+        this.collection = ((MongoClient)context.getAttribute("MONGO_CLIENT")).getDatabase("FlightData").getCollection("airports");
     }
 
     public List<Airport> readAllAirports() {
