@@ -1,4 +1,4 @@
-package assignment1.question2;
+package question2;
 
 /**
  * possible edges: (1,0),(0,1),(2,0),(1,1),(0,2) with b true or false,

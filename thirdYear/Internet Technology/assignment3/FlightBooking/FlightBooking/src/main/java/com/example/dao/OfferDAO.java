@@ -10,6 +10,9 @@ import org.bson.Document;
 import static com.mongodb.client.model.Filters.*;
 
 import javax.servlet.ServletContext;
+import java.sql.Date;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -25,7 +28,7 @@ public class OfferDAO {
 
     public List<Offer> readAllOffers() {
         List<Offer> data = new ArrayList<Offer>();
-        MongoCursor<Document> cursor = offerCollection.find().cursor();
+        MongoCursor<Document> cursor = offerCollection.find(gte("validTill", Date.valueOf(LocalDate.now()))).cursor();
         while (cursor.hasNext()) {
             Document doc = cursor.next();
             Offer p = new Offer(doc);

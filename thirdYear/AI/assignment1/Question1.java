@@ -1,5 +1,3 @@
-package assignment1;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -123,7 +121,7 @@ public class Question1 {
 
         // System.out.println(_graph.get(1));
         
-        LinkedList<Integer> path = findPathFromGraphDFS(_graph, 5, 7);
+        LinkedList<Integer> path = findPathFromGraphBFS(_graph, 9, 7);
         System.out.println("Found path: " + path);
     }
 

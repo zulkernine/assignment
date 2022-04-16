@@ -1,15 +1,16 @@
-package assignment1.question2;
+package question2;
+
+import java.util.List;
 
 public class Question2 {
     public static void main(String[] args) {
         Vertex source = new Vertex(3, 3, true);
         Vertex destinaton = new Vertex(0, 0, false);
-
-        // System.out.println(source==source2);
-
+     
         GenerativeGraphWithBFS graph = new GenerativeGraphWithBFS(source);
+        List<Vertex> path = graph.findPathByBFS(source, destinaton);
         System.out.println("Possible path: ");
-        for(Vertex v : graph.findPathByBFS(source, destinaton)){
+        for(Vertex v : path){
             System.out.println(v);
         }
     }

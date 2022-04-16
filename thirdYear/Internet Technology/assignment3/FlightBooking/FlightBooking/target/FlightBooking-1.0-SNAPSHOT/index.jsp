@@ -2,6 +2,8 @@
 <%@ page import="java.util.List" %>
 <%@ page import="com.example.models.Airport" %>
 <%@ page import="com.example.models.Journey" %>
+<%@ page import="java.time.LocalTime" %>
+<%@ page import="java.time.ZoneId" %>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ page buffer="8192kb" autoFlush="true" %>
 <!DOCTYPE html>
@@ -131,6 +133,9 @@
                         <p class="subtitle mt-3">
                             <%= offers.get(i).getPaymentOffer() %>
                         </p>
+                        <p class="subtitle mt-3">
+                           valid till <%= offers.get(i).getValidTill().toString() %>
+                        </p>
                     </div>
                 </div>
             </div>
@@ -205,11 +210,11 @@
                     <h5 class="mb-1">
                         <%= journeys.get(i).getDepartureTime() %> - <%= journeys.get(i).getArrivalTime() %>
                     </h5>
-                    <h5 class="mb-1">₹ <%= journeys.get(i).getFare() %>
+                    <h5 class="mb-1"><b> ₹ <%= journeys.get(i).getFare() %></b>
                     </h5>
                 </div>
                 <div class="d-flex w-100 justify-content-between">
-                    <%-- <small>6E-483</small>--%>
+                    <%= journeys.get(i).getAirlineName() %>
                 </div>
                 <div class="d-flex w-100 justify-content-between align-items-end">
                     <p class="mb-1">

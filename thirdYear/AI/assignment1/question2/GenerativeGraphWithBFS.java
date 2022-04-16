@@ -1,4 +1,4 @@
-package assignment1.question2;
+package question2;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -42,34 +42,27 @@ public class GenerativeGraphWithBFS {
 
         do{
             Vertex v = vertices.poll();
-            System.out.println(v);
+        
+            if (visited.get(v) == null || !visited.get(v)) {
+                visited.put(v, true);
+            }
 
             // Go to adjascent nodes and add to quese if valid and not visited
             for(EdgeWeight e : possibleWeights){
                 Vertex nv = v.traverseEdge(e);
-                // avoid invalid states.
-                if(nv.isValid() && !visited.containsKey(nv) && v.hasBoat!=e.direction){
-                    previousVertexInPath.put(nv, v);
-                    if (visited.get(v) == null || !visited.get(v)) {
-                        // if(v.canibals>v.misonary) continue;
-                        visited.put(v, true);
 
-                        if (v == dest) {
-                            return _makePath(previousVertexInPath, dest);
-                        }
-                        vertices.offer(nv);
+                // avoid invalid states.
+                if(nv!=null && !visited.containsKey(nv)){
+                    vertices.offer(nv);
+                    previousVertexInPath.put(nv, v);
+
+                    if (nv.equals(dest)) {
+                        return _makePath(previousVertexInPath, dest);
                     }
                 }
             }
             
         }while(!vertices.isEmpty());
-
-        while(dest!=null){
-            path.add(dest);
-            dest = previousVertexInPath.get(dest);
-        }
-
-        Collections.reverse(path);
 
         return path;
     }

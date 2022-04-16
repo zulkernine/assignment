@@ -1,4 +1,4 @@
-package assignment1.question2;
+package question2;
 
 import java.util.Objects;
 
@@ -22,6 +22,8 @@ public class Vertex {
     }
 
     Vertex traverseEdge(EdgeWeight e) {
+        if(this.hasBoat == e.direction) return null;
+
         int m, c;
         if (e.direction) {
             m = this.misonary + e.misonary;
@@ -30,6 +32,10 @@ public class Vertex {
             m = this.misonary - e.misonary;
             c = this.canibals - e.canibals;
         }
+
+        if(m<0 || c<0) return null;
+
+        if((m>3 || c>3) || ((m<c) && m>0) || ((3-m)<(3-c) && (3-m)>0)) return null;
 
         return new Vertex(m, c, e.direction);
     }

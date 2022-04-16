@@ -3,15 +3,21 @@ package com.example.models;
 import org.bson.Document;
 import org.bson.types.ObjectId;
 
+import java.time.LocalDateTime;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
+
 public class Offer {
     private ObjectId id;
     public String source;
     public String destination;
     private String paymentOffer;
+    private LocalDateTime validTill;
     private int price;
 
     public Offer() {
-
     }
 
     public Offer(Document doc) {
@@ -20,6 +26,7 @@ public class Offer {
         this.destination = (String) doc.get("destination");
         this.price = (Integer) doc.get("price");
         this.paymentOffer = (String) doc.get("paymentOffer");
+        this.validTill = LocalDateTime.ofInstant(((Date) doc.get("validTill")).toInstant(), ZoneId.systemDefault());
     }
 
     public Offer(ObjectId id, String source, String destination, String paymentOffer, int price) {
@@ -28,6 +35,16 @@ public class Offer {
         this.destination = destination;
         this.paymentOffer = paymentOffer;
         this.price = price;
+    }
+
+    public String getValidTill() {
+        DateTimeFormatter myFormatObj = DateTimeFormatter.ofPattern("E, MMM dd yyyy");
+
+        return validTill.format(myFormatObj);
+    }
+
+    public void setValidTill(LocalDateTime validTill) {
+        this.validTill = validTill;
     }
 
     public ObjectId getId() {
