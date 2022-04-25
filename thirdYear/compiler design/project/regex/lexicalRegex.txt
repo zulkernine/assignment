@@ -1,0 +1,15 @@
+int|float|void|main|for|return|string : $0
+
+(\b(?!int|float|void|main|for|return|string)\b[A-Za-z_][A-Za-z0-9_]*\b) : id 
+
+[0-9]+[.][0-9]+ : const
+
+[0-9]+ : const 
+
+[(){},;] : $0 
+
+'+'|'-' : $0 
+
+'<'|'>'|'='|'>='|'<='|'==' : $0 
+
+'\"' : $0

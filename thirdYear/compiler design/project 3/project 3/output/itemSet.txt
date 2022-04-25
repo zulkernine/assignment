@@ -1,0 +1,719 @@
+
+Item No. : 0 -----
+prog' -> . prog 	lookahead : $ 
+prog -> . main_func 	lookahead : $ 
+main_func -> . ret_type main ( ) { stmts } 	lookahead : $ 
+main_func -> . ret_type main ( ) { } 	lookahead : $ 
+ret_type -> . void 	lookahead : main 
+ret_type -> . data_type 	lookahead : main 
+data_type -> . int 	lookahead : main 
+data_type -> . float 	lookahead : main 
+data_type -> . string 	lookahead : main 
+
+Item No. : 1 -----
+prog' -> prog 	lookahead : $ 
+
+Item No. : 2 -----
+prog -> main_func 	lookahead : $ 
+
+Item No. : 3 -----
+ret_type -> data_type 	lookahead : main 
+
+Item No. : 4 -----
+main_func -> ret_type . main ( ) { stmts } 	lookahead : $ 
+main_func -> ret_type . main ( ) { } 	lookahead : $ 
+
+Item No. : 5 -----
+ret_type -> void 	lookahead : main 
+
+Item No. : 6 -----
+data_type -> int 	lookahead : main 
+
+Item No. : 7 -----
+data_type -> float 	lookahead : main 
+
+Item No. : 8 -----
+data_type -> string 	lookahead : main 
+
+Item No. : 9 -----
+main_func -> ret_type main . ( ) { stmts } 	lookahead : $ 
+main_func -> ret_type main . ( ) { } 	lookahead : $ 
+
+Item No. : 10 -----
+main_func -> ret_type main ( . ) { stmts } 	lookahead : $ 
+main_func -> ret_type main ( . ) { } 	lookahead : $ 
+
+Item No. : 11 -----
+main_func -> ret_type main ( ) . { stmts } 	lookahead : $ 
+main_func -> ret_type main ( ) . { } 	lookahead : $ 
+
+Item No. : 12 -----
+main_func -> ret_type main ( ) { . stmts } 	lookahead : $ 
+main_func -> ret_type main ( ) { . } 	lookahead : $ 
+stmts -> . stmts stmt 	lookahead : for const id return string float int } 
+stmts -> . stmt 	lookahead : for const id return string float int } 
+stmts -> . stmts for_loop 	lookahead : for const id return string float int } 
+stmts -> . for_loop 	lookahead : for const id return string float int } 
+stmt -> . decl ; 	lookahead : for int float string return id const } 
+stmt -> . ret ; 	lookahead : for int float string return id const } 
+stmt -> . expr ; 	lookahead : for int float string return id const } 
+for_loop -> . for ( stmt expr ; expr ) { stmts } 	lookahead : for int float string return id const } 
+decl -> . data_type assign 	lookahead : ; 
+ret -> . return expr 	lookahead : ; 
+expr -> . expr binary_op T 	lookahead : -= += > <= >= - < == + ; 
+expr -> . T 	lookahead : -= += > <= >= - < == + ; 
+data_type -> . int 	lookahead : id 
+data_type -> . float 	lookahead : id 
+data_type -> . string 	lookahead : id 
+T -> . id ++ 	lookahead : + == < - >= <= > += -= ; 
+T -> . id -- 	lookahead : + == < - >= <= > += -= ; 
+T -> . F 	lookahead : + == < - >= <= > += -= ; 
+F -> . id 	lookahead : -= += > <= >= - < == + ; 
+F -> . const 	lookahead : -= += > <= >= - < == + ; 
+
+Item No. : 13 -----
+decl -> data_type . assign 	lookahead : ; 
+assign -> . id = expr 	lookahead : , ; 
+assign -> . assign , id = expr 	lookahead : , ; 
+assign -> . id = " id " 	lookahead : , ; 
+assign -> . id =" id " 	lookahead : , ; 
+
+Item No. : 14 -----
+stmt -> decl . ; 	lookahead : for int float string return id const } 
+
+Item No. : 15 -----
+main_func -> ret_type main ( ) { stmts . } 	lookahead : $ 
+stmts -> stmts . stmt 	lookahead : for const id return string float int } 
+stmts -> stmts . for_loop 	lookahead : for const id return string float int } 
+stmt -> . decl ; 	lookahead : } int float string return id const for 
+stmt -> . ret ; 	lookahead : } int float string return id const for 
+stmt -> . expr ; 	lookahead : } int float string return id const for 
+for_loop -> . for ( stmt expr ; expr ) { stmts } 	lookahead : } int float string return id const for 
+decl -> . data_type assign 	lookahead : ; 
+ret -> . return expr 	lookahead : ; 
+expr -> . expr binary_op T 	lookahead : -= += > <= >= - < == + ; 
+expr -> . T 	lookahead : -= += > <= >= - < == + ; 
+data_type -> . int 	lookahead : id 
+data_type -> . float 	lookahead : id 
+data_type -> . string 	lookahead : id 
+T -> . id ++ 	lookahead : + == < - >= <= > += -= ; 
+T -> . id -- 	lookahead : + == < - >= <= > += -= ; 
+T -> . F 	lookahead : + == < - >= <= > += -= ; 
+F -> . id 	lookahead : -= += > <= >= - < == + ; 
+F -> . const 	lookahead : -= += > <= >= - < == + ; 
+
+Item No. : 16 -----
+stmts -> stmt 	lookahead : for const id return string float int } 
+
+Item No. : 17 -----
+stmt -> ret . ; 	lookahead : for int float string return id const } 
+
+Item No. : 18 -----
+stmt -> expr . ; 	lookahead : for int float string return id const } 
+expr -> expr . binary_op T 	lookahead : -= += > <= >= - < == + ; 
+binary_op -> . + 	lookahead : id const 
+binary_op -> . - 	lookahead : id const 
+binary_op -> . rel_op 	lookahead : id const 
+binary_op -> . += 	lookahead : id const 
+binary_op -> . -= 	lookahead : id const 
+rel_op -> . < 	lookahead : const id 
+rel_op -> . > 	lookahead : const id 
+rel_op -> . == 	lookahead : const id 
+rel_op -> . <= 	lookahead : const id 
+rel_op -> . >= 	lookahead : const id 
+
+Item No. : 19 -----
+expr -> T 	lookahead : -= += > <= >= - < == + ; 
+
+Item No. : 20 -----
+stmts -> for_loop 	lookahead : for const id return string float int } 
+
+Item No. : 21 -----
+T -> F 	lookahead : + == < - >= <= > += -= ; 
+
+Item No. : 22 -----
+data_type -> int 	lookahead : id 
+
+Item No. : 23 -----
+data_type -> float 	lookahead : id 
+
+Item No. : 24 -----
+data_type -> string 	lookahead : id 
+
+Item No. : 25 -----
+main_func -> ret_type main ( ) { } 	lookahead : $ 
+
+Item No. : 26 -----
+T -> id . ++ 	lookahead : + == < - >= <= > += -= ; 
+T -> id . -- 	lookahead : + == < - >= <= > += -= ; 
+F -> id 	lookahead : -= += > <= >= - < == + ; 
+
+Item No. : 27 -----
+ret -> return . expr 	lookahead : ; 
+expr -> . expr binary_op T 	lookahead : -= += > <= >= - < == + ; 
+expr -> . T 	lookahead : -= += > <= >= - < == + ; 
+T -> . id ++ 	lookahead : + == < - >= <= > += -= ; 
+T -> . id -- 	lookahead : + == < - >= <= > += -= ; 
+T -> . F 	lookahead : + == < - >= <= > += -= ; 
+F -> . id 	lookahead : -= += > <= >= - < == + ; 
+F -> . const 	lookahead : -= += > <= >= - < == + ; 
+
+Item No. : 28 -----
+F -> const 	lookahead : -= += > <= >= - < == + ; 
+
+Item No. : 29 -----
+for_loop -> for . ( stmt expr ; expr ) { stmts } 	lookahead : for int float string return id const } 
+
+Item No. : 30 -----
+decl -> data_type assign 	lookahead : ; 
+assign -> assign . , id = expr 	lookahead : , ; 
+
+Item No. : 31 -----
+assign -> id . = expr 	lookahead : , ; 
+assign -> id . = " id " 	lookahead : , ; 
+assign -> id . =" id " 	lookahead : , ; 
+
+Item No. : 32 -----
+stmt -> decl ; 	lookahead : for int float string return id const } 
+
+Item No. : 33 -----
+stmts -> stmts stmt 	lookahead : for const id return string float int } 
+
+Item No. : 34 -----
+stmts -> stmts for_loop 	lookahead : for const id return string float int } 
+
+Item No. : 35 -----
+main_func -> ret_type main ( ) { stmts } 	lookahead : $ 
+
+Item No. : 36 -----
+stmt -> ret ; 	lookahead : for int float string return id const } 
+
+Item No. : 37 -----
+binary_op -> rel_op 	lookahead : id const 
+
+Item No. : 38 -----
+expr -> expr binary_op . T 	lookahead : -= += > <= >= - < == + ; 
+T -> . id ++ 	lookahead : ; + == < - >= <= > += -= 
+T -> . id -- 	lookahead : ; + == < - >= <= > += -= 
+T -> . F 	lookahead : ; + == < - >= <= > += -= 
+F -> . id 	lookahead : -= += > <= >= - < == + ; 
+F -> . const 	lookahead : -= += > <= >= - < == + ; 
+
+Item No. : 39 -----
+stmt -> expr ; 	lookahead : for int float string return id const } 
+
+Item No. : 40 -----
+binary_op -> + 	lookahead : id const 
+
+Item No. : 41 -----
+binary_op -> - 	lookahead : id const 
+
+Item No. : 42 -----
+rel_op -> < 	lookahead : const id 
+
+Item No. : 43 -----
+rel_op -> > 	lookahead : const id 
+
+Item No. : 44 -----
+rel_op -> <= 	lookahead : const id 
+
+Item No. : 45 -----
+rel_op -> >= 	lookahead : const id 
+
+Item No. : 46 -----
+rel_op -> == 	lookahead : const id 
+
+Item No. : 47 -----
+binary_op -> += 	lookahead : id const 
+
+Item No. : 48 -----
+binary_op -> -= 	lookahead : id const 
+
+Item No. : 49 -----
+T -> id ++ 	lookahead : + == < - >= <= > += -= ; 
+
+Item No. : 50 -----
+T -> id -- 	lookahead : + == < - >= <= > += -= ; 
+
+Item No. : 51 -----
+ret -> return expr 	lookahead : ; 
+expr -> expr . binary_op T 	lookahead : -= += > <= >= - < == + ; 
+binary_op -> . + 	lookahead : id const 
+binary_op -> . - 	lookahead : id const 
+binary_op -> . rel_op 	lookahead : id const 
+binary_op -> . += 	lookahead : id const 
+binary_op -> . -= 	lookahead : id const 
+rel_op -> . < 	lookahead : const id 
+rel_op -> . > 	lookahead : const id 
+rel_op -> . == 	lookahead : const id 
+rel_op -> . <= 	lookahead : const id 
+rel_op -> . >= 	lookahead : const id 
+
+Item No. : 52 -----
+for_loop -> for ( . stmt expr ; expr ) { stmts } 	lookahead : for int float string return id const } 
+stmt -> . decl ; 	lookahead : const id 
+stmt -> . ret ; 	lookahead : const id 
+stmt -> . expr ; 	lookahead : const id 
+decl -> . data_type assign 	lookahead : ; 
+ret -> . return expr 	lookahead : ; 
+expr -> . expr binary_op T 	lookahead : -= += > <= >= - < == + ; 
+expr -> . T 	lookahead : -= += > <= >= - < == + ; 
+data_type -> . int 	lookahead : id 
+data_type -> . float 	lookahead : id 
+data_type -> . string 	lookahead : id 
+T -> . id ++ 	lookahead : + == < - >= <= > += -= ; 
+T -> . id -- 	lookahead : + == < - >= <= > += -= ; 
+T -> . F 	lookahead : + == < - >= <= > += -= ; 
+F -> . id 	lookahead : -= += > <= >= - < == + ; 
+F -> . const 	lookahead : -= += > <= >= - < == + ; 
+
+Item No. : 53 -----
+assign -> assign , . id = expr 	lookahead : , ; 
+
+Item No. : 54 -----
+assign -> id = . expr 	lookahead : , ; 
+assign -> id = . " id " 	lookahead : , ; 
+expr -> . expr binary_op T 	lookahead : -= += > >= - < == + ; <= , 
+expr -> . T 	lookahead : -= += > >= - < == + ; <= , 
+T -> . id ++ 	lookahead : + == < - >= > += -= <= , ; 
+T -> . id -- 	lookahead : + == < - >= > += -= <= , ; 
+T -> . F 	lookahead : + == < - >= > += -= <= , ; 
+F -> . id 	lookahead : -= += > >= - < == + ; <= , 
+F -> . const 	lookahead : -= += > >= - < == + ; <= , 
+
+Item No. : 55 -----
+expr -> expr binary_op T 	lookahead : -= += > <= >= - < == + ; 
+
+Item No. : 56 -----
+stmt -> decl . ; 	lookahead : const id 
+
+Item No. : 57 -----
+for_loop -> for ( stmt . expr ; expr ) { stmts } 	lookahead : for int float string return id const } 
+expr -> . expr binary_op T 	lookahead : -= += > <= >= - < == + ; 
+expr -> . T 	lookahead : -= += > <= >= - < == + ; 
+T -> . id ++ 	lookahead : + == < - >= <= > += -= ; 
+T -> . id -- 	lookahead : + == < - >= <= > += -= ; 
+T -> . F 	lookahead : + == < - >= <= > += -= ; 
+F -> . id 	lookahead : -= += > <= >= - < == + ; 
+F -> . const 	lookahead : -= += > <= >= - < == + ; 
+
+Item No. : 58 -----
+stmt -> ret . ; 	lookahead : const id 
+
+Item No. : 59 -----
+stmt -> expr . ; 	lookahead : const id 
+expr -> expr . binary_op T 	lookahead : -= += > <= >= - < == + ; 
+binary_op -> . + 	lookahead : id const 
+binary_op -> . - 	lookahead : id const 
+binary_op -> . rel_op 	lookahead : id const 
+binary_op -> . += 	lookahead : id const 
+binary_op -> . -= 	lookahead : id const 
+rel_op -> . < 	lookahead : const id 
+rel_op -> . > 	lookahead : const id 
+rel_op -> . == 	lookahead : const id 
+rel_op -> . <= 	lookahead : const id 
+rel_op -> . >= 	lookahead : const id 
+
+Item No. : 60 -----
+assign -> assign , id . = expr 	lookahead : , ; 
+
+Item No. : 61 -----
+assign -> id = expr 	lookahead : , ; 
+expr -> expr . binary_op T 	lookahead : -= += > >= - < == + ; <= , 
+binary_op -> . + 	lookahead : id const 
+binary_op -> . - 	lookahead : id const 
+binary_op -> . rel_op 	lookahead : id const 
+binary_op -> . += 	lookahead : id const 
+binary_op -> . -= 	lookahead : id const 
+rel_op -> . < 	lookahead : const id 
+rel_op -> . > 	lookahead : const id 
+rel_op -> . == 	lookahead : const id 
+rel_op -> . <= 	lookahead : const id 
+rel_op -> . >= 	lookahead : const id 
+
+Item No. : 62 -----
+assign -> id = " . id " 	lookahead : , ; 
+
+Item No. : 63 -----
+stmt -> decl ; 	lookahead : const id 
+
+Item No. : 64 -----
+for_loop -> for ( stmt expr . ; expr ) { stmts } 	lookahead : for int float string return id const } 
+expr -> expr . binary_op T 	lookahead : -= += > <= >= - < == + ; 
+binary_op -> . + 	lookahead : id const 
+binary_op -> . - 	lookahead : id const 
+binary_op -> . rel_op 	lookahead : id const 
+binary_op -> . += 	lookahead : id const 
+binary_op -> . -= 	lookahead : id const 
+rel_op -> . < 	lookahead : const id 
+rel_op -> . > 	lookahead : const id 
+rel_op -> . == 	lookahead : const id 
+rel_op -> . <= 	lookahead : const id 
+rel_op -> . >= 	lookahead : const id 
+
+Item No. : 65 -----
+stmt -> ret ; 	lookahead : const id 
+
+Item No. : 66 -----
+stmt -> expr ; 	lookahead : const id 
+
+Item No. : 67 -----
+assign -> assign , id = . expr 	lookahead : , ; 
+expr -> . expr binary_op T 	lookahead : -= += > >= - < == + ; <= , 
+expr -> . T 	lookahead : -= += > >= - < == + ; <= , 
+T -> . id ++ 	lookahead : + == < - >= > += -= <= , ; 
+T -> . id -- 	lookahead : + == < - >= > += -= <= , ; 
+T -> . F 	lookahead : + == < - >= > += -= <= , ; 
+F -> . id 	lookahead : -= += > >= - < == + ; <= , 
+F -> . const 	lookahead : -= += > >= - < == + ; <= , 
+
+Item No. : 68 -----
+assign -> id = " id . " 	lookahead : , ; 
+
+Item No. : 69 -----
+for_loop -> for ( stmt expr ; . expr ) { stmts } 	lookahead : for int float string return id const } 
+expr -> . expr binary_op T 	lookahead : -= += <= >= - < == + > ) 
+expr -> . T 	lookahead : -= += <= >= - < == + > ) 
+T -> . id ++ 	lookahead : + == < - >= <= += -= > ) 
+T -> . id -- 	lookahead : + == < - >= <= += -= > ) 
+T -> . F 	lookahead : + == < - >= <= += -= > ) 
+F -> . id 	lookahead : -= += <= >= - < == + > ) 
+F -> . const 	lookahead : -= += <= >= - < == + > ) 
+
+Item No. : 70 -----
+assign -> assign , id = expr 	lookahead : , ; 
+expr -> expr . binary_op T 	lookahead : -= += > >= - < == + ; <= , 
+binary_op -> . + 	lookahead : id const 
+binary_op -> . - 	lookahead : id const 
+binary_op -> . rel_op 	lookahead : id const 
+binary_op -> . += 	lookahead : id const 
+binary_op -> . -= 	lookahead : id const 
+rel_op -> . < 	lookahead : const id 
+rel_op -> . > 	lookahead : const id 
+rel_op -> . == 	lookahead : const id 
+rel_op -> . <= 	lookahead : const id 
+rel_op -> . >= 	lookahead : const id 
+
+Item No. : 71 -----
+assign -> id = " id " 	lookahead : , ; 
+
+Item No. : 72 -----
+for_loop -> for ( stmt expr ; expr . ) { stmts } 	lookahead : for int float string return id const } 
+expr -> expr . binary_op T 	lookahead : -= += <= >= - < == + > ) 
+binary_op -> . + 	lookahead : id const 
+binary_op -> . - 	lookahead : id const 
+binary_op -> . rel_op 	lookahead : id const 
+binary_op -> . += 	lookahead : id const 
+binary_op -> . -= 	lookahead : id const 
+rel_op -> . < 	lookahead : const id 
+rel_op -> . > 	lookahead : const id 
+rel_op -> . == 	lookahead : const id 
+rel_op -> . <= 	lookahead : const id 
+rel_op -> . >= 	lookahead : const id 
+
+Item No. : 73 -----
+expr -> T 	lookahead : -= += <= >= - < == + > ) 
+
+Item No. : 74 -----
+T -> F 	lookahead : + == < - >= <= += -= > ) 
+
+Item No. : 75 -----
+T -> id . ++ 	lookahead : + == < - >= <= += -= > ) 
+T -> id . -- 	lookahead : + == < - >= <= += -= > ) 
+F -> id 	lookahead : -= += <= >= - < == + > ) 
+
+Item No. : 76 -----
+F -> const 	lookahead : -= += <= >= - < == + > ) 
+
+Item No. : 77 -----
+expr -> expr binary_op . T 	lookahead : -= += <= >= - < == + > ) 
+T -> . id ++ 	lookahead : ) > + == < - >= <= += -= 
+T -> . id -- 	lookahead : ) > + == < - >= <= += -= 
+T -> . F 	lookahead : ) > + == < - >= <= += -= 
+F -> . id 	lookahead : -= += <= >= - < == + > ) 
+F -> . const 	lookahead : -= += <= >= - < == + > ) 
+
+Item No. : 78 -----
+for_loop -> for ( stmt expr ; expr ) . { stmts } 	lookahead : for int float string return id const } 
+
+Item No. : 79 -----
+T -> id ++ 	lookahead : + == < - >= <= += -= > ) 
+
+Item No. : 80 -----
+T -> id -- 	lookahead : + == < - >= <= += -= > ) 
+
+Item No. : 81 -----
+expr -> expr binary_op T 	lookahead : -= += <= >= - < == + > ) 
+
+Item No. : 82 -----
+for_loop -> for ( stmt expr ; expr ) { . stmts } 	lookahead : for int float string return id const } 
+stmts -> . stmts stmt 	lookahead : for const id return string float int } 
+stmts -> . stmt 	lookahead : for const id return string float int } 
+stmts -> . stmts for_loop 	lookahead : for const id return string float int } 
+stmts -> . for_loop 	lookahead : for const id return string float int } 
+stmt -> . decl ; 	lookahead : for int float string return id const } 
+stmt -> . ret ; 	lookahead : for int float string return id const } 
+stmt -> . expr ; 	lookahead : for int float string return id const } 
+for_loop -> . for ( stmt expr ; expr ) { stmts } 	lookahead : for int float string return id const } 
+decl -> . data_type assign 	lookahead : ; 
+ret -> . return expr 	lookahead : ; 
+expr -> . expr binary_op T 	lookahead : -= += > <= >= - < == + ; 
+expr -> . T 	lookahead : -= += > <= >= - < == + ; 
+data_type -> . int 	lookahead : id 
+data_type -> . float 	lookahead : id 
+data_type -> . string 	lookahead : id 
+T -> . id ++ 	lookahead : + == < - >= <= > += -= ; 
+T -> . id -- 	lookahead : + == < - >= <= > += -= ; 
+T -> . F 	lookahead : + == < - >= <= > += -= ; 
+F -> . id 	lookahead : -= += > <= >= - < == + ; 
+F -> . const 	lookahead : -= += > <= >= - < == + ; 
+
+Item No. : 83 -----
+for_loop -> for ( stmt expr ; expr ) { stmts . } 	lookahead : for int float string return id const } 
+stmts -> stmts . stmt 	lookahead : for const id return string float int } 
+stmts -> stmts . for_loop 	lookahead : for const id return string float int } 
+stmt -> . decl ; 	lookahead : } int float string return id const for 
+stmt -> . ret ; 	lookahead : } int float string return id const for 
+stmt -> . expr ; 	lookahead : } int float string return id const for 
+for_loop -> . for ( stmt expr ; expr ) { stmts } 	lookahead : } int float string return id const for 
+decl -> . data_type assign 	lookahead : ; 
+ret -> . return expr 	lookahead : ; 
+expr -> . expr binary_op T 	lookahead : -= += > <= >= - < == + ; 
+expr -> . T 	lookahead : -= += > <= >= - < == + ; 
+data_type -> . int 	lookahead : id 
+data_type -> . float 	lookahead : id 
+data_type -> . string 	lookahead : id 
+T -> . id ++ 	lookahead : + == < - >= <= > += -= ; 
+T -> . id -- 	lookahead : + == < - >= <= > += -= ; 
+T -> . F 	lookahead : + == < - >= <= > += -= ; 
+F -> . id 	lookahead : -= += > <= >= - < == + ; 
+F -> . const 	lookahead : -= += > <= >= - < == + ; 
+
+Item No. : 84 -----
+for_loop -> for ( stmt expr ; expr ) { stmts } 	lookahead : for int float string return id const } 
+
+Edge List -----
+	From	To	On symbol
+	0	1	prog
+	0	2	main_func
+	0	3	data_type
+	0	4	ret_type
+	0	5	void
+	0	6	int
+	0	7	float
+	0	8	string
+	4	9	main
+	9	10	(
+	10	11	)
+	11	12	{
+	12	13	data_type
+	12	14	decl
+	12	15	stmts
+	12	16	stmt
+	12	17	ret
+	12	18	expr
+	12	19	T
+	12	20	for_loop
+	12	21	F
+	12	22	int
+	12	23	float
+	12	24	string
+	12	25	}
+	12	26	id
+	12	27	return
+	12	28	const
+	12	29	for
+	13	30	assign
+	13	31	id
+	14	32	;
+	15	13	data_type
+	15	14	decl
+	15	33	stmt
+	15	17	ret
+	15	18	expr
+	15	19	T
+	15	34	for_loop
+	15	21	F
+	15	22	int
+	15	23	float
+	15	24	string
+	15	35	}
+	15	26	id
+	15	27	return
+	15	28	const
+	15	29	for
+	17	36	;
+	18	37	rel_op
+	18	38	binary_op
+	18	39	;
+	18	40	+
+	18	41	-
+	18	42	<
+	18	43	>
+	18	44	<=
+	18	45	>=
+	18	46	==
+	18	47	+=
+	18	48	-=
+	26	49	++
+	26	50	--
+	27	51	expr
+	27	19	T
+	27	21	F
+	27	26	id
+	27	28	const
+	29	52	(
+	30	53	,
+	31	54	=
+	38	55	T
+	38	21	F
+	38	26	id
+	38	28	const
+	51	37	rel_op
+	51	38	binary_op
+	51	40	+
+	51	41	-
+	51	42	<
+	51	43	>
+	51	44	<=
+	51	45	>=
+	51	46	==
+	51	47	+=
+	51	48	-=
+	52	13	data_type
+	52	56	decl
+	52	57	stmt
+	52	58	ret
+	52	59	expr
+	52	19	T
+	52	21	F
+	52	22	int
+	52	23	float
+	52	24	string
+	52	26	id
+	52	27	return
+	52	28	const
+	53	60	id
+	54	61	expr
+	54	19	T
+	54	21	F
+	54	26	id
+	54	28	const
+	54	62	"
+	56	63	;
+	57	64	expr
+	57	19	T
+	57	21	F
+	57	26	id
+	57	28	const
+	58	65	;
+	59	37	rel_op
+	59	38	binary_op
+	59	66	;
+	59	40	+
+	59	41	-
+	59	42	<
+	59	43	>
+	59	44	<=
+	59	45	>=
+	59	46	==
+	59	47	+=
+	59	48	-=
+	60	67	=
+	61	37	rel_op
+	61	38	binary_op
+	61	40	+
+	61	41	-
+	61	42	<
+	61	43	>
+	61	44	<=
+	61	45	>=
+	61	46	==
+	61	47	+=
+	61	48	-=
+	62	68	id
+	64	37	rel_op
+	64	38	binary_op
+	64	69	;
+	64	40	+
+	64	41	-
+	64	42	<
+	64	43	>
+	64	44	<=
+	64	45	>=
+	64	46	==
+	64	47	+=
+	64	48	-=
+	67	70	expr
+	67	19	T
+	67	21	F
+	67	26	id
+	67	28	const
+	68	71	"
+	69	72	expr
+	69	73	T
+	69	74	F
+	69	75	id
+	69	76	const
+	70	37	rel_op
+	70	38	binary_op
+	70	40	+
+	70	41	-
+	70	42	<
+	70	43	>
+	70	44	<=
+	70	45	>=
+	70	46	==
+	70	47	+=
+	70	48	-=
+	72	37	rel_op
+	72	77	binary_op
+	72	78	)
+	72	40	+
+	72	41	-
+	72	42	<
+	72	43	>
+	72	44	<=
+	72	45	>=
+	72	46	==
+	72	47	+=
+	72	48	-=
+	75	79	++
+	75	80	--
+	77	81	T
+	77	74	F
+	77	75	id
+	77	76	const
+	78	82	{
+	82	13	data_type
+	82	14	decl
+	82	83	stmts
+	82	16	stmt
+	82	17	ret
+	82	18	expr
+	82	19	T
+	82	20	for_loop
+	82	21	F
+	82	22	int
+	82	23	float
+	82	24	string
+	82	26	id
+	82	27	return
+	82	28	const
+	82	29	for
+	83	13	data_type
+	83	14	decl
+	83	33	stmt
+	83	17	ret
+	83	18	expr
+	83	19	T
+	83	34	for_loop
+	83	21	F
+	83	22	int
+	83	23	float
+	83	24	string
+	83	84	}
+	83	26	id
+	83	27	return
+	83	28	const
+	83	29	for

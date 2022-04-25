@@ -1,0 +1,1 @@
+ int main ( ) { string n = " abc " ; int a = 2 ; int b = 5 ; float c = 4.5 ; for ( int i = 0 ; i < n ; i ++ ) { for ( int j = i ; j < n ; j ++ ) { for ( int l = j ; l < n ; l ++ ) { int k = 1 ; k += i + j + l ; } } } } 

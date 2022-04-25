@@ -1,0 +1,23 @@
+#
+prog|main_func|data_type|ret_type|decl|stmts|stmt|ret|expr|T|rel_op|binary_op|for_loop|assign|F
+#
+void|int|float|string|(|)|{|}|main|id|$|,|;|+|-|<|>|=|return|const|<=|>=|==|for|"|++|--|+=|-=
+#
+prog@main_func
+main_func@ret_type main ( ) { stmts }|ret_type main ( ) { }
+ret_type@void|data_type
+data_type@int|float|string
+stmts@stmts stmt|stmt|stmts for_loop|for_loop
+for_loop@for ( stmt expr ; expr ) { stmts }
+stmt@decl ;|ret ;|expr ;
+decl@data_type assign
+ret@return expr
+assign@id = expr|assign , id = expr|id = " id "|id =" id "
+expr@expr binary_op T|T
+binary_op@+|-|rel_op|+=|-=
+rel_op@<|>|==|<=|>=
+T@id ++|id --|F
+F@id|const
+#
+prog
+#

@@ -35,7 +35,7 @@ public class FlightServlet extends HttpServlet {
         String date = request.getParameter("travelDate");
 
         if(date!=null && src!=null && dest!=null){
-            System.out.println( date+"\t"+src+"\t"+dest );
+//            System.out.println( date+"\t"+src+"\t"+dest );
 
             SimpleDateFormat format1 = new SimpleDateFormat("yyyy-MM-dd");
             Date dt1 = null;
@@ -51,7 +51,7 @@ public class FlightServlet extends HttpServlet {
                 System.out.println( day+"\t"+src+"\t"+dest );
 
                 List<Journey> journeys = new JourneysDao(request.getServletContext()).getAvailableJourneys(src,dest,day);
-                System.out.println(journeys);
+//                System.out.println(journeys);
 
                 request.setAttribute("sourceAirportCode",src);
                 request.setAttribute("destinationAirportCode",dest);
@@ -66,19 +66,18 @@ public class FlightServlet extends HttpServlet {
             }
         }
 
-
-
         // Set banners
         OfferDAO offerDAO = new OfferDAO(request.getServletContext());
         List<Offer> offers = offerDAO.readAllOffers();
         List<Airport> airports = new AirportDAO(request.getServletContext()).readAllAirports();
-        System.out.println(offers);
+//        System.out.println(offers);
         request.setAttribute("offers", offers);
         request.setAttribute("airports", airports);
 
         response.setContentType("text/html");
         getServletContext().getRequestDispatcher("/index.jsp").forward(request, response);
     }
+
 
     public void destroy() {
     }

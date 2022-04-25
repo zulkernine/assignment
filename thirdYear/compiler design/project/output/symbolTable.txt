@@ -1,0 +1,29 @@
+
+--------Exiting a block: --------
+Symbol Table for this block was: 
+Id : 1 -> Data Type : NUMBER_CONSTANT -> Type : Variable
+Id : k -> Data Type : int -> Type : Variable
+Id : l -> Data Type : int -> Type : Variable
+
+--------Exiting a block: --------
+Symbol Table for this block was: 
+Id : j -> Data Type : int -> Type : Variable
+
+--------Exiting a block: --------
+Symbol Table for this block was: 
+Id : 0 -> Data Type : NUMBER_CONSTANT -> Type : Variable
+Id : i -> Data Type : int -> Type : Variable
+
+--------Exiting a block: --------
+Symbol Table for this block was: 
+Id : c -> Data Type : float -> Type : Variable
+Id : 5 -> Data Type : NUMBER_CONSTANT -> Type : Variable
+Id : b -> Data Type : int -> Type : Variable
+Id : 4.5 -> Data Type : NUMBER_CONSTANT -> Type : Variable
+Id : a -> Data Type : int -> Type : Variable
+Id : abc -> Data Type : STRING_CONSTANT -> Type : Variable
+Id : 2 -> Data Type : NUMBER_CONSTANT -> Type : Variable
+Id : n -> Data Type : string -> Type : Variable
+
+--------Exiting a block: --------
+Symbol Table for this block was: 

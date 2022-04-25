@@ -1,0 +1,118 @@
+Derivation steps for input file-----
+
+prog' => prog 
+      => main_func 
+      => ret_type main ( ) { stmts } 
+      => ret_type main ( ) { stmts for_loop } 
+      => ret_type main ( ) { stmts for ( stmt expr ; expr ) { stmts } } 
+      => ret_type main ( ) { stmts for ( stmt expr ; expr ) { for_loop } } 
+      => ret_type main ( ) { stmts for ( stmt expr ; expr ) { for ( stmt expr ; expr ) { stmts } } } 
+      => ret_type main ( ) { stmts for ( stmt expr ; expr ) { for ( stmt expr ; expr ) { for_loop } } } 
+      => ret_type main ( ) { stmts for ( stmt expr ; expr ) { for ( stmt expr ; expr ) { for ( stmt expr ; expr ) { stmts } } } } 
+      => ret_type main ( ) { stmts for ( stmt expr ; expr ) { for ( stmt expr ; expr ) { for ( stmt expr ; expr ) { stmts stmt } } } } 
+      => ret_type main ( ) { stmts for ( stmt expr ; expr ) { for ( stmt expr ; expr ) { for ( stmt expr ; expr ) { stmts expr ; } } } } 
+      => ret_type main ( ) { stmts for ( stmt expr ; expr ) { for ( stmt expr ; expr ) { for ( stmt expr ; expr ) { stmts expr binary_op T ; } } } } 
+      => ret_type main ( ) { stmts for ( stmt expr ; expr ) { for ( stmt expr ; expr ) { for ( stmt expr ; expr ) { stmts expr binary_op F ; } } } } 
+      => ret_type main ( ) { stmts for ( stmt expr ; expr ) { for ( stmt expr ; expr ) { for ( stmt expr ; expr ) { stmts expr binary_op id ; } } } } 
+      => ret_type main ( ) { stmts for ( stmt expr ; expr ) { for ( stmt expr ; expr ) { for ( stmt expr ; expr ) { stmts expr + id ; } } } } 
+      => ret_type main ( ) { stmts for ( stmt expr ; expr ) { for ( stmt expr ; expr ) { for ( stmt expr ; expr ) { stmts expr binary_op T + id ; } } } } 
+      => ret_type main ( ) { stmts for ( stmt expr ; expr ) { for ( stmt expr ; expr ) { for ( stmt expr ; expr ) { stmts expr binary_op F + id ; } } } } 
+      => ret_type main ( ) { stmts for ( stmt expr ; expr ) { for ( stmt expr ; expr ) { for ( stmt expr ; expr ) { stmts expr binary_op id + id ; } } } } 
+      => ret_type main ( ) { stmts for ( stmt expr ; expr ) { for ( stmt expr ; expr ) { for ( stmt expr ; expr ) { stmts expr + id + id ; } } } } 
+      => ret_type main ( ) { stmts for ( stmt expr ; expr ) { for ( stmt expr ; expr ) { for ( stmt expr ; expr ) { stmts expr binary_op T + id + id ; } } } } 
+      => ret_type main ( ) { stmts for ( stmt expr ; expr ) { for ( stmt expr ; expr ) { for ( stmt expr ; expr ) { stmts expr binary_op F + id + id ; } } } } 
+      => ret_type main ( ) { stmts for ( stmt expr ; expr ) { for ( stmt expr ; expr ) { for ( stmt expr ; expr ) { stmts expr binary_op id + id + id ; } } } } 
+      => ret_type main ( ) { stmts for ( stmt expr ; expr ) { for ( stmt expr ; expr ) { for ( stmt expr ; expr ) { stmts expr += id + id + id ; } } } } 
+      => ret_type main ( ) { stmts for ( stmt expr ; expr ) { for ( stmt expr ; expr ) { for ( stmt expr ; expr ) { stmts T += id + id + id ; } } } } 
+      => ret_type main ( ) { stmts for ( stmt expr ; expr ) { for ( stmt expr ; expr ) { for ( stmt expr ; expr ) { stmts F += id + id + id ; } } } } 
+      => ret_type main ( ) { stmts for ( stmt expr ; expr ) { for ( stmt expr ; expr ) { for ( stmt expr ; expr ) { stmts id += id + id + id ; } } } } 
+      => ret_type main ( ) { stmts for ( stmt expr ; expr ) { for ( stmt expr ; expr ) { for ( stmt expr ; expr ) { stmt id += id + id + id ; } } } } 
+      => ret_type main ( ) { stmts for ( stmt expr ; expr ) { for ( stmt expr ; expr ) { for ( stmt expr ; expr ) { decl ; id += id + id + id ; } } } } 
+      => ret_type main ( ) { stmts for ( stmt expr ; expr ) { for ( stmt expr ; expr ) { for ( stmt expr ; expr ) { data_type assign ; id += id + id + id ; } } } } 
+      => ret_type main ( ) { stmts for ( stmt expr ; expr ) { for ( stmt expr ; expr ) { for ( stmt expr ; expr ) { data_type id = expr ; id += id + id + id ; } } } } 
+      => ret_type main ( ) { stmts for ( stmt expr ; expr ) { for ( stmt expr ; expr ) { for ( stmt expr ; expr ) { data_type id = T ; id += id + id + id ; } } } } 
+      => ret_type main ( ) { stmts for ( stmt expr ; expr ) { for ( stmt expr ; expr ) { for ( stmt expr ; expr ) { data_type id = F ; id += id + id + id ; } } } } 
+      => ret_type main ( ) { stmts for ( stmt expr ; expr ) { for ( stmt expr ; expr ) { for ( stmt expr ; expr ) { data_type id = const ; id += id + id + id ; } } } } 
+      => ret_type main ( ) { stmts for ( stmt expr ; expr ) { for ( stmt expr ; expr ) { for ( stmt expr ; expr ) { int id = const ; id += id + id + id ; } } } } 
+      => ret_type main ( ) { stmts for ( stmt expr ; expr ) { for ( stmt expr ; expr ) { for ( stmt expr ; T ) { int id = const ; id += id + id + id ; } } } } 
+      => ret_type main ( ) { stmts for ( stmt expr ; expr ) { for ( stmt expr ; expr ) { for ( stmt expr ; id ++ ) { int id = const ; id += id + id + id ; } } } } 
+      => ret_type main ( ) { stmts for ( stmt expr ; expr ) { for ( stmt expr ; expr ) { for ( stmt expr binary_op T ; id ++ ) { int id = const ; id += id + id + id ; } } } } 
+      => ret_type main ( ) { stmts for ( stmt expr ; expr ) { for ( stmt expr ; expr ) { for ( stmt expr binary_op F ; id ++ ) { int id = const ; id += id + id + id ; } } } } 
+      => ret_type main ( ) { stmts for ( stmt expr ; expr ) { for ( stmt expr ; expr ) { for ( stmt expr binary_op id ; id ++ ) { int id = const ; id += id + id + id ; } } } } 
+      => ret_type main ( ) { stmts for ( stmt expr ; expr ) { for ( stmt expr ; expr ) { for ( stmt expr rel_op id ; id ++ ) { int id = const ; id += id + id + id ; } } } } 
+      => ret_type main ( ) { stmts for ( stmt expr ; expr ) { for ( stmt expr ; expr ) { for ( stmt expr < id ; id ++ ) { int id = const ; id += id + id + id ; } } } } 
+      => ret_type main ( ) { stmts for ( stmt expr ; expr ) { for ( stmt expr ; expr ) { for ( stmt T < id ; id ++ ) { int id = const ; id += id + id + id ; } } } } 
+      => ret_type main ( ) { stmts for ( stmt expr ; expr ) { for ( stmt expr ; expr ) { for ( stmt F < id ; id ++ ) { int id = const ; id += id + id + id ; } } } } 
+      => ret_type main ( ) { stmts for ( stmt expr ; expr ) { for ( stmt expr ; expr ) { for ( stmt id < id ; id ++ ) { int id = const ; id += id + id + id ; } } } } 
+      => ret_type main ( ) { stmts for ( stmt expr ; expr ) { for ( stmt expr ; expr ) { for ( decl ; id < id ; id ++ ) { int id = const ; id += id + id + id ; } } } } 
+      => ret_type main ( ) { stmts for ( stmt expr ; expr ) { for ( stmt expr ; expr ) { for ( data_type assign ; id < id ; id ++ ) { int id = const ; id += id + id + id ; } } } } 
+      => ret_type main ( ) { stmts for ( stmt expr ; expr ) { for ( stmt expr ; expr ) { for ( data_type id = expr ; id < id ; id ++ ) { int id = const ; id += id + id + id ; } } } } 
+      => ret_type main ( ) { stmts for ( stmt expr ; expr ) { for ( stmt expr ; expr ) { for ( data_type id = T ; id < id ; id ++ ) { int id = const ; id += id + id + id ; } } } } 
+      => ret_type main ( ) { stmts for ( stmt expr ; expr ) { for ( stmt expr ; expr ) { for ( data_type id = F ; id < id ; id ++ ) { int id = const ; id += id + id + id ; } } } } 
+      => ret_type main ( ) { stmts for ( stmt expr ; expr ) { for ( stmt expr ; expr ) { for ( data_type id = id ; id < id ; id ++ ) { int id = const ; id += id + id + id ; } } } } 
+      => ret_type main ( ) { stmts for ( stmt expr ; expr ) { for ( stmt expr ; expr ) { for ( int id = id ; id < id ; id ++ ) { int id = const ; id += id + id + id ; } } } } 
+      => ret_type main ( ) { stmts for ( stmt expr ; expr ) { for ( stmt expr ; T ) { for ( int id = id ; id < id ; id ++ ) { int id = const ; id += id + id + id ; } } } } 
+      => ret_type main ( ) { stmts for ( stmt expr ; expr ) { for ( stmt expr ; id ++ ) { for ( int id = id ; id < id ; id ++ ) { int id = const ; id += id + id + id ; } } } } 
+      => ret_type main ( ) { stmts for ( stmt expr ; expr ) { for ( stmt expr binary_op T ; id ++ ) { for ( int id = id ; id < id ; id ++ ) { int id = const ; id += id + id + id ; } } } } 
+      => ret_type main ( ) { stmts for ( stmt expr ; expr ) { for ( stmt expr binary_op F ; id ++ ) { for ( int id = id ; id < id ; id ++ ) { int id = const ; id += id + id + id ; } } } } 
+      => ret_type main ( ) { stmts for ( stmt expr ; expr ) { for ( stmt expr binary_op id ; id ++ ) { for ( int id = id ; id < id ; id ++ ) { int id = const ; id += id + id + id ; } } } } 
+      => ret_type main ( ) { stmts for ( stmt expr ; expr ) { for ( stmt expr rel_op id ; id ++ ) { for ( int id = id ; id < id ; id ++ ) { int id = const ; id += id + id + id ; } } } } 
+      => ret_type main ( ) { stmts for ( stmt expr ; expr ) { for ( stmt expr < id ; id ++ ) { for ( int id = id ; id < id ; id ++ ) { int id = const ; id += id + id + id ; } } } } 
+      => ret_type main ( ) { stmts for ( stmt expr ; expr ) { for ( stmt T < id ; id ++ ) { for ( int id = id ; id < id ; id ++ ) { int id = const ; id += id + id + id ; } } } } 
+      => ret_type main ( ) { stmts for ( stmt expr ; expr ) { for ( stmt F < id ; id ++ ) { for ( int id = id ; id < id ; id ++ ) { int id = const ; id += id + id + id ; } } } } 
+      => ret_type main ( ) { stmts for ( stmt expr ; expr ) { for ( stmt id < id ; id ++ ) { for ( int id = id ; id < id ; id ++ ) { int id = const ; id += id + id + id ; } } } } 
+      => ret_type main ( ) { stmts for ( stmt expr ; expr ) { for ( decl ; id < id ; id ++ ) { for ( int id = id ; id < id ; id ++ ) { int id = const ; id += id + id + id ; } } } } 
+      => ret_type main ( ) { stmts for ( stmt expr ; expr ) { for ( data_type assign ; id < id ; id ++ ) { for ( int id = id ; id < id ; id ++ ) { int id = const ; id += id + id + id ; } } } } 
+      => ret_type main ( ) { stmts for ( stmt expr ; expr ) { for ( data_type id = expr ; id < id ; id ++ ) { for ( int id = id ; id < id ; id ++ ) { int id = const ; id += id + id + id ; } } } } 
+      => ret_type main ( ) { stmts for ( stmt expr ; expr ) { for ( data_type id = T ; id < id ; id ++ ) { for ( int id = id ; id < id ; id ++ ) { int id = const ; id += id + id + id ; } } } } 
+      => ret_type main ( ) { stmts for ( stmt expr ; expr ) { for ( data_type id = F ; id < id ; id ++ ) { for ( int id = id ; id < id ; id ++ ) { int id = const ; id += id + id + id ; } } } } 
+      => ret_type main ( ) { stmts for ( stmt expr ; expr ) { for ( data_type id = id ; id < id ; id ++ ) { for ( int id = id ; id < id ; id ++ ) { int id = const ; id += id + id + id ; } } } } 
+      => ret_type main ( ) { stmts for ( stmt expr ; expr ) { for ( int id = id ; id < id ; id ++ ) { for ( int id = id ; id < id ; id ++ ) { int id = const ; id += id + id + id ; } } } } 
+      => ret_type main ( ) { stmts for ( stmt expr ; T ) { for ( int id = id ; id < id ; id ++ ) { for ( int id = id ; id < id ; id ++ ) { int id = const ; id += id + id + id ; } } } } 
+      => ret_type main ( ) { stmts for ( stmt expr ; id ++ ) { for ( int id = id ; id < id ; id ++ ) { for ( int id = id ; id < id ; id ++ ) { int id = const ; id += id + id + id ; } } } } 
+      => ret_type main ( ) { stmts for ( stmt expr binary_op T ; id ++ ) { for ( int id = id ; id < id ; id ++ ) { for ( int id = id ; id < id ; id ++ ) { int id = const ; id += id + id + id ; } } } } 
+      => ret_type main ( ) { stmts for ( stmt expr binary_op F ; id ++ ) { for ( int id = id ; id < id ; id ++ ) { for ( int id = id ; id < id ; id ++ ) { int id = const ; id += id + id + id ; } } } } 
+      => ret_type main ( ) { stmts for ( stmt expr binary_op id ; id ++ ) { for ( int id = id ; id < id ; id ++ ) { for ( int id = id ; id < id ; id ++ ) { int id = const ; id += id + id + id ; } } } } 
+      => ret_type main ( ) { stmts for ( stmt expr rel_op id ; id ++ ) { for ( int id = id ; id < id ; id ++ ) { for ( int id = id ; id < id ; id ++ ) { int id = const ; id += id + id + id ; } } } } 
+      => ret_type main ( ) { stmts for ( stmt expr < id ; id ++ ) { for ( int id = id ; id < id ; id ++ ) { for ( int id = id ; id < id ; id ++ ) { int id = const ; id += id + id + id ; } } } } 
+      => ret_type main ( ) { stmts for ( stmt T < id ; id ++ ) { for ( int id = id ; id < id ; id ++ ) { for ( int id = id ; id < id ; id ++ ) { int id = const ; id += id + id + id ; } } } } 
+      => ret_type main ( ) { stmts for ( stmt F < id ; id ++ ) { for ( int id = id ; id < id ; id ++ ) { for ( int id = id ; id < id ; id ++ ) { int id = const ; id += id + id + id ; } } } } 
+      => ret_type main ( ) { stmts for ( stmt id < id ; id ++ ) { for ( int id = id ; id < id ; id ++ ) { for ( int id = id ; id < id ; id ++ ) { int id = const ; id += id + id + id ; } } } } 
+      => ret_type main ( ) { stmts for ( decl ; id < id ; id ++ ) { for ( int id = id ; id < id ; id ++ ) { for ( int id = id ; id < id ; id ++ ) { int id = const ; id += id + id + id ; } } } } 
+      => ret_type main ( ) { stmts for ( data_type assign ; id < id ; id ++ ) { for ( int id = id ; id < id ; id ++ ) { for ( int id = id ; id < id ; id ++ ) { int id = const ; id += id + id + id ; } } } } 
+      => ret_type main ( ) { stmts for ( data_type id = expr ; id < id ; id ++ ) { for ( int id = id ; id < id ; id ++ ) { for ( int id = id ; id < id ; id ++ ) { int id = const ; id += id + id + id ; } } } } 
+      => ret_type main ( ) { stmts for ( data_type id = T ; id < id ; id ++ ) { for ( int id = id ; id < id ; id ++ ) { for ( int id = id ; id < id ; id ++ ) { int id = const ; id += id + id + id ; } } } } 
+      => ret_type main ( ) { stmts for ( data_type id = F ; id < id ; id ++ ) { for ( int id = id ; id < id ; id ++ ) { for ( int id = id ; id < id ; id ++ ) { int id = const ; id += id + id + id ; } } } } 
+      => ret_type main ( ) { stmts for ( data_type id = const ; id < id ; id ++ ) { for ( int id = id ; id < id ; id ++ ) { for ( int id = id ; id < id ; id ++ ) { int id = const ; id += id + id + id ; } } } } 
+      => ret_type main ( ) { stmts for ( int id = const ; id < id ; id ++ ) { for ( int id = id ; id < id ; id ++ ) { for ( int id = id ; id < id ; id ++ ) { int id = const ; id += id + id + id ; } } } } 
+      => ret_type main ( ) { stmts stmt for ( int id = const ; id < id ; id ++ ) { for ( int id = id ; id < id ; id ++ ) { for ( int id = id ; id < id ; id ++ ) { int id = const ; id += id + id + id ; } } } } 
+      => ret_type main ( ) { stmts decl ; for ( int id = const ; id < id ; id ++ ) { for ( int id = id ; id < id ; id ++ ) { for ( int id = id ; id < id ; id ++ ) { int id = const ; id += id + id + id ; } } } } 
+      => ret_type main ( ) { stmts data_type assign ; for ( int id = const ; id < id ; id ++ ) { for ( int id = id ; id < id ; id ++ ) { for ( int id = id ; id < id ; id ++ ) { int id = const ; id += id + id + id ; } } } } 
+      => ret_type main ( ) { stmts data_type id = expr ; for ( int id = const ; id < id ; id ++ ) { for ( int id = id ; id < id ; id ++ ) { for ( int id = id ; id < id ; id ++ ) { int id = const ; id += id + id + id ; } } } } 
+      => ret_type main ( ) { stmts data_type id = T ; for ( int id = const ; id < id ; id ++ ) { for ( int id = id ; id < id ; id ++ ) { for ( int id = id ; id < id ; id ++ ) { int id = const ; id += id + id + id ; } } } } 
+      => ret_type main ( ) { stmts data_type id = F ; for ( int id = const ; id < id ; id ++ ) { for ( int id = id ; id < id ; id ++ ) { for ( int id = id ; id < id ; id ++ ) { int id = const ; id += id + id + id ; } } } } 
+      => ret_type main ( ) { stmts data_type id = const ; for ( int id = const ; id < id ; id ++ ) { for ( int id = id ; id < id ; id ++ ) { for ( int id = id ; id < id ; id ++ ) { int id = const ; id += id + id + id ; } } } } 
+      => ret_type main ( ) { stmts float id = const ; for ( int id = const ; id < id ; id ++ ) { for ( int id = id ; id < id ; id ++ ) { for ( int id = id ; id < id ; id ++ ) { int id = const ; id += id + id + id ; } } } } 
+      => ret_type main ( ) { stmts stmt float id = const ; for ( int id = const ; id < id ; id ++ ) { for ( int id = id ; id < id ; id ++ ) { for ( int id = id ; id < id ; id ++ ) { int id = const ; id += id + id + id ; } } } } 
+      => ret_type main ( ) { stmts decl ; float id = const ; for ( int id = const ; id < id ; id ++ ) { for ( int id = id ; id < id ; id ++ ) { for ( int id = id ; id < id ; id ++ ) { int id = const ; id += id + id + id ; } } } } 
+      => ret_type main ( ) { stmts data_type assign ; float id = const ; for ( int id = const ; id < id ; id ++ ) { for ( int id = id ; id < id ; id ++ ) { for ( int id = id ; id < id ; id ++ ) { int id = const ; id += id + id + id ; } } } } 
+      => ret_type main ( ) { stmts data_type id = expr ; float id = const ; for ( int id = const ; id < id ; id ++ ) { for ( int id = id ; id < id ; id ++ ) { for ( int id = id ; id < id ; id ++ ) { int id = const ; id += id + id + id ; } } } } 
+      => ret_type main ( ) { stmts data_type id = T ; float id = const ; for ( int id = const ; id < id ; id ++ ) { for ( int id = id ; id < id ; id ++ ) { for ( int id = id ; id < id ; id ++ ) { int id = const ; id += id + id + id ; } } } } 
+      => ret_type main ( ) { stmts data_type id = F ; float id = const ; for ( int id = const ; id < id ; id ++ ) { for ( int id = id ; id < id ; id ++ ) { for ( int id = id ; id < id ; id ++ ) { int id = const ; id += id + id + id ; } } } } 
+      => ret_type main ( ) { stmts data_type id = const ; float id = const ; for ( int id = const ; id < id ; id ++ ) { for ( int id = id ; id < id ; id ++ ) { for ( int id = id ; id < id ; id ++ ) { int id = const ; id += id + id + id ; } } } } 
+      => ret_type main ( ) { stmts int id = const ; float id = const ; for ( int id = const ; id < id ; id ++ ) { for ( int id = id ; id < id ; id ++ ) { for ( int id = id ; id < id ; id ++ ) { int id = const ; id += id + id + id ; } } } } 
+      => ret_type main ( ) { stmts stmt int id = const ; float id = const ; for ( int id = const ; id < id ; id ++ ) { for ( int id = id ; id < id ; id ++ ) { for ( int id = id ; id < id ; id ++ ) { int id = const ; id += id + id + id ; } } } } 
+      => ret_type main ( ) { stmts decl ; int id = const ; float id = const ; for ( int id = const ; id < id ; id ++ ) { for ( int id = id ; id < id ; id ++ ) { for ( int id = id ; id < id ; id ++ ) { int id = const ; id += id + id + id ; } } } } 
+      => ret_type main ( ) { stmts data_type assign ; int id = const ; float id = const ; for ( int id = const ; id < id ; id ++ ) { for ( int id = id ; id < id ; id ++ ) { for ( int id = id ; id < id ; id ++ ) { int id = const ; id += id + id + id ; } } } } 
+      => ret_type main ( ) { stmts data_type id = expr ; int id = const ; float id = const ; for ( int id = const ; id < id ; id ++ ) { for ( int id = id ; id < id ; id ++ ) { for ( int id = id ; id < id ; id ++ ) { int id = const ; id += id + id + id ; } } } } 
+      => ret_type main ( ) { stmts data_type id = T ; int id = const ; float id = const ; for ( int id = const ; id < id ; id ++ ) { for ( int id = id ; id < id ; id ++ ) { for ( int id = id ; id < id ; id ++ ) { int id = const ; id += id + id + id ; } } } } 
+      => ret_type main ( ) { stmts data_type id = F ; int id = const ; float id = const ; for ( int id = const ; id < id ; id ++ ) { for ( int id = id ; id < id ; id ++ ) { for ( int id = id ; id < id ; id ++ ) { int id = const ; id += id + id + id ; } } } } 
+      => ret_type main ( ) { stmts data_type id = const ; int id = const ; float id = const ; for ( int id = const ; id < id ; id ++ ) { for ( int id = id ; id < id ; id ++ ) { for ( int id = id ; id < id ; id ++ ) { int id = const ; id += id + id + id ; } } } } 
+      => ret_type main ( ) { stmts int id = const ; int id = const ; float id = const ; for ( int id = const ; id < id ; id ++ ) { for ( int id = id ; id < id ; id ++ ) { for ( int id = id ; id < id ; id ++ ) { int id = const ; id += id + id + id ; } } } } 
+      => ret_type main ( ) { stmt int id = const ; int id = const ; float id = const ; for ( int id = const ; id < id ; id ++ ) { for ( int id = id ; id < id ; id ++ ) { for ( int id = id ; id < id ; id ++ ) { int id = const ; id += id + id + id ; } } } } 
+      => ret_type main ( ) { decl ; int id = const ; int id = const ; float id = const ; for ( int id = const ; id < id ; id ++ ) { for ( int id = id ; id < id ; id ++ ) { for ( int id = id ; id < id ; id ++ ) { int id = const ; id += id + id + id ; } } } } 
+      => ret_type main ( ) { data_type assign ; int id = const ; int id = const ; float id = const ; for ( int id = const ; id < id ; id ++ ) { for ( int id = id ; id < id ; id ++ ) { for ( int id = id ; id < id ; id ++ ) { int id = const ; id += id + id + id ; } } } } 
+      => ret_type main ( ) { data_type id = " id " ; int id = const ; int id = const ; float id = const ; for ( int id = const ; id < id ; id ++ ) { for ( int id = id ; id < id ; id ++ ) { for ( int id = id ; id < id ; id ++ ) { int id = const ; id += id + id + id ; } } } } 
+      => ret_type main ( ) { string id = " id " ; int id = const ; int id = const ; float id = const ; for ( int id = const ; id < id ; id ++ ) { for ( int id = id ; id < id ; id ++ ) { for ( int id = id ; id < id ; id ++ ) { int id = const ; id += id + id + id ; } } } } 
+      => data_type main ( ) { string id = " id " ; int id = const ; int id = const ; float id = const ; for ( int id = const ; id < id ; id ++ ) { for ( int id = id ; id < id ; id ++ ) { for ( int id = id ; id < id ; id ++ ) { int id = const ; id += id + id + id ; } } } } 
+      => int main ( ) { string id = " id " ; int id = const ; int id = const ; float id = const ; for ( int id = const ; id < id ; id ++ ) { for ( int id = id ; id < id ; id ++ ) { for ( int id = id ; id < id ; id ++ ) { int id = const ; id += id + id + id ; } } } } 

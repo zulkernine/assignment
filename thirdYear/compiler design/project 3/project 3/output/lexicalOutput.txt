@@ -1,0 +1,1 @@
+ int main ( ) { string id = " id " ; int id = const ; int id = const ; float id = const ; for ( int id = const ; id < id ; id ++ ) { for ( int id = id ; id < id ; id ++ ) { for ( int id = id ; id < id ; id ++ ) { int id = const ; id += id + id + id ; } } } } 
