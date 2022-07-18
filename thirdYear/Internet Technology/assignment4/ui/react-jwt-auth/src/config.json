@@ -1,0 +1,6 @@
+{
+  "base_url_auth": "http://localhost:8080/api/auth/",
+  "base_url_cloth": "http://localhost:8080/api/cloth/",
+  "base_url_test": "http://localhost:8080/api/test/",
+  "base_url_user": "http://localhost:8080/api/user/"
+}
