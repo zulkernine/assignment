@@ -26,6 +26,8 @@ public class FlightServlet extends HttpServlet {
 
     public void init() {
         message = "Hello World!";
+//        getServletContext().getAttribute()
+
     }
 
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -66,9 +68,14 @@ public class FlightServlet extends HttpServlet {
             }
         }
 
+
+//        HttpSession hs = request.getSession();
+//        hs.se
+
         // Set banners
         OfferDAO offerDAO = new OfferDAO(request.getServletContext());
         List<Offer> offers = offerDAO.readAllOffers();
+        System.out.println("Offers: " +offers.size());
         List<Airport> airports = new AirportDAO(request.getServletContext()).readAllAirports();
 //        System.out.println(offers);
         request.setAttribute("offers", offers);
